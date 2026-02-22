@@ -139,6 +139,38 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
 .rec-impact { display: inline-block; margin-top: 5px; font-size: 11px; font-family: 'Courier New', monospace; padding: 2px 7px; border-radius: 3px; background: var(--olive-pale); color: var(--olive); }
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+.scenario-table-wrap { overflow-x: auto; }
+
+/* ===== RESPONSIVE MOBILE ===== */
+@media (max-width: 780px) {
+  .stage-info { grid-template-columns: 1fr; }
+  .stage-pills { flex-direction: row; flex-wrap: wrap; min-width: 0; }
+}
+@media (max-width: 600px) {
+  .container { padding: 16px 12px; }
+  .top-nav { flex-wrap: wrap; height: auto; padding: 8px 12px 0; gap: 0; }
+  .nav-brand { flex: 1; padding: 4px 0 8px; font-size: 12px; }
+  .nav-tabs { order: 3; width: 100%; border-top: 1px solid rgba(255,255,255,0.08); justify-content: stretch; }
+  .nav-tab { flex: 1; padding: 0 4px; font-size: 11px; height: 40px; letter-spacing: 0; }
+  .nav-reset { font-size: 10px; padding: 4px 9px; white-space: nowrap; }
+  .proceso-canvas { height: 210px; }
+  .step-label { display: none; }
+  .step-num { width: 24px; height: 24px; font-size: 10px; }
+  .step-item:not(:last-child)::after { top: 12px; }
+  .stage-info { padding: 14px; }
+  .stage-title { font-size: 13px; }
+  .stage-desc { font-size: 12px; }
+  .kpi-value { font-size: 20px; }
+  .kpi-card { padding: 12px 14px; }
+  .card-header { padding: 10px 14px; }
+  .param-row { grid-template-columns: 1fr 84px 42px; gap: 5px; padding: 6px 12px; font-size: 12px; }
+  .param-unit { font-size: 9px; }
+  .diag-card { padding: 14px; }
+  .scenario-bar { flex-wrap: wrap; gap: 8px; }
+  .fc-table { font-size: 11px; }
+  .fc-table th, .fc-table td { padding: 5px 7px; }
+  .chart-wrap { height: 200px; }
+}
 </style>
 </head>
 <body>
@@ -322,10 +354,10 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
         <button class="btn btn-outline btn-sm" onclick="saveScenario()">Guardar escenario actual</button>
         <span style="font-size:12px;color:var(--text-sec);" id="scenario-count">0 escenarios guardados</span>
       </div>
-      <table class="scenario-table">
+      <div class="scenario-table-wrap"><table class="scenario-table">
         <thead><tr><th>Nombre</th><th>CAPEX neto (€)</th><th>VAN (€)</th><th>TIR (%)</th><th>Payback</th><th></th></tr></thead>
         <tbody id="scenario-tbody"><tr><td colspan="6" style="color:var(--text-sec);font-size:12px;padding:12px;">Sin escenarios guardados.</td></tr></tbody>
-      </table>
+      </table></div>
     </div>
   </div>
 </div>
@@ -446,11 +478,12 @@ function updateCharts(){const r=R;if(!r.fc)return;
 
   const iLabels=['Ahorro electricidad','Excedente red','Venta hueso','Fertiliz. digestato','Ahorro transporte'];
   const iVals=[r.ahorro_electricidad,r.ingreso_excedente,r.ingreso_hueso,r.ahorro_fertilizante,r.ahorro_transporte];
-  mkChart('chart-ingresos','doughnut',{labels:iLabels,datasets:[{data:iVals,backgroundColor:OP,borderWidth:1,borderColor:'#fff'}]},{plugins:{legend:{display:true,position:'right',labels:{font:{size:10},boxWidth:9,color:'#6b6660',padding:6}},tooltip:{callbacks:{label:ctx=>ctx.label+': '+fmtEur(ctx.raw,0)}}}});
+  const lgPos=window.innerWidth<640?'bottom':'right';
+  mkChart('chart-ingresos','doughnut',{labels:iLabels,datasets:[{data:iVals,backgroundColor:OP,borderWidth:1,borderColor:'#fff'}]},{plugins:{legend:{display:true,position:lgPos,labels:{font:{size:10},boxWidth:9,color:'#6b6660',padding:6}},tooltip:{callbacks:{label:ctx=>ctx.label+': '+fmtEur(ctx.raw,0)}}}});
 
   const cLabels=['Mant. CHP','Personal','Consumibles','Seguros','Otros O&M'];
   const cVals=[r.coste_mant_CHP_anual,r.p.coste_personal,r.p.coste_consumibles,r.p.coste_seguros,r.p.coste_otros_om];
-  mkChart('chart-costes','doughnut',{labels:cLabels,datasets:[{data:cVals,backgroundColor:BP,borderWidth:1,borderColor:'#fff'}]},{plugins:{legend:{display:true,position:'right',labels:{font:{size:10},boxWidth:9,color:'#6b6660',padding:6}},tooltip:{callbacks:{label:ctx=>ctx.label+': '+fmtEur(ctx.raw,0)}}}});
+  mkChart('chart-costes','doughnut',{labels:cLabels,datasets:[{data:cVals,backgroundColor:BP,borderWidth:1,borderColor:'#fff'}]},{plugins:{legend:{display:true,position:lgPos,labels:{font:{size:10},boxWidth:9,color:'#6b6660',padding:6}},tooltip:{callbacks:{label:ctx=>ctx.label+': '+fmtEur(ctx.raw,0)}}}});
 
   const bv=r.van;
   const svars=[{key:'precio_venta_excedente',label:'Precio excedente',d:20},{key:'rendimiento_biogas',label:'Rdto. biogás',d:20},{key:'t_aceituna',label:'Toneladas aceituna',d:20},{key:'horas_operacion',label:'Horas CHP',d:10},{key:'tasa_descuento',label:'Tasa descuento',d:-20},{key:'inv_digestor',label:'CAPEX digestor',d:-20}];
