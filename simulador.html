@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador — Aprovechamiento del Alperujo</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #f5f2ed;
+  --surface: #ffffff;
+  --surface2: #f0ede8;
+  --border: #ddd9d3;
+  --border2: #ccc8c2;
+  --text: #252320;
+  --text-sec: #6b6660;
+  --olive: #4a6741;
+  --olive-light: #6b8f5e;
+  --olive-pale: #e8f0e5;
+  --brown: #7a5c3a;
+  --brown-light: #9b7a55;
+  --dark: #2d3228;
+  --pos: #3d6b35;
+  --neg: #8b3a2a;
+  --warn: #7a6230;
+  --pos-bg: #eef5ec;
+  --neg-bg: #f5ece9;
+  --warn-bg: #f5f0e6;
+  --radius: 6px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; background: var(--bg); color: var(--text); line-height: 1.5; }
+
+/* NAV */
+.top-nav { position: sticky; top: 0; z-index: 100; background: var(--dark); display: flex; align-items: center; padding: 0 24px; height: 52px; gap: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+.nav-brand { color: rgba(255,255,255,0.9); font-size: 13px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
+.nav-brand span { color: #8aaf7b; }
+.nav-tabs { display: flex; gap: 0; }
+.nav-tab { background: none; border: none; color: rgba(255,255,255,0.55); font-size: 13px; padding: 0 16px; height: 52px; cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; letter-spacing: 0.01em; }
+.nav-tab:hover { color: rgba(255,255,255,0.85); }
+.nav-tab.active { color: #fff; border-bottom-color: #8aaf7b; }
+.nav-reset { margin-left: auto; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.6); font-size: 12px; padding: 5px 12px; border-radius: var(--radius); cursor: pointer; transition: background 0.15s; }
+.nav-reset:hover { background: rgba(255,255,255,0.14); color: rgba(255,255,255,0.9); }
+
+/* TABS */
+.tab-section { display: none; }
+.tab-section.active { display: block; }
+.container { max-width: 1160px; margin: 0 auto; padding: 28px 24px; }
+
+/* CARDS */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+.card-header { padding: 12px 18px; border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-sec); display: flex; align-items: center; gap: 8px; }
+.card-header::before { content: ''; display: block; width: 3px; height: 12px; background: var(--olive); border-radius: 2px; }
+
+/* ===== PROCESO ===== */
+.stepper { display: flex; align-items: flex-start; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px; }
+.step-item { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 76px; cursor: pointer; position: relative; }
+.step-item:not(:last-child)::after { content: ''; position: absolute; top: 15px; left: 50%; width: 100%; height: 1px; background: var(--border2); z-index: 0; }
+.step-num { width: 30px; height: 30px; border-radius: 50%; background: var(--surface2); border: 1.5px solid var(--border2); color: var(--text-sec); font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; transition: all 0.15s; font-family: 'Courier New', monospace; }
+.step-item.active .step-num { background: var(--olive); border-color: var(--olive); color: #fff; }
+.step-item.done .step-num { background: var(--olive-pale); border-color: var(--olive); color: var(--olive); }
+.step-label { font-size: 9.5px; color: var(--text-sec); margin-top: 5px; text-align: center; line-height: 1.3; max-width: 68px; }
+.step-item.active .step-label { color: var(--olive); font-weight: 600; }
+.canvas-wrap { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); }
+.proceso-canvas { display: block; width: 100%; height: 300px; }
+.stage-info { display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: start; padding: 18px; background: var(--surface); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius); }
+.stage-title { font-size: 15px; font-weight: 600; color: var(--dark); margin-bottom: 5px; }
+.stage-sub { font-size: 11px; color: var(--olive); font-family: 'Courier New', monospace; margin-bottom: 7px; }
+.stage-desc { font-size: 13px; color: var(--text-sec); line-height: 1.65; }
+.stage-pills { display: flex; flex-direction: column; gap: 5px; min-width: 185px; }
+.stage-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 5px 10px; font-size: 11px; font-family: 'Courier New', monospace; color: var(--text-sec); }
+.stage-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 15px; border-radius: var(--radius); font-size: 13px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; }
+.btn-outline { background: var(--surface); border-color: var(--border2); color: var(--text-sec); }
+.btn-outline:hover { border-color: var(--olive); color: var(--olive); }
+.btn-primary { background: var(--olive); color: #fff; border-color: var(--olive); }
+.btn-primary:hover { background: #3d5836; }
+.btn:disabled { opacity: 0.35; pointer-events: none; }
+.stage-counter { font-size: 12px; font-family: 'Courier New', monospace; color: var(--text-sec); }
+
+/* ===== DIMENSIONADO ===== */
+.dim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 780px) { .dim-grid { grid-template-columns: 1fr; } }
+.param-row { display: grid; grid-template-columns: 1fr 105px 55px; gap: 8px; align-items: center; padding: 7px 18px; border-bottom: 1px solid var(--bg); }
+.param-row:last-child { border-bottom: none; }
+.param-row label { font-size: 13px; color: var(--text); }
+.param-row input { width: 100%; padding: 4px 7px; border: 1px solid var(--border2); border-radius: 4px; font-size: 12px; font-family: 'Courier New', monospace; background: var(--bg); color: var(--text); text-align: right; }
+.param-row input:focus { outline: none; border-color: var(--olive); background: #fff; }
+.param-unit { font-size: 10px; color: var(--text-sec); font-family: 'Courier New', monospace; }
+.derived-section { padding: 10px 18px; background: var(--surface2); border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 7px; }
+.dpill { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 4px 9px; font-size: 11px; font-family: 'Courier New', monospace; color: var(--text-sec); }
+.dpill strong { color: var(--olive); }
+
+/* ===== FINANCIERO ===== */
+.kpi-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 22px; }
+.kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); border-top: 3px solid var(--border2); padding: 16px 18px; box-shadow: var(--shadow); transition: background 0.2s, border-top-color 0.2s; }
+.kpi-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-sec); margin-bottom: 7px; font-family: 'Courier New', monospace; }
+.kpi-value { font-size: 24px; font-weight: 600; font-family: 'Courier New', monospace; color: var(--dark); line-height: 1.1; }
+.kpi-sub { font-size: 11px; color: var(--text-sec); margin-top: 4px; }
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px; }
+@media (max-width: 780px) { .chart-grid { grid-template-columns: 1fr; } .kpi-row { grid-template-columns: 1fr; } }
+.chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+.chart-wrap { padding: 14px; position: relative; height: 230px; }
+.fc-table-wrap { overflow-x: auto; }
+.fc-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: 'Courier New', monospace; }
+.fc-table th { background: var(--surface2); padding: 7px 12px; text-align: right; font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-sec); border-bottom: 1px solid var(--border2); }
+.fc-table th:first-child { text-align: center; }
+.fc-table td { padding: 5px 12px; text-align: right; border-bottom: 1px solid var(--bg); color: var(--text-sec); }
+.fc-table td:first-child { text-align: center; font-weight: 600; color: var(--text); }
+.fc-table tr.payback-row td { background: var(--olive-pale); color: var(--olive); font-weight: 600; }
+.fc-table tr:hover td { background: var(--surface2); }
+.pos-val { color: var(--pos); }
+.neg-val { color: var(--neg); }
+.scenario-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.btn-sm { padding: 5px 10px; font-size: 11px; }
+.scenario-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.scenario-table th { background: var(--surface2); padding: 7px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-sec); border-bottom: 1px solid var(--border2); }
+.scenario-table td { padding: 7px 12px; border-bottom: 1px solid var(--bg); font-family: 'Courier New', monospace; font-size: 12px; }
+.btn-del { background: none; border: 1px solid var(--border2); color: var(--text-sec); border-radius: 4px; padding: 2px 7px; font-size: 11px; cursor: pointer; }
+.btn-del:hover { border-color: var(--neg); color: var(--neg); }
+
+/* ===== RESULTADOS ===== */
+.res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 780px) { .res-grid { grid-template-columns: 1fr; } }
+.diag-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--border2); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 20px; }
+.diag-card.pos { border-left-color: var(--pos); }
+.diag-card.neg { border-left-color: var(--neg); }
+.diag-card.warn { border-left-color: var(--warn); }
+.diag-title { font-size: 13px; font-weight: 600; margin-bottom: 9px; }
+.diag-text { font-size: 13px; color: var(--text-sec); line-height: 1.7; }
+.thresh-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.thresh-table th { background: var(--surface2); padding: 7px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-sec); border-bottom: 1px solid var(--border2); }
+.thresh-table td { padding: 7px 12px; border-bottom: 1px solid var(--bg); font-family: 'Courier New', monospace; font-size: 12px; }
+.rec-list { display: flex; flex-direction: column; gap: 9px; }
+.rec-item { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; }
+.rec-item-title { font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 3px; }
+.rec-item-desc { font-size: 12px; color: var(--text-sec); }
+.rec-impact { display: inline-block; margin-top: 5px; font-size: 11px; font-family: 'Courier New', monospace; padding: 2px 7px; border-radius: 3px; background: var(--olive-pale); color: var(--olive); }
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="nav-brand">Simulador &mdash; <span>Alperujo</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showTab('proceso')">Proceso</button>
+    <button class="nav-tab" onclick="showTab('dimensionado')">Dimensionado</button>
+    <button class="nav-tab" onclick="showTab('financiero')">Financiero</button>
+    <button class="nav-tab" onclick="showTab('resultados')">Resultados</button>
+  </div>
+  <button class="nav-reset" onclick="resetDefaults()">Restaurar valores TFG</button>
+</nav>
+
+<!-- PROCESO -->
+<section id="tab-proceso" class="tab-section active">
+<div class="container">
+  <div class="stepper" id="stepper"></div>
+  <div class="canvas-wrap">
+    <canvas id="proceso-canvas" class="proceso-canvas"></canvas>
+    <div class="stage-info">
+      <div>
+        <div class="stage-title" id="stage-title"></div>
+        <div class="stage-sub" id="stage-sub"></div>
+        <div class="stage-desc" id="stage-desc"></div>
+      </div>
+      <div class="stage-pills" id="stage-pills"></div>
+    </div>
+  </div>
+  <div class="stage-nav">
+    <button class="btn btn-outline" id="btn-prev" onclick="stepPrev()">&#8592; Anterior</button>
+    <span class="stage-counter" id="stage-counter"></span>
+    <button class="btn btn-primary" id="btn-next" onclick="stepNext()">Siguiente &#8594;</button>
+  </div>
+</div>
+</section>
+
+<!-- DIMENSIONADO -->
+<section id="tab-dimensionado" class="tab-section">
+<div class="container">
+<div class="dim-grid">
+
+  <div class="card">
+    <div class="card-header">Materia Prima</div>
+    <div class="param-row"><label>Toneladas de aceituna</label><input type="number" id="t_aceituna" value="15000" min="1000" max="100000" step="500" oninput="onInput()"><span class="param-unit">t/año</span></div>
+    <div class="param-row"><label>Rendimiento alperujo</label><input type="number" id="rend_alperujo" value="77.3" min="50" max="95" step="0.1" oninput="onInput()"><span class="param-unit">%</span></div>
+    <div class="param-row"><label>Contenido hueso</label><input type="number" id="contenido_hueso" value="14.4" min="5" max="30" step="0.1" oninput="onInput()"><span class="param-unit">%</span></div>
+    <div class="param-row"><label>Eficiencia separación hueso</label><input type="number" id="rend_separacion" value="97" min="70" max="100" step="0.5" oninput="onInput()"><span class="param-unit">%</span></div>
+    <div class="param-row"><label>Precio alperujo a orujera</label><input type="number" id="precio_alperujo_orujera" value="6.0" min="0" max="30" step="0.5" oninput="onInput()"><span class="param-unit">€/t</span></div>
+    <div class="param-row"><label>Coste transporte total</label><input type="number" id="coste_transporte_total" value="42300" min="0" max="500000" step="1000" oninput="onInput()"><span class="param-unit">€/año</span></div>
+    <div class="derived-section">
+      <div class="dpill">Alperujo: <strong id="d-alperujo">—</strong> t/año</div>
+      <div class="dpill">Hueso sep.: <strong id="d-hueso">—</strong> t/año</div>
+      <div class="dpill">A digestor: <strong id="d-digestion">—</strong> t/año</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Digestor Anaerobio</div>
+    <div class="param-row"><label>Rendimiento biogás</label><input type="number" id="rendimiento_biogas" value="142.7" min="50" max="400" step="1" oninput="onInput()"><span class="param-unit">m³/t</span></div>
+    <div class="param-row"><label>Contenido CH&#8324;</label><input type="number" id="pct_CH4" value="60" min="40" max="75" step="1" oninput="onInput()"><span class="param-unit">%</span></div>
+    <div class="param-row"><label>Autoconsumo biogás</label><input type="number" id="pct_autoconsumo_biogas" value="10" min="0" max="50" step="0.5" oninput="onInput()"><span class="param-unit">%</span></div>
+    <div class="param-row"><label>Hectáreas olivar fertilizables</label><input type="number" id="ha_olivar" value="750" min="0" max="5000" step="50" oninput="onInput()"><span class="param-unit">ha</span></div>
+    <div class="param-row"><label>Nitrógeno aplicado</label><input type="number" id="kg_N_ha" value="50" min="10" max="150" step="1" oninput="onInput()"><span class="param-unit">kg N/ha</span></div>
+    <div class="param-row"><label>Precio nitrógeno</label><input type="number" id="precio_N" value="1.28" min="0.5" max="5" step="0.01" oninput="onInput()"><span class="param-unit">€/kg</span></div>
+    <div class="derived-section">
+      <div class="dpill">Biogás bruto: <strong id="d-biogas-bruto">—</strong> m³/año</div>
+      <div class="dpill">Biogás neto: <strong id="d-biogas-neto">—</strong> m³/año</div>
+      <div class="dpill">Digestato: <strong id="d-digestato">—</strong> t/año</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Motor CHP</div>
+    <div class="param-row"><label>Potencia eléctrica CHP</label><input type="number" id="potencia_CHP_kwe" value="500" min="50" max="5000" step="50" oninput="onInput()"><span class="param-unit">kWe</span></div>
+    <div class="param-row"><label>Horas de operación</label><input type="number" id="horas_operacion" value="7326" min="1000" max="8760" step="100" oninput="onInput()"><span class="param-unit">h/año</span></div>
+    <div class="param-row"><label>Rendimiento eléctrico</label><input type="number" id="rend_electrico_CHP" value="38" min="20" max="55" step="0.5" oninput="onInput()"><span class="param-unit">%</span></div>
+    <div class="param-row"><label>Rendimiento térmico</label><input type="number" id="rend_termico_CHP" value="44" min="20" max="60" step="0.5" oninput="onInput()"><span class="param-unit">%</span></div>
+    <div class="param-row"><label>Autoconsumo eléctrico</label><input type="number" id="pct_autoconsumo_elec" value="14.5" min="0" max="50" step="0.5" oninput="onInput()"><span class="param-unit">%</span></div>
+    <div class="param-row"><label>Factura eléctrica actual</label><input type="number" id="factura_electrica_anual" value="62301" min="0" max="1000000" step="1000" oninput="onInput()"><span class="param-unit">€/año</span></div>
+    <div class="derived-section">
+      <div class="dpill">Elect. bruta: <strong id="d-elec-bruta">—</strong> MWh/año</div>
+      <div class="dpill">Elect. neta: <strong id="d-elec-neta">—</strong> MWh/año</div>
+      <div class="dpill">Calor: <strong id="d-calor">—</strong> MWh/año</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Ingresos y Precios</div>
+    <div class="param-row"><label>Precio venta hueso</label><input type="number" id="precio_venta_hueso" value="120" min="0" max="500" step="5" oninput="onInput()"><span class="param-unit">€/t</span></div>
+    <div class="param-row"><label>Precio compra red</label><input type="number" id="precio_compra_red" value="120" min="50" max="400" step="5" oninput="onInput()"><span class="param-unit">€/MWh</span></div>
+    <div class="param-row"><label>Precio venta excedente</label><input type="number" id="precio_venta_excedente" value="65" min="20" max="200" step="5" oninput="onInput()"><span class="param-unit">€/MWh</span></div>
+    <div class="derived-section">
+      <div class="dpill">Ahorro elect.: <strong id="d-ahorro-elec">—</strong> €/año</div>
+      <div class="dpill">Ingr. excedente: <strong id="d-ingr-exc">—</strong> €/año</div>
+      <div class="dpill">Ingr. hueso: <strong id="d-ingr-hueso">—</strong> €/año</div>
+      <div class="dpill">Fertilizante: <strong id="d-ingr-fert">—</strong> €/año</div>
+      <div class="dpill">Total ingresos: <strong id="d-ingr-total">—</strong> €/año</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Inversión (CAPEX)</div>
+    <div class="param-row"><label>Despedregadora</label><input type="number" id="inv_despedregadora" value="85000" min="0" max="500000" step="5000" oninput="onInput()"><span class="param-unit">€</span></div>
+    <div class="param-row"><label>Digestor anaerobio</label><input type="number" id="inv_digestor" value="850000" min="0" max="5000000" step="10000" oninput="onInput()"><span class="param-unit">€</span></div>
+    <div class="param-row"><label>Motor CHP</label><input type="number" id="inv_CHP" value="700000" min="0" max="5000000" step="10000" oninput="onInput()"><span class="param-unit">€</span></div>
+    <div class="param-row"><label>Instalación eléctrica</label><input type="number" id="inv_instalacion_electrica" value="320000" min="0" max="2000000" step="10000" oninput="onInput()"><span class="param-unit">€</span></div>
+    <div class="param-row"><label>Otros</label><input type="number" id="inv_otros" value="245000" min="0" max="2000000" step="5000" oninput="onInput()"><span class="param-unit">€</span></div>
+    <div class="param-row"><label>Subvención</label><input type="number" id="pct_subvencion" value="0" min="0" max="80" step="1" oninput="onInput()"><span class="param-unit">%</span></div>
+    <div class="derived-section">
+      <div class="dpill">CAPEX bruto: <strong id="d-capex-bruto">—</strong> €</div>
+      <div class="dpill">CAPEX neto: <strong id="d-capex-neto">—</strong> €</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Costes O&amp;M y Parámetros Financieros</div>
+    <div class="param-row"><label>Mant. CHP variable</label><input type="number" id="coste_mant_CHP_kwh" value="0.015" min="0.005" max="0.05" step="0.001" oninput="onInput()"><span class="param-unit">€/kWh</span></div>
+    <div class="param-row"><label>Personal</label><input type="number" id="coste_personal" value="35000" min="0" max="500000" step="1000" oninput="onInput()"><span class="param-unit">€/año</span></div>
+    <div class="param-row"><label>Consumibles</label><input type="number" id="coste_consumibles" value="10000" min="0" max="100000" step="1000" oninput="onInput()"><span class="param-unit">€/año</span></div>
+    <div class="param-row"><label>Seguros</label><input type="number" id="coste_seguros" value="11000" min="0" max="100000" step="500" oninput="onInput()"><span class="param-unit">€/año</span></div>
+    <div class="param-row"><label>Otros O&amp;M</label><input type="number" id="coste_otros_om" value="10000" min="0" max="100000" step="500" oninput="onInput()"><span class="param-unit">€/año</span></div>
+    <div class="param-row"><label>Revisión mayor</label><input type="number" id="coste_revision_mayor" value="120000" min="0" max="500000" step="5000" oninput="onInput()"><span class="param-unit">€</span></div>
+    <div class="param-row"><label>Año revisión mayor</label><input type="number" id="anyo_revision_mayor" value="8" min="1" max="20" step="1" oninput="onInput()"><span class="param-unit">año</span></div>
+    <div class="param-row"><label>Tasa de descuento</label><input type="number" id="tasa_descuento" value="5" min="0" max="20" step="0.25" oninput="onInput()"><span class="param-unit">%</span></div>
+    <div class="param-row"><label>Horizonte temporal</label><input type="number" id="horizonte" value="15" min="5" max="30" step="1" oninput="onInput()"><span class="param-unit">años</span></div>
+    <div class="param-row"><label>Valor residual</label><input type="number" id="pct_valor_residual" value="10" min="0" max="50" step="1" oninput="onInput()"><span class="param-unit">%</span></div>
+    <div class="derived-section">
+      <div class="dpill">OPEX total: <strong id="d-opex">—</strong> €/año</div>
+      <div class="dpill">FC operativo: <strong id="d-fc-op">—</strong> €/año</div>
+    </div>
+  </div>
+
+</div>
+</div>
+</section>
+
+<!-- FINANCIERO -->
+<section id="tab-financiero" class="tab-section">
+<div class="container">
+  <div class="kpi-row">
+    <div class="kpi-card" id="kpi-van-card">
+      <div class="kpi-label">VAN — Valor Actual Neto</div>
+      <div class="kpi-value" id="kpi-van">—</div>
+      <div class="kpi-sub" id="kpi-van-sub">Horizonte 15 años</div>
+    </div>
+    <div class="kpi-card" id="kpi-tir-card">
+      <div class="kpi-label">TIR — Tasa Interna de Retorno</div>
+      <div class="kpi-value" id="kpi-tir">—</div>
+      <div class="kpi-sub" id="kpi-tir-sub">Tasa de descuento: 5,00 %</div>
+    </div>
+    <div class="kpi-card" id="kpi-pb-card">
+      <div class="kpi-label">Payback — Periodo de Retorno</div>
+      <div class="kpi-value" id="kpi-pb">—</div>
+      <div class="kpi-sub">Retorno simple de la inversión</div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card"><div class="card-header">Flujo de Caja Acumulado</div><div class="chart-wrap"><canvas id="chart-fc"></canvas></div></div>
+    <div class="chart-card"><div class="card-header">Desglose de Ingresos Anuales</div><div class="chart-wrap"><canvas id="chart-ingresos"></canvas></div></div>
+    <div class="chart-card"><div class="card-header">Desglose de Costes O&amp;M</div><div class="chart-wrap"><canvas id="chart-costes"></canvas></div></div>
+    <div class="chart-card"><div class="card-header">Sensibilidad — Impacto en VAN</div><div class="chart-wrap"><canvas id="chart-sens"></canvas></div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:18px;">
+    <div class="card-header">Tabla de Flujos de Caja</div>
+    <div class="fc-table-wrap">
+      <table class="fc-table">
+        <thead><tr><th>Año</th><th>FC Neto (€)</th><th>FC Acumulado (€)</th><th>FC Descontado (€)</th><th>VAN Acumulado (€)</th></tr></thead>
+        <tbody id="fc-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Comparación de Escenarios</div>
+    <div style="padding:16px 18px;">
+      <div class="scenario-bar">
+        <button class="btn btn-outline btn-sm" onclick="saveScenario()">Guardar escenario actual</button>
+        <span style="font-size:12px;color:var(--text-sec);" id="scenario-count">0 escenarios guardados</span>
+      </div>
+      <table class="scenario-table">
+        <thead><tr><th>Nombre</th><th>CAPEX neto (€)</th><th>VAN (€)</th><th>TIR (%)</th><th>Payback</th><th></th></tr></thead>
+        <tbody id="scenario-tbody"><tr><td colspan="6" style="color:var(--text-sec);font-size:12px;padding:12px;">Sin escenarios guardados.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- RESULTADOS -->
+<section id="tab-resultados" class="tab-section">
+<div class="container">
+  <div id="diag-card" class="diag-card">
+    <div class="diag-title" id="diag-title">Diagnóstico</div>
+    <div class="diag-text" id="diag-text">Ajuste los parámetros en la pestaña Dimensionado para ver el diagnóstico.</div>
+  </div>
+  <div class="res-grid">
+    <div class="card">
+      <div class="card-header">Umbrales para VAN = 0</div>
+      <table class="thresh-table">
+        <thead><tr><th>Variable</th><th>Valor actual</th><th>Umbral VAN = 0</th></tr></thead>
+        <tbody id="thresh-tbody"></tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-header">Recomendaciones</div>
+      <div style="padding:14px 16px;"><div class="rec-list" id="rec-list"></div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<script>
+'use strict';
+const DEFAULTS={t_aceituna:15000,rend_alperujo:77.3,contenido_hueso:14.4,rend_separacion:97,precio_alperujo_orujera:6.0,coste_transporte_total:42300,factura_electrica_anual:62301,ha_olivar:750,kg_N_ha:50,precio_N:1.28,rendimiento_biogas:142.7,pct_CH4:60,pct_autoconsumo_biogas:10,potencia_CHP_kwe:500,horas_operacion:7326,rend_electrico_CHP:38,rend_termico_CHP:44,pct_autoconsumo_elec:14.5,precio_venta_hueso:120,inv_despedregadora:85000,inv_digestor:850000,inv_CHP:700000,inv_instalacion_electrica:320000,inv_otros:245000,pct_subvencion:0,precio_compra_red:120,precio_venta_excedente:65,coste_mant_CHP_kwh:0.015,coste_personal:35000,coste_consumibles:10000,coste_seguros:11000,coste_otros_om:10000,coste_revision_mayor:120000,anyo_revision_mayor:8,tasa_descuento:5,horizonte:15,pct_valor_residual:10};
+
+let scenarios=[],charts={},R={},currentStep=0,rafId=null,rafT=0,rafLast=null,scenarioCount=0;
+const $=id=>document.getElementById(id);
+const fmtN=(v,d=0)=>(v==null||isNaN(v))?'—':v.toLocaleString('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d});
+const fmtEur=(v,d=0)=>(v==null||isNaN(v))?'—':v.toLocaleString('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d})+' €';
+const fmtPct=(v,d=2)=>(v==null||isNaN(v))?'—':v.toLocaleString('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d})+' %';
+const setText=(id,v)=>{const e=$(id);if(e)e.textContent=v;};
+
+function getParams(){const p={};Object.keys(DEFAULTS).forEach(k=>{const e=$(k);p[k]=e?parseFloat(e.value)||0:DEFAULTS[k];});return p;}
+
+function compute(ov={}){
+  const p={...getParams(),...ov};
+  const t_alperujo=p.t_aceituna*p.rend_alperujo/100;
+  const t_hueso_separado=t_alperujo*(p.contenido_hueso/100)*(p.rend_separacion/100);
+  const t_alperujo_despedregado=t_alperujo-t_hueso_separado;
+  const digestato_estimado=t_alperujo_despedregado*0.69;
+  const biogas_bruto=t_alperujo_despedregado*p.rendimiento_biogas;
+  const biogas_neto=biogas_bruto*(1-p.pct_autoconsumo_biogas/100);
+  const energia_electrica_bruta=p.potencia_CHP_kwe*p.horas_operacion/1000;
+  const energia_electrica_neta=energia_electrica_bruta*(1-p.pct_autoconsumo_elec/100);
+  const autoconsumo_mwh=p.factura_electrica_anual/p.precio_compra_red;
+  const excedente_red=Math.max(0,energia_electrica_neta-autoconsumo_mwh);
+  const energia_termica=p.potencia_CHP_kwe*(p.rend_termico_CHP/p.rend_electrico_CHP)*p.horas_operacion/1000;
+  const ahorro_electricidad=p.factura_electrica_anual;
+  const ahorro_transporte=p.coste_transporte_total;
+  const ahorro_fertilizante=p.ha_olivar*p.kg_N_ha*p.precio_N;
+  const ingreso_excedente=excedente_red*p.precio_venta_excedente;
+  const ingreso_hueso=t_hueso_separado*p.precio_venta_hueso;
+  const perdida_alperujo=-(t_alperujo*p.precio_alperujo_orujera);
+  const ingresos_netos=ahorro_electricidad+ahorro_transporte+ahorro_fertilizante+ingreso_excedente+ingreso_hueso+perdida_alperujo;
+  const coste_mant_CHP_anual=p.coste_mant_CHP_kwh*energia_electrica_bruta*1000;
+  const costes_OM_anuales=coste_mant_CHP_anual+p.coste_personal+p.coste_consumibles+p.coste_seguros+p.coste_otros_om;
+  const fc_operativo=ingresos_netos-costes_OM_anuales;
+  const inversion_total=p.inv_despedregadora+p.inv_digestor+p.inv_CHP+p.inv_instalacion_electrica+p.inv_otros;
+  const inversion_neta=inversion_total*(1-p.pct_subvencion/100);
+  const n=Math.round(p.horizonte);
+  const fc=new Array(n+1);fc[0]=-inversion_neta;
+  for(let i=1;i<=n;i++){fc[i]=fc_operativo;if(i===Math.round(p.anyo_revision_mayor))fc[i]-=p.coste_revision_mayor;if(i===n)fc[i]+=inversion_total*p.pct_valor_residual/100;}
+  const r=p.tasa_descuento/100;
+  let van=0;for(let i=0;i<=n;i++)van+=fc[i]/Math.pow(1+r,i);
+  function npv(rate){let s=0;for(let i=0;i<=n;i++)s+=fc[i]/Math.pow(1+rate,i);return s;}
+  let tir=null;
+  if(npv(-0.5)*npv(2.0)<0){let a=-0.5,b=2.0;for(let i=0;i<200;i++){const m=(a+b)/2;if(Math.abs(b-a)<1e-6)break;if(npv(a)*npv(m)<=0)b=m;else a=m;}tir=(a+b)/2*100;}
+  let payback=null,cum=0;
+  for(let i=0;i<=n;i++){cum+=fc[i];if(cum>=0&&payback===null){payback=i;break;}}
+  const fc_disc=fc.map((v,i)=>v/Math.pow(1+r,i));
+  const cum_fc=[],cum_fc_disc=[];let cs=0,csd=0;
+  for(let i=0;i<=n;i++){cs+=fc[i];cum_fc.push(cs);csd+=fc_disc[i];cum_fc_disc.push(csd);}
+  return{p,t_alperujo,t_hueso_separado,t_alperujo_despedregado,digestato_estimado,biogas_bruto,biogas_neto,energia_electrica_bruta,energia_electrica_neta,autoconsumo_mwh,excedente_red,energia_termica,ahorro_electricidad,ahorro_transporte,ahorro_fertilizante,ingreso_excedente,ingreso_hueso,perdida_alperujo,ingresos_netos,coste_mant_CHP_anual,costes_OM_anuales,fc_operativo,inversion_total,inversion_neta,fc,fc_disc,cum_fc,cum_fc_disc,van,tir,payback,n};
+}
+
+const cVAN=v=>v>0?'var(--pos)':'var(--neg)';
+const cTIR=(tir,tasa)=>tir===null?'var(--neg)':tir>tasa+2?'var(--pos)':tir>tasa-2?'var(--warn)':'var(--neg)';
+const cPB=pb=>pb===null?'var(--neg)':pb<8?'var(--pos)':pb<=12?'var(--warn)':'var(--neg)';
+const bgVAN=v=>v>0?'var(--pos-bg)':'var(--neg-bg)';
+const bgTIR=(tir,tasa)=>tir===null?'var(--neg-bg)':tir>tasa+2?'var(--pos-bg)':tir>tasa-2?'var(--warn-bg)':'var(--neg-bg)';
+const bgPB=pb=>pb===null?'var(--neg-bg)':pb<8?'var(--pos-bg)':pb<=12?'var(--warn-bg)':'var(--neg-bg)';
+
+function updateAll(){R=compute();updateDerived();updateKPIs();updateCharts();updateFCTable();updateThresholds();updateDiagnosis();updateRecommendations();}
+
+function updateDerived(){const r=R;
+  setText('d-alperujo',fmtN(r.t_alperujo,0));setText('d-hueso',fmtN(r.t_hueso_separado,0));setText('d-digestion',fmtN(r.t_alperujo_despedregado,0));
+  setText('d-biogas-bruto',fmtN(r.biogas_bruto,0));setText('d-biogas-neto',fmtN(r.biogas_neto,0));setText('d-digestato',fmtN(r.digestato_estimado,0));
+  setText('d-elec-bruta',fmtN(r.energia_electrica_bruta,0));setText('d-elec-neta',fmtN(r.energia_electrica_neta,0));setText('d-calor',fmtN(r.energia_termica,0));
+  setText('d-ahorro-elec',fmtEur(r.ahorro_electricidad,0));setText('d-ingr-exc',fmtEur(r.ingreso_excedente,0));setText('d-ingr-hueso',fmtEur(r.ingreso_hueso,0));setText('d-ingr-fert',fmtEur(r.ahorro_fertilizante,0));setText('d-ingr-total',fmtEur(r.ingresos_netos,0));
+  setText('d-capex-bruto',fmtEur(r.inversion_total,0));setText('d-capex-neto',fmtEur(r.inversion_neta,0));
+  setText('d-opex',fmtEur(r.costes_OM_anuales,0));setText('d-fc-op',fmtEur(r.fc_operativo,0));
+}
+
+function updateKPIs(){const r=R,tasa=r.p.tasa_descuento;
+  setText('kpi-van',fmtEur(r.van,0));setText('kpi-tir',r.tir!==null?fmtPct(r.tir,2):'No definida');setText('kpi-pb',r.payback!==null?r.payback+' años':'> horizonte');
+  setText('kpi-van-sub','Horizonte '+r.n+' años');setText('kpi-tir-sub','Tasa descuento: '+fmtPct(tasa,2));
+  const vc=$('kpi-van-card'),tc=$('kpi-tir-card'),pc=$('kpi-pb-card');
+  vc.style.borderTopColor=cVAN(r.van);tc.style.borderTopColor=cTIR(r.tir,tasa);pc.style.borderTopColor=cPB(r.payback);
+  vc.style.background=bgVAN(r.van);tc.style.background=bgTIR(r.tir,tasa);pc.style.background=bgPB(r.payback);
+}
+
+const OP=['#4a6741','#6b8f5e','#8aaf7b','#b5d1a5','#d6e9ce'];
+const BP=['#7a5c3a','#9b7a55','#bc9870','#d9be9e','#f0dfc8'];
+
+function mkChart(id,type,data,opts){const el=$(id);if(!el)return;if(charts[id])charts[id].destroy();charts[id]=new Chart(el,{type,data,options:{responsive:true,maintainAspectRatio:false,...opts}});return charts[id];}
+
+function updateCharts(){const r=R;if(!r.fc)return;
+  const labels=Array.from({length:r.n+1},(_,i)=>i===0?'0':''+i);
+  const pbIdx=r.payback;
+  mkChart('chart-fc','line',{labels,datasets:[{label:'FC Acum.',data:r.cum_fc,borderColor:'#4a6741',backgroundColor:'rgba(74,103,65,0.07)',borderWidth:2,fill:true,tension:0.3,pointRadius:r.cum_fc.map((_,i)=>i===pbIdx?7:2.5),pointBackgroundColor:r.cum_fc.map((_,i)=>i===pbIdx?'#3d6b35':'#4a6741')},{label:'VAN Acum.',data:r.cum_fc_disc,borderColor:'#9b7a55',borderDash:[5,5],backgroundColor:'transparent',borderWidth:1.5,fill:false,tension:0.3,pointRadius:2}]},{plugins:{legend:{display:true,labels:{font:{size:10},boxWidth:10,color:'#6b6660'}},tooltip:{callbacks:{label:ctx=>fmtEur(ctx.raw,0)+(ctx.datasetIndex===0&&ctx.dataIndex===pbIdx?' \u2190 PAYBACK':'')}}},scales:{x:{ticks:{font:{size:10},color:'#6b6660'},grid:{color:'rgba(0,0,0,0.04)'}},y:{ticks:{font:{size:10},color:'#6b6660',callback:v=>fmtEur(v,0)},grid:{color:'rgba(0,0,0,0.04)'},afterDataLimits(ax){ax.min=Math.min(ax.min,0);}}}});
+
+  const iLabels=['Ahorro electricidad','Excedente red','Venta hueso','Fertiliz. digestato','Ahorro transporte'];
+  const iVals=[r.ahorro_electricidad,r.ingreso_excedente,r.ingreso_hueso,r.ahorro_fertilizante,r.ahorro_transporte];
+  mkChart('chart-ingresos','doughnut',{labels:iLabels,datasets:[{data:iVals,backgroundColor:OP,borderWidth:1,borderColor:'#fff'}]},{plugins:{legend:{display:true,position:'right',labels:{font:{size:10},boxWidth:9,color:'#6b6660',padding:6}},tooltip:{callbacks:{label:ctx=>ctx.label+': '+fmtEur(ctx.raw,0)}}}});
+
+  const cLabels=['Mant. CHP','Personal','Consumibles','Seguros','Otros O&M'];
+  const cVals=[r.coste_mant_CHP_anual,r.p.coste_personal,r.p.coste_consumibles,r.p.coste_seguros,r.p.coste_otros_om];
+  mkChart('chart-costes','doughnut',{labels:cLabels,datasets:[{data:cVals,backgroundColor:BP,borderWidth:1,borderColor:'#fff'}]},{plugins:{legend:{display:true,position:'right',labels:{font:{size:10},boxWidth:9,color:'#6b6660',padding:6}},tooltip:{callbacks:{label:ctx=>ctx.label+': '+fmtEur(ctx.raw,0)}}}});
+
+  const bv=r.van;
+  const svars=[{key:'precio_venta_excedente',label:'Precio excedente',d:20},{key:'rendimiento_biogas',label:'Rdto. biogás',d:20},{key:'t_aceituna',label:'Toneladas aceituna',d:20},{key:'horas_operacion',label:'Horas CHP',d:10},{key:'tasa_descuento',label:'Tasa descuento',d:-20},{key:'inv_digestor',label:'CAPEX digestor',d:-20}];
+  const sLabels=[],sDatas=[],sColors=[];
+  svars.forEach(sv=>{const o={};o[sv.key]=r.p[sv.key]*(1+sv.d/100);const delta=compute(o).van-bv;sLabels.push(sv.label);sDatas.push(delta);sColors.push(delta>=0?'rgba(61,107,53,0.7)':'rgba(139,58,42,0.7)');});
+  mkChart('chart-sens','bar',{labels:sLabels,datasets:[{data:sDatas,backgroundColor:sColors,borderWidth:0}]},{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>(ctx.raw>=0?'+':'')+fmtEur(ctx.raw,0)}}},scales:{x:{ticks:{font:{size:10},color:'#6b6660',callback:v=>fmtEur(v,0)},grid:{color:'rgba(0,0,0,0.04)'}},y:{ticks:{font:{size:10},color:'#6b6660'},grid:{display:false}}}});
+}
+
+function updateFCTable(){const r=R;if(!r.fc)return;const tbody=$('fc-tbody');if(!tbody)return;
+  const cv=v=>v>=0?`<span class="pos-val">${fmtEur(v,0)}</span>`:`<span class="neg-val">${fmtEur(v,0)}</span>`;
+  tbody.innerHTML=Array.from({length:r.n+1},(_,i)=>{const isPB=i===r.payback;return`<tr${isPB?' class="payback-row"':''}><td>${i===0?'0':i}</td><td>${cv(r.fc[i])}</td><td>${cv(r.cum_fc[i])}</td><td>${cv(r.fc_disc[i])}</td><td>${cv(r.cum_fc_disc[i])}</td></tr>`;}).join('');
+}
+
+function saveScenario(){const r=R;scenarioCount++;scenarios.push({name:'Escenario '+scenarioCount,van:r.van,tir:r.tir,payback:r.payback,capex:r.inversion_neta,id:scenarioCount});renderScenarios();}
+function deleteScenario(id){scenarios=scenarios.filter(s=>s.id!==id);renderScenarios();}
+function renderScenarios(){
+  setText('scenario-count',scenarios.length+' escenario'+(scenarios.length!==1?'s':'')+' guardado'+(scenarios.length!==1?'s':''));
+  const tbody=$('scenario-tbody');
+  if(!scenarios.length){tbody.innerHTML='<tr><td colspan="6" style="color:var(--text-sec);font-size:12px;padding:12px;">Sin escenarios guardados.</td></tr>';return;}
+  tbody.innerHTML=scenarios.map(s=>`<tr><td>${s.name}</td><td>${fmtEur(s.capex,0)}</td><td style="color:${s.van>0?'var(--pos)':'var(--neg)'}">${fmtEur(s.van,0)}</td><td>${s.tir!==null?fmtPct(s.tir,2):'—'}</td><td>${s.payback!==null?s.payback+' a.':'> horiz.'}</td><td><button class="btn-del" onclick="deleteScenario(${s.id})">Borrar</button></td></tr>`).join('');
+}
+
+function bisect(key,lo,hi){const o={};let a=lo,b=hi;for(let i=0;i<80;i++){const m=(a+b)/2;if(Math.abs(b-a)<0.01)break;o[key]=m;if(compute(o).van>=0)b=m;else a=m;}return(a+b)/2;}
+function updateThresholds(){const r=R;
+  const vars=[{key:'precio_venta_excedente',label:'Precio excedente',lo:5,hi:400,fmt:v=>fmtN(v,1)+' €/MWh'},{key:'t_aceituna',label:'Toneladas aceituna',lo:500,hi:200000,fmt:v=>fmtN(v,0)+' t/año'},{key:'rendimiento_biogas',label:'Rdto. biogás',lo:20,hi:500,fmt:v=>fmtN(v,1)+' m³/t'},{key:'horas_operacion',label:'Horas operación CHP',lo:500,hi:8760,fmt:v=>fmtN(v,0)+' h/año'}];
+  const tbody=$('thresh-tbody');if(!tbody)return;
+  tbody.innerHTML=vars.map(v=>{let thresh='—';try{const t=bisect(v.key,v.lo,v.hi);thresh=v.fmt(t);}catch(e){}return`<tr><td>${v.label}</td><td>${v.fmt(r.p[v.key])}</td><td style="color:var(--olive)">${thresh}</td></tr>`;}).join('');
+}
+
+function updateDiagnosis(){const r=R,tasa=r.p.tasa_descuento;
+  const card=$('diag-card'),title=$('diag-title'),text=$('diag-text');if(!card)return;
+  if(r.van>0&&r.tir!==null&&r.tir>tasa){card.className='diag-card pos';title.textContent='Proyecto viable';text.innerHTML=`El proyecto presenta <strong>viabilidad económica</strong> con un VAN de <strong>${fmtEur(r.van,0)}</strong> y una TIR del <strong>${fmtPct(r.tir,2)}</strong>, superior a la tasa de descuento del ${fmtPct(tasa,2)}. El periodo de retorno simple es de <strong>${r.payback!==null?r.payback+' años':'más del horizonte analizado'}</strong>. El modelo de economía circular genera valor a partir de un residuo agroindustrial, con ingresos diversificados procedentes de la venta de energía eléctrica, hueso de aceituna y digestato como biofertilizante.`;}
+  else if(r.van>0){card.className='diag-card warn';title.textContent='Viable pero ajustado';text.innerHTML=`El VAN es positivo (${fmtEur(r.van,0)}) pero la TIR (${fmtPct(r.tir,2)}) se sitúa próxima a la tasa de descuento (${fmtPct(tasa,2)}), lo que indica un margen de seguridad reducido. Se recomienda revisar los parámetros más sensibles del modelo.`;}
+  else{card.className='diag-card neg';title.textContent='Proyecto no viable en la configuración actual';text.innerHTML=`El VAN negativo (${fmtEur(r.van,0)}) indica que el proyecto no recupera la inversión en el horizonte analizado (${r.n} años). Se recomienda ajustar los parámetros de ingresos o reducir la inversión inicial.`;}
+}
+
+function updateRecommendations(){const r=R,base=r.van,recs=[];
+  if(r.p.pct_subvencion<20)recs.push({t:'Solicitar subvención pública',d:'Un 20% de subvención reduciría el CAPEX neto en '+fmtEur(r.inversion_total*0.2,0)+', mejorando sustancialmente la viabilidad del proyecto.',imp:compute({pct_subvencion:20}).van-base});
+  if(r.p.horas_operacion<7500)recs.push({t:'Optimizar disponibilidad del CHP',d:'Aumentar las horas de operación al 85% (7.446 h/año) incrementa la generación eléctrica y el margen operativo.',imp:compute({horas_operacion:7446}).van-base});
+  if(r.p.rendimiento_biogas<150)recs.push({t:'Mejorar rendimiento del digestor',d:'Optimizar el consorcio bacteriano y el tiempo de retención hidráulica para aumentar el rendimiento de biogás.',imp:compute({rendimiento_biogas:155}).van-base});
+  if(r.excedente_red<r.energia_electrica_neta*0.5)recs.push({t:'Negociar contrato de venta a red',d:'El autoconsumo es elevado. Negociar un contrato de vertido favorable para el excedente podría aumentar los ingresos directos.',imp:null});
+  const list=$('rec-list');if(!list)return;
+  if(!recs.length){list.innerHTML='<div style="color:var(--text-sec);font-size:13px;">No se identifican mejoras significativas en la configuración actual.</div>';return;}
+  list.innerHTML=recs.map(rec=>`<div class="rec-item"><div class="rec-item-title">${rec.t}</div><div class="rec-item-desc">${rec.desc||rec.d}</div>${rec.imp!==null?`<span class="rec-impact">Impacto VAN: ${rec.imp>=0?'+':''}${fmtEur(rec.imp,0)}</span>`:''}</div>`).join('');
+}
+
+// ===== STAGES =====
+const STAGES=[
+  {title:'Recepción de alperujo',sub:'Subproducto de almazara de 2 fases · 77,3% s/aceituna',desc:'El alperujo es el subproducto sólido húmedo generado en las almazaras de centrifugación en dos fases. Con un contenido en humedad del 25-35% y un 3-6% de aceite residual, constituye la materia prima del modelo de valorización energética y agronómica propuesto.',pills:['Humedad: ~30%','Aceite residual: 3-6%','Origen: centrifugación 2 fases']},
+  {title:'Proceso en almazara',sub:'Centrifugación · rendimiento alperujo 77,3%',desc:'La almazara de dos fases produce aceite de oliva virgen mediante molienda y centrifugación sin adición de agua. Esto genera alperujo en mayor cantidad pero con menor contenido hídrico que el sistema de tres fases, lo que facilita su posterior tratamiento anaerobio.',pills:['Rend. alperujo: 77,3%','Sistema: 2 fases','Sin agua añadida']},
+  {title:'Despedregadora',sub:'Separación neumática · eliminación de material inerte',desc:'Antes de la digestión anaerobia, el alperujo se somete a despedregado para eliminar piedras y fragmentos de hueso que podrían dañar los equipos. La separación se realiza mediante cribas vibrantes y corrientes de aire clasificadoras.',pills:['Eficiencia: >95%','Material eliminado: rocas, tierra','Protección de equipos']},
+  {title:'Separación de hueso',sub:'Biomasa sólida · 14,4% s/alperujo · 97% eficiencia',desc:'El hueso de aceituna separado del alperujo es una biomasa lignocelulósica de alto poder calorífico (18-19 MJ/kg). Se comercializa como combustible para calderas de biomasa, generando un ingreso adicional y reduciendo la carga orgánica del digestor.',pills:['Contenido: 14,4% s/alperujo','Eficiencia sep.: 97%','PCI: ~18-19 MJ/kg']},
+  {title:'Digestor anaerobio',sub:'Régimen mesofílico · HRT 25 días · 60% CH₄',desc:'El alperujo sin hueso se introduce en el digestor anaerobio de régimen mesofílico (35-40°C). El consorcio bacteriano acetogénico degrada la materia orgánica en ausencia de oxígeno, produciendo biogás rico en metano y digestato como subproducto valorizable.',pills:['Temperatura: 35-40 °C','HRT: ~25 días','Biogás: ~60% CH₄']},
+  {title:'Biofertilizante (digestato)',sub:'Cierre del ciclo de nutrientes · fertirrigación 750 ha',desc:'El digestato efluente del digestor es un biofertilizante rico en N, P y K en formas biodisponibles. Se aplica mediante fertirrigación en el olivar, cerrando el ciclo de nutrientes y sustituyendo fertilizantes minerales de síntesis, con el consiguiente ahorro económico y ambiental.',pills:['N+P+K biodisponible','Aplicación: fertirrigación','750 ha olivar tratables']},
+  {title:'Motor CHP',sub:'Cogeneración · 500 kWe · η_el 38% · η_term 44%',desc:'El biogás producido alimenta un motor de cogeneración que genera simultáneamente electricidad y calor. Con 500 kWe y 7.326 horas de operación anuales, la planta cubre su autoconsumo y vende los excedentes a red, maximizando los ingresos del sistema.',pills:['Potencia: 500 kWe','Horas: 7.326 h/año','η global: >80%']},
+  {title:'Red eléctrica',sub:'Autoconsumo + excedente a red · ahorro en factura',desc:'La electricidad generada cubre el autoconsumo de la instalación y de la almazara. El excedente se vierte a la red eléctrica, generando ingreso adicional y reduciendo la dependencia energética exterior. El ahorro en factura eléctrica constituye uno de los principales vectores de valor del proyecto.',pills:['Autoconsumo: 14,5%','Excedente: venta a red','Ahorro factura anual']},
+  {title:'Calor útil',sub:'Recuperación térmica · 80-90 °C · usos industriales',desc:'El calor recuperado en el motor CHP se aprovecha a 80-90°C para mantener el régimen mesofílico del digestor y para usos industriales en la almazara. Este aprovechamiento eleva la eficiencia global del sistema por encima del 80%, siendo fundamental para la competitividad económica del modelo.',pills:['Temperatura: 80-90 °C','Uso: calefacción digestor','η global sistema: >80%']}
+];
+
+function updateStageInfo(){
+  const s=STAGES[currentStep];
+  setText('stage-title',s.title);setText('stage-sub',s.sub);setText('stage-desc',s.desc);
+  const pe=$('stage-pills');if(pe)pe.innerHTML=s.pills.map(p=>`<div class="stage-pill">${p}</div>`).join('');
+  setText('stage-counter',(currentStep+1)+' / '+STAGES.length);
+  $('btn-prev').disabled=currentStep===0;$('btn-next').disabled=currentStep===STAGES.length-1;
+  renderStepper();
+}
+function renderStepper(){const el=$('stepper');if(!el)return;el.innerHTML=STAGES.map((s,i)=>`<div class="step-item ${i===currentStep?'active':i<currentStep?'done':''}" onclick="goStep(${i})"><div class="step-num">${String(i+1).padStart(2,'0')}</div><div class="step-label">${s.title.split(' ').slice(0,2).join(' ')}</div></div>`).join('');}
+function goStep(i){currentStep=i;updateStageInfo();startCanvas();}
+function stepNext(){if(currentStep<STAGES.length-1){currentStep++;updateStageInfo();startCanvas();}}
+function stepPrev(){if(currentStep>0){currentStep--;updateStageInfo();startCanvas();}}
+
+// ===== CANVAS — SKETCHUP STYLE =====
+const ST='#e8e5e0',SL='#d4d1cb',SR='#bcb9b3',ST2='#dedad4',SL2='#c8c5bf',SR2='#aeaba5';
+const OL='rgba(74,103,65,0.78)',OD='rgba(52,78,45,0.88)',BR='rgba(122,92,58,0.72)',BRD='rgba(90,68,40,0.82)';
+const EDGE='rgba(55,50,45,0.13)';
+
+function _ip(wx,wy,wz,ox,oy,sc){return[ox+(wx-wy)*sc*0.866,oy+(wx+wy)*sc*0.5-wz*sc];}
+function _face(ctx,pts,ox,oy,sc,fill,stroke){ctx.beginPath();pts.forEach(([x,y,z],i)=>{const[sx,sy]=_ip(x,y,z,ox,oy,sc);i?ctx.lineTo(sx,sy):ctx.moveTo(sx,sy);});ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=0.6;ctx.stroke();}}
+function _box(ctx,bx,by,bz,sw,sd,sh,ox,oy,sc,cT,cL,cR){
+  _face(ctx,[[bx,by,bz+sh],[bx+sw,by,bz+sh],[bx+sw,by+sd,bz+sh],[bx,by+sd,bz+sh]],ox,oy,sc,cT,EDGE);
+  _face(ctx,[[bx,by,bz],[bx+sw,by,bz],[bx+sw,by,bz+sh],[bx,by,bz+sh]],ox,oy,sc,cL,EDGE);
+  _face(ctx,[[bx+sw,by,bz],[bx+sw,by+sd,bz],[bx+sw,by+sd,bz+sh],[bx+sw,by,bz+sh]],ox,oy,sc,cR,EDGE);
+}
+function _grid(ctx,W,H){ctx.fillStyle='#f3f0eb';ctx.fillRect(0,0,W,H);ctx.fillStyle='rgba(100,95,88,0.06)';for(let x=28;x<W;x+=28)for(let y=28;y<H;y+=28){ctx.beginPath();ctx.arc(x,y,0.9,0,Math.PI*2);ctx.fill();}}
+function _lbl(ctx,W,H,t1,t2){ctx.textAlign='left';ctx.fillStyle='rgba(45,50,40,0.58)';ctx.font='bold 9px "Courier New",monospace';ctx.fillText(t1,W*0.04,H*0.9);ctx.fillStyle='rgba(107,102,96,0.45)';ctx.font='8px "Courier New",monospace';ctx.fillText(t2,W*0.04,H*0.9+12);}
+
+function drawStage(ctx,W,H,t,idx){
+  _grid(ctx,W,H);
+  const ox=W*0.48,oy=H*0.62,sc=Math.min(W,H)/9;
+  if(idx===0)s0(ctx,W,H,t,ox,oy,sc);
+  else if(idx===1)s1(ctx,W,H,t,ox,oy,sc);
+  else if(idx===2)s2(ctx,W,H,t,ox,oy,sc);
+  else if(idx===3)s3(ctx,W,H,t,ox,oy,sc);
+  else if(idx===4)s4(ctx,W,H,t,ox,oy,sc);
+  else if(idx===5)s5(ctx,W,H,t,ox,oy,sc);
+  else if(idx===6)s6(ctx,W,H,t,ox,oy,sc);
+  else if(idx===7)s7(ctx,W,H,t,ox,oy,sc);
+  else s8(ctx,W,H,t,ox,oy,sc);
+}
+
+function s0(ctx,W,H,t,ox,oy,sc){
+  _box(ctx,-3,-3,0,8,6,0.25,ox,oy,sc,ST,SL,SR);
+  [[-1.5,0],[0.5,-1],[2,1]].forEach(([tx,ty],i)=>{
+    _box(ctx,tx-0.14,ty-0.14,0.25,0.28,0.28,1.1+i*0.15,ox,oy,sc,SR2,SL2,SR2);
+    const[cx,cy]=_ip(tx,ty,1.4+i*0.15,ox,oy,sc);const r=(0.72+i*0.04)*sc;
+    const g=ctx.createRadialGradient(cx-r*0.2,cy-r*0.3,r*0.08,cx,cy,r);g.addColorStop(0,'rgba(88,118,70,0.95)');g.addColorStop(0.6,'rgba(63,93,48,0.85)');g.addColorStop(1,'rgba(43,68,33,0.35)');
+    ctx.beginPath();ctx.ellipse(cx,cy,r*1.1,r*0.78,0,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+  });
+  for(let i=0;i<18;i++){const ph=((i/18)+t*0.38)%1;const[px,py]=_ip(-1.5+(i%3)*2,(i%3-1)*0.5,2-ph*2.4,ox,oy,sc);ctx.beginPath();ctx.ellipse(px,py,2.2,3,0,0,Math.PI*2);ctx.fillStyle=`rgba(48,68,28,${(1-ph)*0.82})`;ctx.fill();}
+  _box(ctx,2.5,0.5,0.25,1.2,1,0.65,ox,oy,sc,ST,OL,OD);
+  _lbl(ctx,W,H,'RECEPCIÓN ALPERUJO','Subproducto almazara · 77,3% s/aceituna');
+}
+
+function s1(ctx,W,H,t,ox,oy,sc){
+  _box(ctx,-3.5,-2.5,0,7,5,0.22,ox,oy,sc,ST,SL,SR);
+  const[dcx,dcy]=_ip(0,0,0.22,ox,oy,sc);const dr=sc*1.3;
+  ctx.beginPath();ctx.ellipse(dcx,dcy,dr,dr*0.56,0,0,Math.PI*2);ctx.fillStyle=SL;ctx.fill();ctx.strokeStyle=EDGE;ctx.lineWidth=0.7;ctx.stroke();
+  for(let i=0;i<8;i++){const a=t*2+i*Math.PI/4;const[x1,y1]=[dcx+Math.cos(a)*dr*0.38,dcy+Math.sin(a)*dr*0.21];const[x2,y2]=[dcx+Math.cos(a)*dr*0.83,dcy+Math.sin(a)*dr*0.46];ctx.strokeStyle='rgba(55,50,45,0.09)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();}
+  ctx.beginPath();ctx.ellipse(dcx,dcy-dr*0.22,dr*0.38,dr*0.21,0,0,Math.PI*2);ctx.fillStyle=ST;ctx.fill();
+  _box(ctx,-3.5,-0.4,0.45,1,0.8,0.45,ox,oy,sc,OL,OL,OD);
+  _box(ctx,2,-0.3,0.45,1.5,0.6,0.3,ox,oy,sc,BR,BR,BRD);
+  for(let i=0;i<8;i++){const ph=((i/8)+t*0.58)%1;const[px,py]=_ip(-3.5+ph*1.15,-0.08,0.65,ox,oy,sc);ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fillStyle=`rgba(74,103,65,${(1-ph)*0.75})`;ctx.fill();}
+  _lbl(ctx,W,H,'ALMAZARA 2 FASES','Centrifugación · sin agua añadida');
+}
+
+function s2(ctx,W,H,t,ox,oy,sc){
+  _box(ctx,-3.5,-2.5,0,7,5,0.2,ox,oy,sc,ST,SL,SR);
+  const vib=Math.sin(t*18)*0.045;
+  _box(ctx,-1.8+vib,-1.2,0.2,3.6,2.4,1.8,ox,oy,sc,ST,SL,SR);
+  const[fx0,fy0]=_ip(-1.8+vib,-1.2,2,ox,oy,sc);const[fx1,fy1]=_ip(1.8+vib,-1.2,0.2,ox,oy,sc);
+  for(let g=0;g<5;g++){const gy=fy0+(fy1-fy0)*g/4;ctx.strokeStyle='rgba(55,50,45,0.07)';ctx.lineWidth=0.5;ctx.beginPath();ctx.moveTo(fx0,gy);ctx.lineTo(fx1,gy);ctx.stroke();}
+  _box(ctx,-1+vib,-2,2,2,1.5,0.9,ox,oy,sc,ST2,OL,OD);
+  for(let i=0;i<14;i++){const ph=((i/14)+t*0.68)%1;const[px,py]=_ip(-0.8+(i%4)*0.5+vib,-1.5,1.85-ph*1.65,ox,oy,sc);ctx.beginPath();ctx.arc(px,py,1.4,0,Math.PI*2);ctx.fillStyle=i%3===0?`rgba(145,125,95,${(1-ph)*0.68})`:`rgba(74,103,65,${(1-ph)*0.68})`;ctx.fill();}
+  _box(ctx,-2.8,1.2,0.2,1.2,0.8,0.55,ox,oy,sc,SR2,SL2,SR2);
+  _box(ctx,1.8,1.2,0.2,1.2,0.8,0.55,ox,oy,sc,ST,OL,OD);
+  _lbl(ctx,W,H,'DESPEDREGADORA VIBRATORIA','Separación inerte · protección digestor');
+}
+
+function s3(ctx,W,H,t,ox,oy,sc){
+  _box(ctx,-3.5,-2.5,0,7,5,0.2,ox,oy,sc,ST,SL,SR);
+  _box(ctx,-1.5,-1,0.2,3,2,1.5,ox,oy,sc,ST,SL,SR);
+  const slOff=(t*1.2)%0.5;
+  for(let i=0;i<6;i++){const bx=-1.3+(i*0.5+slOff)%3;_box(ctx,bx,-0.8,1.7,0.33,1.6,0.11,ox,oy,sc,ST2,SL2,SR2);}
+  for(let i=0;i<12;i++){const ph=((i/12)+t*0.48)%1;const[px,py]=_ip(1.5+ph*1.5,-0.2,0.5,ox,oy,sc);ctx.beginPath();ctx.ellipse(px,py,2.8,1.8,0,0,Math.PI*2);ctx.fillStyle=`rgba(138,112,78,${(1-ph)*0.78})`;ctx.fill();}
+  _box(ctx,2.5,-0.5,0.2,1.2,1.2,3.5,ox,oy,sc,ST,OL,OD);
+  const fhv=Math.sin(t*0.3)*0.15+0.6;_box(ctx,2.55,-0.45,0.25,1.1,1.1,3.5*fhv,ox,oy,sc,'rgba(122,92,58,0.28)','rgba(122,92,58,0.22)','rgba(122,92,58,0.18)');
+  _lbl(ctx,W,H,'SEPARACIÓN DE HUESO','14,4% s/alperujo · 97% eficiencia · PCI 18-19 MJ/kg');
+}
+
+function s4(ctx,W,H,t,ox,oy,sc){
+  _box(ctx,-3.5,-2.5,0,7,5,0.2,ox,oy,sc,ST,SL,SR);
+  _box(ctx,-1.8,-1.5,0.2,3.6,3,3,ox,oy,sc,ST,SL,SR);
+  const[dcx,dcy]=_ip(0,0,3.2,ox,oy,sc);const dr=sc*1.65;
+  ctx.beginPath();ctx.ellipse(dcx,dcy,dr,dr*0.37,0,0,Math.PI*2);ctx.fillStyle=ST2;ctx.fill();ctx.strokeStyle=EDGE;ctx.lineWidth=0.6;ctx.stroke();
+  const lhv=0.55+Math.sin(t*0.2)*0.04;
+  _face(ctx,[[-1.8,-1.5,0.2+3*lhv],[1.8,-1.5,0.2+3*lhv],[1.8,1.5,0.2+3*lhv],[-1.8,1.5,0.2+3*lhv]],ox,oy,sc,'rgba(74,103,65,0.16)','rgba(74,103,65,0.28)');
+  for(let i=0;i<14;i++){const ph=((i/14)+t*0.33)%1;const[px,py]=_ip(-1.4+(i%5)*0.6,-1+(i%3)*0.8,0.4+ph*2.5,ox,oy,sc);ctx.beginPath();ctx.arc(px,py,1.8,0,Math.PI*2);ctx.fillStyle=`rgba(74,103,65,${(1-ph)*0.55})`;ctx.fill();}
+  _box(ctx,-0.2,-0.2,3.2,0.4,0.4,1.2,ox,oy,sc,ST2,OL,OD);
+  const tmp=(36.5+Math.sin(t*0.25)*0.3).toFixed(1);
+  const[tx2,ty2]=_ip(2.5,-1.5,1.5,ox,oy,sc);
+  ctx.fillStyle='rgba(240,237,232,0.93)';ctx.strokeStyle=EDGE;ctx.lineWidth=0.5;ctx.beginPath();ctx.rect(tx2,ty2,70,36);ctx.fill();ctx.stroke();
+  ctx.fillStyle='#4a6741';ctx.font='bold 12px "Courier New",monospace';ctx.textAlign='center';ctx.fillText(tmp+' °C',tx2+35,ty2+19);ctx.fillStyle='#6b6660';ctx.font='7px "Courier New",monospace';ctx.fillText('T DIGESTOR',tx2+35,ty2+30);
+  _lbl(ctx,W,H,'DIGESTOR ANAEROBIO','Mesofílico 35-40°C · HRT 25d · 60% CH₄');
+}
+
+function s5(ctx,W,H,t,ox,oy,sc){
+  _box(ctx,-3.5,-2.5,0,7,5,0.2,ox,oy,sc,ST,SL,SR);
+  _box(ctx,-2.8,-1.2,0.2,2,2,2.5,ox,oy,sc,ST,SL,SR);
+  const[dcx2,dcy2]=_ip(-1.8,-0.2,2.7,ox,oy,sc);ctx.beginPath();ctx.ellipse(dcx2,dcy2,sc*0.9,sc*0.33,0,0,Math.PI*2);ctx.fillStyle=ST2;ctx.fill();ctx.strokeStyle=EDGE;ctx.lineWidth=0.5;ctx.stroke();
+  _box(ctx,-0.8,-0.2,0.4,3.2,0.28,0.22,ox,oy,sc,OL,OL,OD);
+  ctx.setLineDash([5,8]);ctx.lineDashOffset=-t*13;const[p0x,p0y]=_ip(2.4,-0.1,0.55,ox,oy,sc);const[p1x,p1y]=_ip(3.4,-0.1,0.55,ox,oy,sc);ctx.strokeStyle='rgba(74,103,65,0.48)';ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(p0x,p0y);ctx.lineTo(p1x,p1y);ctx.stroke();ctx.setLineDash([]);
+  [[1.5,1],[2.8,-0.5]].forEach(([tx,ty],i)=>{
+    _box(ctx,tx-0.12,ty-0.12,0.2,0.24,0.24,0.78+i*0.1,ox,oy,sc,SR2,SL2,SR2);
+    const[cx,cy]=_ip(tx,ty,1.1+i*0.1,ox,oy,sc);const r=(0.58+i*0.04)*sc;
+    const g=ctx.createRadialGradient(cx-r*0.2,cy-r*0.3,r*0.08,cx,cy,r);g.addColorStop(0,'rgba(88,118,70,0.9)');g.addColorStop(1,'rgba(43,68,33,0.32)');
+    ctx.beginPath();ctx.ellipse(cx,cy,r,r*0.72,0,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+    for(let d=0;d<10;d++){const ph=((d/10)+t*0.58+i*0.3)%1;const a=(d/10)*Math.PI*0.65+Math.PI*0.18;const spd=28+d%3*9;const px=cx+Math.cos(a)*spd*ph,py=cy+Math.sin(a)*spd*ph+ph*ph*36;if(ph<0.88){ctx.beginPath();ctx.arc(px,py,1.4,0,Math.PI*2);ctx.fillStyle=`rgba(74,103,65,${(1-ph)*0.68})`;ctx.fill();}}
+  });
+  _lbl(ctx,W,H,'BIOFERTILIZANTE — DIGESTATO','N+P+K biodisponible · cierre ciclo nutrientes');
+}
+
+function s6(ctx,W,H,t,ox,oy,sc){
+  _box(ctx,-3.5,-2.5,0,7,5,0.2,ox,oy,sc,ST,SL,SR);
+  _box(ctx,-2,-1.2,0.2,3.5,2.4,1.8,ox,oy,sc,ST,SL,SR);
+  for(let i=0;i<5;i++)_box(ctx,-1.7+i*0.6,-1,2,0.33,2.2,0.48,ox,oy,sc,ST2,SL2,SR2);
+  _box(ctx,1.5,-0.2,0.9,1.2,0.4,0.28,ox,oy,sc,SR,SR,SR2);
+  const chpAng=t*3;const[fwx,fwy]=_ip(2.8,0,1.05,ox,oy,sc);const fwr=sc*0.7;
+  const fwg=ctx.createRadialGradient(fwx,fwy,fwr*0.13,fwx,fwy,fwr);fwg.addColorStop(0,SR);fwg.addColorStop(1,'#b0ada7');
+  ctx.beginPath();ctx.ellipse(fwx,fwy,fwr,fwr*0.5,0,0,Math.PI*2);ctx.fillStyle=fwg;ctx.fill();ctx.strokeStyle=EDGE;ctx.lineWidth=0.7;ctx.stroke();
+  for(let s=0;s<4;s++){const a=chpAng+s*Math.PI/2;ctx.strokeStyle='rgba(55,50,45,0.16)';ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(fwx,fwy);ctx.lineTo(fwx+Math.cos(a)*fwr*0.68,fwy+Math.sin(a)*fwr*0.37);ctx.stroke();}
+  ctx.beginPath();ctx.arc(fwx,fwy,3.5,0,Math.PI*2);ctx.fillStyle=SL;ctx.fill();
+  _box(ctx,-3.5,-0.3,0.65,1.5,0.58,0.28,ox,oy,sc,OL,OL,OD);
+  ctx.setLineDash([5,8]);ctx.lineDashOffset=-t*15;const[ip0x,ip0y]=_ip(-3.5,-0.05,0.82,ox,oy,sc);const[ip1x,ip1y]=_ip(-2,-0.05,0.82,ox,oy,sc);ctx.strokeStyle='rgba(74,103,65,0.52)';ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(ip0x,ip0y);ctx.lineTo(ip1x,ip1y);ctx.stroke();ctx.setLineDash([]);
+  const bph=(t*2.5)%1;const[ex,ey]=_ip(3.8,0,1.1,ox,oy,sc);ctx.fillStyle=`rgba(74,103,65,${0.58+bph*0.38})`;ctx.font='bold 16px system-ui';ctx.textAlign='center';ctx.fillText('↯',ex,ey+6);
+  for(let i=0;i<6;i++){const wph=((i*0.2)+t*0.48)%1;const[wx,wy]=_ip(-1.5+i*0.6,-1,2.5,ox,oy,sc);ctx.beginPath();for(let d=0;d<=16;d++){const p={x:wx+d-8,y:wy-wph*33-Math.sin((d/3.8)+t*3.8+i)*3.8};d===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y);}ctx.strokeStyle=`rgba(122,92,58,${(1-wph)*0.45})`;ctx.lineWidth=1.4;ctx.stroke();}
+  _lbl(ctx,W,H,'MOTOR CHP — COGENERACIÓN','500 kWe · η_el 38% · η_term 44% · >80% global');
+}
+
+function s7(ctx,W,H,t,ox,oy,sc){
+  _box(ctx,-3.5,-2.5,0,7,5,0.15,ox,oy,sc,ST,SL,SR);
+  const poles=[[-2.5,0],[0,0],[2.2,0]];
+  poles.forEach(([px,py])=>{
+    _box(ctx,px-0.11,py-0.09,0.15,0.22,0.18,3.5,ox,oy,sc,ST2,SL2,SR2);
+    _box(ctx,px-0.68,py-0.05,3.5,1.36,0.1,0.16,ox,oy,sc,SL,SL2,SR2);
+    [-0.53,0,0.53].forEach(ox2=>{const[ix,iy]=_ip(px+ox2,py,3.5,ox,oy,sc);ctx.beginPath();ctx.arc(ix,iy,2.5,0,Math.PI*2);ctx.fillStyle=SR2;ctx.fill();});
+  });
+  ['rgba(74,103,65,0.48)','rgba(74,103,65,0.28)','rgba(74,103,65,0.18)'].forEach((wc,wi)=>{
+    for(let i=0;i<poles.length-1;i++){const[x1,y1]=_ip(poles[i][0],poles[i][1]-0.52+wi*0.52,3.5,ox,oy,sc);const[x2,y2]=_ip(poles[i+1][0],poles[i+1][1]-0.52+wi*0.52,3.5,ox,oy,sc);const mx=(x1+x2)/2,my=Math.max(y1,y2)+14;ctx.strokeStyle=wc;ctx.lineWidth=1.1;ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo(mx,my,x2,y2);ctx.stroke();}
+    const ph=((wi*0.33)+t*0.52)%1;const[ax,ay]=_ip(poles[0][0],poles[0][1]-0.52+wi*0.52,3.5,ox,oy,sc);const[bx2,by2]=_ip(poles[poles.length-1][0],poles[poles.length-1][1]-0.52+wi*0.52,3.5,ox,oy,sc);const ppx=ax+(bx2-ax)*ph,ppy=ay+(by2-ay)*ph+14*Math.sin(ph*Math.PI);ctx.beginPath();ctx.arc(ppx,ppy,3.5,0,Math.PI*2);ctx.fillStyle='rgba(74,103,65,0.88)';ctx.fill();
+  });
+  _box(ctx,3.2,-0.8,0.15,1.2,1.2,1.2,ox,oy,sc,ST,SL,SR);
+  const[hx,hy]=_ip(3.8,-0.2,1.35,ox,oy,sc);ctx.beginPath();ctx.moveTo(hx-sc*0.52,hy);ctx.lineTo(hx,hy-sc*0.43);ctx.lineTo(hx+sc*0.52,hy);ctx.closePath();ctx.fillStyle=SR2;ctx.fill();
+  _lbl(ctx,W,H,'RED DE DISTRIBUCIÓN ELÉCTRICA','Autoconsumo + excedente a red · ahorro factura');
+}
+
+function s8(ctx,W,H,t,ox,oy,sc){
+  _box(ctx,-3.5,-2.5,0,7,5,0.15,ox,oy,sc,ST,SL,SR);
+  _box(ctx,-2.5,-1,0.15,5,2,2,ox,oy,sc,ST,SL,SR);
+  for(let i=0;i<3;i++)_box(ctx,-2+i*1.5,-0.8,2.15,0.78,1.6,0.33,ox,oy,sc,OL,OL,OD);
+  for(let i=0;i<3;i++)_box(ctx,-1.2+i*1.5,-0.7,1.6,0.78,1.4,0.33,ox,oy,sc,BR,BR,BRD);
+  for(let i=0;i<10;i++){const ph=((i/10)+t*0.43)%1;const[px,py]=_ip(-2.3+ph*4.6,-0.15,2.35,ox,oy,sc);const fg=ctx.createRadialGradient(px,py,0.5,px,py,4);fg.addColorStop(0,'rgba(122,92,58,0.68)');fg.addColorStop(1,'rgba(122,92,58,0)');ctx.beginPath();ctx.arc(px,py,4,0,Math.PI*2);ctx.fillStyle=fg;ctx.fill();}
+  for(let i=0;i<8;i++){const ph=(((i/8)-t*0.33)%1+1)%1;const[px,py]=_ip(-2.3+ph*4.6,0.28,1.82,ox,oy,sc);const fg=ctx.createRadialGradient(px,py,0.3,px,py,3);fg.addColorStop(0,'rgba(74,103,65,0.58)');fg.addColorStop(1,'rgba(74,103,65,0)');ctx.beginPath();ctx.arc(px,py,3,0,Math.PI*2);ctx.fillStyle=fg;ctx.fill();}
+  for(let i=0;i<7;i++){const wph=((i*0.2)+t*0.48)%1;const[wx,wy]=_ip(-2+i*0.65,0,2.5,ox,oy,sc);ctx.beginPath();for(let d=0;d<=14;d++){const p={x:wx+d-7,y:wy-wph*36-Math.sin((d/3.2)+t*3.5+i)*3.8};d===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y);}ctx.strokeStyle=`rgba(122,92,58,${(1-wph)*0.42})`;ctx.lineWidth=1.4;ctx.stroke();}
+  const[gx,gy]=_ip(3,-1.5,1.1,ox,oy,sc);const gr=sc*0.68;
+  ctx.beginPath();ctx.arc(gx,gy,gr,0,Math.PI*2);ctx.fillStyle=SL;ctx.fill();ctx.strokeStyle=EDGE;ctx.lineWidth=0.7;ctx.stroke();
+  const tv=0.62+Math.sin(t*0.4)*0.04;ctx.beginPath();ctx.arc(gx,gy,gr*0.8,-Math.PI*0.8,-Math.PI*0.8+tv*Math.PI*1.6);ctx.strokeStyle='rgba(122,92,58,0.68)';ctx.lineWidth=4;ctx.lineCap='round';ctx.stroke();
+  const ht=(83+Math.sin(t*0.4)*2).toFixed(0);ctx.fillStyle='#7a5c3a';ctx.font='bold 10px "Courier New",monospace';ctx.textAlign='center';ctx.fillText(ht+'°C',gx,gy+4);
+  _lbl(ctx,W,H,'RECUPERADOR DE CALOR','80-90°C · calefacción digestor + usos industriales');
+}
+
+function startCanvas(){
+  if(rafId)cancelAnimationFrame(rafId);rafT=0;rafLast=null;
+  const canvas=$('proceso-canvas');if(!canvas)return;
+  const W=canvas.offsetWidth,H=canvas.offsetHeight;
+  canvas.width=W*devicePixelRatio;canvas.height=H*devicePixelRatio;
+  const ctx=canvas.getContext('2d');ctx.scale(devicePixelRatio,devicePixelRatio);
+  const step=currentStep;
+  function loop(ts){if(!rafLast)rafLast=ts;rafT+=(ts-rafLast)/1000;rafLast=ts;ctx.clearRect(0,0,W,H);drawStage(ctx,W,H,rafT,step);rafId=requestAnimationFrame(loop);}
+  rafId=requestAnimationFrame(loop);
+}
+
+function showTab(id){
+  document.querySelectorAll('.tab-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+  const sec=document.getElementById('tab-'+id);if(sec)sec.classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(b=>{if(b.textContent.trim().toLowerCase().startsWith(id.substring(0,4)))b.classList.add('active');});
+  if(id==='proceso')startCanvas();
+}
+
+function resetDefaults(){Object.keys(DEFAULTS).forEach(k=>{const e=$(k);if(e)e.value=DEFAULTS[k];});updateAll();}
+function onInput(){updateAll();}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  resetDefaults();updateStageInfo();
+  setTimeout(startCanvas,60);
+  window.addEventListener('resize',()=>{if($('tab-proceso').classList.contains('active'))startCanvas();});
+});
+</script>
+</body>
+</html>
