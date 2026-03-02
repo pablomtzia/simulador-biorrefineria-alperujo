@@ -378,7 +378,7 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
           <tr><td>Patronato (recibos, impuestos, tasas)</td><td><input class="cref-input" id="gas_patronato" value="3465.61" oninput="recalcFinancials()"> €</td><td></td></tr>
           <tr><td>Intereses bancos (póliza, préstamo)</td><td><input class="cref-input" id="gas_intereses" value="1466.34" oninput="recalcFinancials()"> €</td><td></td></tr>
           <tr><td>Comisión bancos (tarjeta tienda, surtidor)</td><td><input class="cref-input" id="gas_comision" value="4983.00" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Transportes (DHL, MRW — paquetería tienda)</td><td><input class="cref-input" id="gas_transportes" value="46108.83" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr><td>Transportes (paquetería tienda + orujera)</td><td><input class="cref-input" id="gas_transportes" value="46108.83" oninput="recalcFinancials()"> €</td><td></td></tr>
           <tr><td>Reparaciones vehículos e ITV</td><td><input class="cref-input" id="gas_reparacion_vh" value="2348.83" oninput="recalcFinancials()"> €</td><td></td></tr>
           <tr class="cref-key"><td>Amortización inmovilizado mat. e inmat.</td><td><input class="cref-input" id="gas_amortizacion" value="62952.49" oninput="recalcFinancials()"> €</td><td><span class="cref-badge olive">→ ref. amortización actual</span></td></tr>
           <tr><td>Créditos incobrables</td><td><input class="cref-input" id="gas_incobrables" value="7186.49" oninput="recalcFinancials()"> €</td><td></td></tr>
@@ -968,6 +968,7 @@ const CREF_BASE={
   // Gastos
   gas_trabajos:26763.03, gas_seg_soc:57544.13, gas_comisionistas:4519.49, gas_combustible:1110.64,
   gas_hojarasca:500.00, gas_transportes:46108.83, gas_patronato:3465.61, gas_cuotas:21991.41,
+  gas_envases:7182.02, gas_comision:4983.00, gas_reparacion_vh:2348.83,
   ex_alperujo:3098820, ex_ing_alp:36803.46, ex_ing_aceite:2847628.80, ex_gastos:579416.84};
 // ─── ESCENARIOS ────────────────────────────────────────────────────────────
 // Escenario A: Campaña real 2024-2025 (cooperativa base, 3.265 t)
@@ -1202,9 +1203,12 @@ function updateCrefSection(key){
   set('gas_combustible', (CREF_BASE.gas_combustible*f).toFixed(2));
   set('gas_hojarasca',   ps(CREF_BASE.gas_hojarasca,   1.00)); // directamente proporcional
   // Gastos — escala parcial
-  set('gas_transportes', ps(CREF_BASE.gas_transportes, 0.65)); // paquetería+orujera mixto
-  set('gas_patronato',   ps(CREF_BASE.gas_patronato,   0.15)); // tasas casi fijas
-  set('gas_cuotas',      ps(CREF_BASE.gas_cuotas,      0.30)); // Ecoembes/AECOR volumen
+  set('gas_transportes',  ps(CREF_BASE.gas_transportes,  0.65)); // paquetería+orujera mixto
+  set('gas_patronato',    ps(CREF_BASE.gas_patronato,    0.15)); // tasas casi fijas
+  set('gas_cuotas',       ps(CREF_BASE.gas_cuotas,       0.30)); // Ecoembes/AECOR volumen
+  set('gas_envases',      ps(CREF_BASE.gas_envases,      0.85)); // envases escala con producción aceite
+  set('gas_comision',     ps(CREF_BASE.gas_comision,     0.35)); // comisiones tarjeta tienda+surtidor
+  set('gas_reparacion_vh',ps(CREF_BASE.gas_reparacion_vh,0.50)); // reparaciones vehículos
   // Tabla Excel — producción por variedad
   for(let i=1;i<=6;i++)set('exv_kg_'+i,Math.round(CREF_BASE.exv_kg[i-1]*f));
   set('ex_alperujo',Math.round(CREF_BASE.ex_alperujo*f));
