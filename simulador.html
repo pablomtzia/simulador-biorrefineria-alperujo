@@ -962,8 +962,12 @@ const CREF_BASE={
   t_aceituna:3265,
   kg_total:3265802, kg_alp:3098820, kg_aceite:605012,
   exv_kg:[851948,18713,1421069,4671,912721,56680], // kg por variedad
+  // Ingresos
   ing_alpeorujo:36803.46, ing_turbios:2023.06, ing_hueso:8747.10, ing_servicio:22546.61,
+  ing_hojarasca:3210.25, ing_surtidor:45235.18, ing_abonos:17076.03, ing_tienda:14369.03,
+  // Gastos
   gas_trabajos:26763.03, gas_seg_soc:57544.13, gas_comisionistas:4519.49, gas_combustible:1110.64,
+  gas_hojarasca:500.00, gas_transportes:46108.83, gas_patronato:3465.61, gas_cuotas:21991.41,
   ex_alperujo:3098820, ex_ing_alp:36803.46, ex_ing_aceite:2847628.80, ex_gastos:579416.84};
 // ─── ESCENARIOS ────────────────────────────────────────────────────────────
 // Escenario A: Campaña real 2024-2025 (cooperativa base, 3.265 t)
@@ -1178,17 +1182,29 @@ function updateCrefSection(key){
   if(desc)desc.textContent=key==='A'
     ?'Carga: aceitunas 3.265 t · rend. alperujo 94,9% · precio alperujo 11,88 €/t · factura eléctrica 34.510 €/año · transporte alperujo 0 € (extractora recoge).'
     :`Proyección: aceitunas ${sc.t_aceituna.toLocaleString('es-ES')} t · rend. alperujo 94,9% · precio alperujo 11,88 €/t · factura eléctrica ${(sc.factura_electrica_anual/1000).toFixed(1).replace('.',',')}k €/año · escalado ×${f.toFixed(2).replace('.',',')} desde campaña real.`;
-  // Ingresos que escalan con el volumen
+  // Helper escala parcial: base × (1 + (f-1) × coef)
+  const ps=(base,c)=>(base*(1+(f-1)*c)).toFixed(2);
+  // Ingresos — escala completa (proporcional a producción)
   set('ing_alpeorujo',(CREF_BASE.ing_alpeorujo*f).toFixed(2));
-  set('ing_turbios',(CREF_BASE.ing_turbios*f).toFixed(2));
-  set('ing_hueso',(CREF_BASE.ing_hueso*f).toFixed(2));
-  set('ing_servicio',(CREF_BASE.ing_servicio*f).toFixed(2));
-  // Gastos que escalan (gas_electricidad usa el valor del escenario, fórmula semi-variable)
-  set('gas_electricidad',sc.factura_electrica_anual.toFixed(2));
-  set('gas_trabajos',(CREF_BASE.gas_trabajos*f).toFixed(2));
-  set('gas_seg_soc',(CREF_BASE.gas_seg_soc*f).toFixed(2));
+  set('ing_turbios',  (CREF_BASE.ing_turbios*f).toFixed(2));
+  set('ing_hueso',    (CREF_BASE.ing_hueso*f).toFixed(2));
+  set('ing_servicio', (CREF_BASE.ing_servicio*f).toFixed(2));
+  set('ing_hojarasca',ps(CREF_BASE.ing_hojarasca, 1.00)); // directamente proporcional
+  // Ingresos — escala parcial
+  set('ing_surtidor', ps(CREF_BASE.ing_surtidor, 0.30));  // actividad campaña parcial
+  set('ing_abonos',   ps(CREF_BASE.ing_abonos,   0.35));  // ventas fitosanitarios
+  set('ing_tienda',   ps(CREF_BASE.ing_tienda,   0.40));  // tienda cooperativa
+  // Gastos — escala completa
+  set('gas_electricidad',sc.factura_electrica_anual.toFixed(2)); // semi-variable por escenario
+  set('gas_trabajos',    (CREF_BASE.gas_trabajos*f).toFixed(2));
+  set('gas_seg_soc',     (CREF_BASE.gas_seg_soc*f).toFixed(2));
   set('gas_comisionistas',(CREF_BASE.gas_comisionistas*f).toFixed(2));
-  set('gas_combustible',(CREF_BASE.gas_combustible*f).toFixed(2));
+  set('gas_combustible', (CREF_BASE.gas_combustible*f).toFixed(2));
+  set('gas_hojarasca',   ps(CREF_BASE.gas_hojarasca,   1.00)); // directamente proporcional
+  // Gastos — escala parcial
+  set('gas_transportes', ps(CREF_BASE.gas_transportes, 0.65)); // paquetería+orujera mixto
+  set('gas_patronato',   ps(CREF_BASE.gas_patronato,   0.15)); // tasas casi fijas
+  set('gas_cuotas',      ps(CREF_BASE.gas_cuotas,      0.30)); // Ecoembes/AECOR volumen
   // Tabla Excel — producción por variedad
   for(let i=1;i<=6;i++)set('exv_kg_'+i,Math.round(CREF_BASE.exv_kg[i-1]*f));
   set('ex_alperujo',Math.round(CREF_BASE.ex_alperujo*f));
