@@ -699,13 +699,13 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
     <div class="param-row"><label>Rendimiento biogás</label><input type="number" id="rendimiento_biogas" value="142.7" min="50" max="400" step="1" oninput="onInput()"><span class="param-unit">m³/t</span></div>
     <div class="param-row"><label>Contenido CH&#8324;</label><input type="number" id="pct_CH4" value="60" min="40" max="75" step="1" oninput="onInput()"><span class="param-unit">%</span></div>
     <div class="param-row"><label>Autoconsumo biogás</label><input type="number" id="pct_autoconsumo_biogas" value="10" min="0" max="50" step="0.5" oninput="onInput()"><span class="param-unit">%</span></div>
-    <div class="param-row" data-scale><label>Hectáreas olivar fertilizables</label><input type="number" id="ha_olivar" value="750" min="0" max="5000" step="50" oninput="onInput()"><span class="param-unit">ha</span></div>
-    <div class="param-row"><label>Nitrógeno aplicado</label><input type="number" id="kg_N_ha" value="50" min="10" max="150" step="1" oninput="onInput()"><span class="param-unit">kg N/ha</span></div>
-    <div class="param-row"><label>Precio nitrógeno</label><input type="number" id="precio_N" value="1.28" min="0.5" max="5" step="0.01" oninput="onInput()"><span class="param-unit">€/kg</span></div>
+    <div class="param-row"><label>N en digestato</label><input type="number" id="kg_N_digestato" value="5" min="1" max="20" step="0.5" oninput="onInput()"><span class="param-unit">kg N/t</span></div>
+    <div class="param-row"><label>Dosis N olivar</label><input type="number" id="kg_N_ha" value="50" min="10" max="150" step="1" oninput="onInput()"><span class="param-unit">kg N/ha</span></div>
     <div class="derived-section">
       <div class="dpill">Biogás bruto: <strong id="d-biogas-bruto">—</strong> m³/año</div>
       <div class="dpill">Biogás neto: <strong id="d-biogas-neto">—</strong> m³/año</div>
       <div class="dpill">Digestato: <strong id="d-digestato">—</strong> t/año</div>
+      <div class="dpill">Ha fertilizables: <strong id="d-ha-fert">—</strong> ha</div>
     </div>
     <div class="param-legend-toggle" onclick="toggleLegend(this)"><span class="legend-icon">ⓘ</span> Fuentes y metodología<span class="legend-chevron">▸</span></div>
     <div class="param-legend">
@@ -713,9 +713,9 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
         <tr><td>Rdto. biogás 142,7 m³/t</td><td><span class="legend-badge lb-bib">BIB</span>Ferrández-Villena et al. (2024) · rango bibliográfico 120-200 m³/t · valor conservador (tercio inferior)</td></tr>
         <tr><td>Contenido CH₄ 60%</td><td><span class="legend-badge lb-bib">BIB</span>Típico para digestión anaerobia de alperujo · rango 55-65%</td></tr>
         <tr><td>Autoconsumo biogás 10%</td><td><span class="legend-badge lb-est">EST</span>Consumo propio del digestor (calefacción reactor, agitación, bombas) · rango estándar 8-12%</td></tr>
-        <tr><td>Ha olivar fertilizables</td><td><span class="legend-badge lb-est">EST</span>Proporcional a socios de la cooperativa · ~4-5 t aceituna/ha media olivar andaluz</td></tr>
-        <tr><td>Nitrógeno 50 kg N/ha</td><td><span class="legend-badge lb-bib">BIB</span>Referencia agronómica olivar mediterráneo en producción · rango 40-80 kg N/ha</td></tr>
-        <tr><td>Precio N 1,28 €/kg</td><td><span class="legend-badge lb-est">EST</span>Equivalente nitrógeno en urea · mercado España 2024 · usado como proxy ahorro fertilizante mineral</td></tr>
+        <tr><td>N en digestato 5 kg N/t</td><td><span class="legend-badge lb-bib">BIB</span>Contenido nitrógeno total (Kjeldahl) del digestato líquido de alperujo · rango bibliográfico 3-7 kg N/t · valor conservador</td></tr>
+        <tr><td>Dosis N olivar 50 kg N/ha</td><td><span class="legend-badge lb-bib">BIB</span>Referencia agronómica olivar mediterráneo en producción · rango 40-80 kg N/ha · base para calcular ha fertilizables</td></tr>
+        <tr><td>Ha fertilizables (derivado)</td><td><span class="legend-badge lb-est">EST</span>N total (digestato × kg N/t) ÷ dosis = ha que puede cubrir el digestato disponible</td></tr>
         <tr><td>Digestato (×0,69 s/paté)</td><td><span class="legend-badge lb-est">EST</span>Estimación digestión húmeda · ~31% de la masa de entrada escapa como biogás (gas de baja densidad)</td></tr>
       </table>
     </div>
@@ -750,21 +750,25 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
   <div class="card">
     <div class="card-header">Ingresos y Precios</div>
     <div class="param-row"><label>Precio venta hueso</label><input type="number" id="precio_venta_hueso" value="120" min="0" max="500" step="5" oninput="onInput()"><span class="param-unit">€/t</span></div>
+    <div class="param-row"><label>Precio digestato</label><input type="number" id="precio_digestato" value="10" min="0" max="80" step="1" oninput="onInput()"><span class="param-unit">€/t</span></div>
     <div class="param-row"><label>Precio compra red</label><input type="number" id="precio_compra_red" value="120" min="50" max="400" step="5" oninput="onInput()"><span class="param-unit">€/MWh</span></div>
     <div class="param-row"><label>Precio venta excedente</label><input type="number" id="precio_venta_excedente" value="65" min="20" max="200" step="5" oninput="onInput()"><span class="param-unit">€/MWh</span></div>
+    <div class="param-row" data-scale><label>Hectáreas olivar socios</label><input type="number" id="ha_olivar" value="750" min="0" max="5000" step="50" oninput="onInput()"><span class="param-unit">ha</span></div>
     <div class="derived-section">
       <div class="dpill">Ahorro elect.: <strong id="d-ahorro-elec">—</strong> €/año</div>
       <div class="dpill">Ingr. excedente: <strong id="d-ingr-exc">—</strong> €/año</div>
       <div class="dpill">Ingr. hueso: <strong id="d-ingr-hueso">—</strong> €/año</div>
-      <div class="dpill">Fertilizante: <strong id="d-ingr-fert">—</strong> €/año</div>
+      <div class="dpill">Digestato: <strong id="d-ingr-fert">—</strong> €/año</div>
       <div class="dpill">Total ingresos: <strong id="d-ingr-total">—</strong> €/año</div>
     </div>
     <div class="param-legend-toggle" onclick="toggleLegend(this)"><span class="legend-icon">ⓘ</span> Fuentes y metodología<span class="legend-chevron">▸</span></div>
     <div class="param-legend">
       <table class="legend-table">
         <tr><td>Precio hueso 120 €/t</td><td><span class="legend-badge lb-bib">BIB</span>IDAE (2018) · boletín precios biomasa · mercado biomasa industrial (calderas industriales y pellet)</td></tr>
+        <tr><td>Precio digestato 10 €/t</td><td><span class="legend-badge lb-est">EST</span>Precio de cesión/venta del digestato a socios como biofertilizante · rango mercado 5-20 €/t según calidad y demanda local</td></tr>
         <tr><td>Precio compra red 120 €/MWh</td><td><span class="legend-badge lb-est">EST</span>Tarifa PVPC industria media 2024 (Ministerio para la Transición Ecológica) · referencia mercado regulado</td></tr>
         <tr><td>Precio venta excedente 65 €/MWh</td><td><span class="legend-badge lb-est">EST</span>Precio spot mercado ibérico OMIE 2024 · promedio anual · fluctúa según oferta/demanda</td></tr>
+        <tr><td>Ha olivar socios</td><td><span class="legend-badge lb-est">EST</span>Superficie total de los socios de la cooperativa · referencia para comparar con las ha fertilizables que genera la planta</td></tr>
       </table>
     </div>
   </div>
@@ -943,7 +947,7 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
 
 <script>
 'use strict';
-const DEFAULTS={t_aceituna:3265,rend_alperujo:94.9,contenido_hueso:10,rend_separacion:97,precio_alperujo_orujera:11.88,coste_transporte_total:0,factura_electrica_anual:34510,ha_olivar:750,kg_N_ha:50,precio_N:1.28,rendimiento_biogas:142.7,pct_CH4:60,pct_autoconsumo_biogas:10,potencia_CHP_kwe:100,horas_operacion:7600,rend_electrico_CHP:38,rend_termico_CHP:44,pct_autoconsumo_elec:14.5,precio_venta_hueso:120,inv_deshuesadora:80000,inv_digestor:230000,inv_CHP:100000,inv_instalacion_electrica:70000,inv_otros:70000,pct_subvencion:0,precio_compra_red:120,precio_venta_excedente:65,coste_mant_CHP_kwh:0.015,coste_personal:25000,coste_consumibles:8000,coste_seguros:8000,coste_otros_om:8000,coste_revision_mayor:40000,anyo_revision_mayor:8,tasa_descuento:5,horizonte:15,pct_valor_residual:10};
+const DEFAULTS={t_aceituna:3265,rend_alperujo:94.9,contenido_hueso:10,rend_separacion:97,precio_alperujo_orujera:11.88,coste_transporte_total:0,factura_electrica_anual:34510,ha_olivar:750,kg_N_ha:50,kg_N_digestato:5,rendimiento_biogas:142.7,pct_CH4:60,pct_autoconsumo_biogas:10,potencia_CHP_kwe:100,horas_operacion:7600,rend_electrico_CHP:38,rend_termico_CHP:44,pct_autoconsumo_elec:14.5,precio_venta_hueso:120,precio_digestato:10,inv_deshuesadora:80000,inv_digestor:230000,inv_CHP:100000,inv_instalacion_electrica:70000,inv_otros:70000,pct_subvencion:0,precio_compra_red:120,precio_venta_excedente:65,coste_mant_CHP_kwh:0.015,coste_personal:25000,coste_consumibles:8000,coste_seguros:8000,coste_otros_om:8000,coste_revision_mayor:40000,anyo_revision_mayor:8,tasa_descuento:5,horizonte:15,pct_valor_residual:10};
 
 // Datos reales campaña 2024-2025 (cooperativa andaluza)
 const CAMPAIGN_2425={
@@ -985,9 +989,8 @@ const SCENARIOS = {
     rendimiento_biogas: 142.7, // m³ biogás/t paté (bibliográfico, conservador)
     pct_CH4: 60,               // Contenido metano biogás (típico alperujo)
     pct_autoconsumo_biogas: 10,// Consumo propio del digestor
-    ha_olivar: 750,            // Hectáreas olivar de socios que reciben digestato
+    kg_N_digestato: 5,         // kg N/t digestato (contenido nitrógeno total, rango 3-7)
     kg_N_ha: 50,               // Kg nitrógeno aplicado/ha (agronomía mediterránea)
-    precio_N: 1.28,            // €/kg N (mercado fertilizantes, promedio España)
     // ── CHP (Motor cogeneración) ──
     // Paté al digestor: 2.666 t → biogás neto: ~342.000 m³ → CH4: ~205.000 m³
     // Energía eléctrica disponible: ~778 MWh/año → potencia: 100 kWe × 7.600 h
@@ -999,8 +1002,10 @@ const SCENARIOS = {
     factura_electrica_anual: 34510, // Real: 34.509,70 €/año (escala base)
     // ── Precios ──
     precio_venta_hueso: 120,   // €/t hueso limpio (mercado biomasa, IDAE 2018)
+    precio_digestato: 10,      // €/t digestato cedido/vendido a socios como biofertilizante
     precio_compra_red: 120,    // €/MWh precio compra red (mercado regulado)
     precio_venta_excedente: 65,// €/MWh venta excedentes (mercado spot medio)
+    ha_olivar: 750,            // Ha olivar socios (referencia cobertura digestato)
     // ── CAPEX (Inversión total: 550.000 €, 5.500 €/kWe instalado) ──
     inv_deshuesadora: 80000, // 80.000 € — Deshuesadora para ~35 t alperujo/día de campaña
     inv_digestor: 230000,      // 230.000 € — Digestor anaerobio + agitación + calefacción
@@ -1033,9 +1038,8 @@ const SCENARIOS = {
     rendimiento_biogas: 142.7,
     pct_CH4: 60,
     pct_autoconsumo_biogas: 10,
-    ha_olivar: 1400,           // Proporcional: 750 × (6100/3265) ≈ 1.400 ha
+    kg_N_digestato: 5,
     kg_N_ha: 50,
-    precio_N: 1.28,
     // ── CHP ──
     // Paté: ~4.980 t → biogás neto: ~639.000 m³ → CH4: ~383.000 m³
     // Energía eléctrica disponible: ~1.454 MWh → potencia: 200 kWe × 7.270 h = 1.454 MWh
@@ -1051,8 +1055,10 @@ const SCENARIOS = {
     factura_electrica_anual: 58500, // ≈ 6.902 + 51.571 = 58.473 € → 58.500 €
     // ── Precios ──
     precio_venta_hueso: 120,
+    precio_digestato: 10,
     precio_compra_red: 120,
     precio_venta_excedente: 65,
+    ha_olivar: 1400,           // Proporcional: 750 × (6100/3265) ≈ 1.400 ha socios
     // ── CAPEX (Inversión total: 900.000 €, 4.500 €/kWe; economía de escala) ──
     inv_deshuesadora: 115000, // 115.000 € — Mayor capacidad: ~65 t/día campaña
     inv_digestor: 400000,       // 400.000 € — Conservador: ley potencial (^0.6) daría ~335k; +65k por obra civil, permisos y diseño específico alperujo
@@ -1085,9 +1091,8 @@ const SCENARIOS = {
     rendimiento_biogas: 142.7,
     pct_CH4: 60,
     pct_autoconsumo_biogas: 10,
-    ha_olivar: 2000,           // Proporcional: 750 × (9000/3265) ≈ 2.070 → 2.000 ha
+    kg_N_digestato: 5,
     kg_N_ha: 50,
-    precio_N: 1.28,
     // ── CHP ──
     // Paté: ~7.347 t → biogás neto: ~943.000 m³ → CH4: ~566.000 m³
     // Energía eléctrica disponible: ~2.145 MWh → potencia: 300 kWe × 7.150 h = 2.145 MWh
@@ -1102,8 +1107,10 @@ const SCENARIOS = {
     factura_electrica_anual: 83000, // ≈ 6.902 + 76.116 = 83.018 € → 83.000 €
     // ── Precios ──
     precio_venta_hueso: 120,
+    precio_digestato: 10,
     precio_compra_red: 120,
     precio_venta_excedente: 65,
+    ha_olivar: 2000,           // Proporcional: 750 × (9000/3265) ≈ 2.070 → 2.000 ha socios
     // ── CAPEX (Inversión total: 1.200.000 €, 4.000 €/kWe; máxima economía de escala) ──
     inv_deshuesadora: 145000, // 145.000 € — Capacidad: ~95 t/día campaña
     inv_digestor: 530000,       // 530.000 € — Conservador: ley potencial (^0.6) daría ~423k; +107k por obra civil, permisos y diseño para planta grande
@@ -1217,12 +1224,12 @@ function updateComparisonSection(){
   setH('cmp_excedente_elec', pos(r.ingreso_excedente));
   setH('cmp_ing_hueso_act',  pos(ingHueso));
   setH('cmp_ingr_hueso',     pos(r.ingreso_hueso));
-  setH('cmp_fertilizante',   pos(r.ahorro_fertilizante));
+  setH('cmp_fertilizante',   pos(r.ingreso_digestato));
   setH('cmp_opex_planta',    neg(r.costes_OM_anuales));
 
   // Totales — propuesto usa ingAlp (idéntico al actual) para coherencia interna
   setH('cmp_total_act', tot(totalAct));
-  const fcProp=r.ahorro_electricidad+r.ingreso_excedente+r.ingreso_hueso+r.ahorro_fertilizante-ingAlp-r.costes_OM_anuales;
+  const fcProp=r.ahorro_electricidad+r.ingreso_excedente+r.ingreso_hueso+r.ingreso_digestato-ingAlp-r.costes_OM_anuales;
   setH('cmp_fc_op', tot(fcProp));
 
   // Barra delta
@@ -1321,11 +1328,13 @@ function compute(ov={}){
   const energia_termica=p.potencia_CHP_kwe*(p.rend_termico_CHP/p.rend_electrico_CHP)*p.horas_operacion/1000;
   const ahorro_electricidad=p.factura_electrica_anual;
   const ahorro_transporte=p.coste_transporte_total;
-  const ahorro_fertilizante=p.ha_olivar*p.kg_N_ha*p.precio_N;
+  const N_total_kg=digestato_estimado*p.kg_N_digestato;
+  const ha_fertilizables=p.kg_N_ha>0?N_total_kg/p.kg_N_ha:0;
+  const ingreso_digestato=digestato_estimado*p.precio_digestato;
   const ingreso_excedente=excedente_red*p.precio_venta_excedente;
   const ingreso_hueso=t_hueso_separado*p.precio_venta_hueso;
   const perdida_alperujo=-(t_alperujo*p.precio_alperujo_orujera);
-  const ingresos_netos=ahorro_electricidad+ahorro_transporte+ahorro_fertilizante+ingreso_excedente+ingreso_hueso+perdida_alperujo;
+  const ingresos_netos=ahorro_electricidad+ahorro_transporte+ingreso_digestato+ingreso_excedente+ingreso_hueso+perdida_alperujo;
   const coste_mant_CHP_anual=p.coste_mant_CHP_kwh*energia_electrica_bruta*1000;
   const costes_OM_anuales=coste_mant_CHP_anual+p.coste_personal+p.coste_consumibles+p.coste_seguros+p.coste_otros_om;
   const fc_operativo=ingresos_netos-costes_OM_anuales;
@@ -1344,7 +1353,7 @@ function compute(ov={}){
   const fc_disc=fc.map((v,i)=>v/Math.pow(1+r,i));
   const cum_fc=[],cum_fc_disc=[];let cs=0,csd=0;
   for(let i=0;i<=n;i++){cs+=fc[i];cum_fc.push(cs);csd+=fc_disc[i];cum_fc_disc.push(csd);}
-  return{p,t_alperujo,t_hueso_separado,t_alperujo_deshuesado,digestato_estimado,biogas_bruto,biogas_neto,energia_electrica_bruta,energia_electrica_neta,autoconsumo_mwh,excedente_red,energia_termica,ahorro_electricidad,ahorro_transporte,ahorro_fertilizante,ingreso_excedente,ingreso_hueso,perdida_alperujo,ingresos_netos,coste_mant_CHP_anual,costes_OM_anuales,fc_operativo,inversion_total,inversion_neta,fc,fc_disc,cum_fc,cum_fc_disc,van,tir,payback,n};
+  return{p,t_alperujo,t_hueso_separado,t_alperujo_deshuesado,digestato_estimado,N_total_kg,ha_fertilizables,biogas_bruto,biogas_neto,energia_electrica_bruta,energia_electrica_neta,autoconsumo_mwh,excedente_red,energia_termica,ahorro_electricidad,ahorro_transporte,ingreso_digestato,ingreso_excedente,ingreso_hueso,perdida_alperujo,ingresos_netos,coste_mant_CHP_anual,costes_OM_anuales,fc_operativo,inversion_total,inversion_neta,fc,fc_disc,cum_fc,cum_fc_disc,van,tir,payback,n};
 }
 
 const cVAN=v=>v>0?'var(--pos)':'var(--neg)';
@@ -1358,9 +1367,9 @@ function updateAll(){R=compute();updateDerived();updateKPIs();updateCharts();upd
 
 function updateDerived(){const r=R;
   setText('d-alperujo',fmtN(r.t_alperujo,0));setText('d-hueso',fmtN(r.t_hueso_separado,0));setText('d-digestion',fmtN(r.t_alperujo_deshuesado,0));
-  setText('d-biogas-bruto',fmtN(r.biogas_bruto,0));setText('d-biogas-neto',fmtN(r.biogas_neto,0));setText('d-digestato',fmtN(r.digestato_estimado,0));
+  setText('d-biogas-bruto',fmtN(r.biogas_bruto,0));setText('d-biogas-neto',fmtN(r.biogas_neto,0));setText('d-digestato',fmtN(r.digestato_estimado,0));setText('d-ha-fert',fmtN(r.ha_fertilizables,0));
   setText('d-elec-bruta',fmtN(r.energia_electrica_bruta,0));setText('d-elec-neta',fmtN(r.energia_electrica_neta,0));setText('d-calor',fmtN(r.energia_termica,0));
-  setText('d-ahorro-elec',fmtEur(r.ahorro_electricidad,0));setText('d-ingr-exc',fmtEur(r.ingreso_excedente,0));setText('d-ingr-hueso',fmtEur(r.ingreso_hueso,0));setText('d-ingr-fert',fmtEur(r.ahorro_fertilizante,0));setText('d-ingr-total',fmtEur(r.ingresos_netos,0));
+  setText('d-ahorro-elec',fmtEur(r.ahorro_electricidad,0));setText('d-ingr-exc',fmtEur(r.ingreso_excedente,0));setText('d-ingr-hueso',fmtEur(r.ingreso_hueso,0));setText('d-ingr-fert',fmtEur(r.ingreso_digestato,0));setText('d-ingr-total',fmtEur(r.ingresos_netos,0));
   setText('d-capex-bruto',fmtEur(r.inversion_total,0));setText('d-capex-neto',fmtEur(r.inversion_neta,0));
   setText('d-opex',fmtEur(r.costes_OM_anuales,0));setText('d-fc-op',fmtEur(r.fc_operativo,0));
 }
@@ -1383,8 +1392,8 @@ function updateCharts(){const r=R;if(!r.fc)return;
   const pbIdx=r.payback;
   mkChart('chart-fc','line',{labels,datasets:[{label:'FC Acum.',data:r.cum_fc,borderColor:'#4a6741',backgroundColor:'rgba(74,103,65,0.07)',borderWidth:2,fill:true,tension:0.3,pointRadius:r.cum_fc.map((_,i)=>i===pbIdx?7:2.5),pointBackgroundColor:r.cum_fc.map((_,i)=>i===pbIdx?'#3d6b35':'#4a6741')},{label:'VAN Acum.',data:r.cum_fc_disc,borderColor:'#9b7a55',borderDash:[5,5],backgroundColor:'transparent',borderWidth:1.5,fill:false,tension:0.3,pointRadius:2}]},{plugins:{legend:{display:true,labels:{font:{size:10},boxWidth:10,color:'#6b6660'}},tooltip:{callbacks:{label:ctx=>fmtEur(ctx.raw,0)+(ctx.datasetIndex===0&&ctx.dataIndex===pbIdx?' \u2190 PAYBACK':'')}}},scales:{x:{ticks:{font:{size:10},color:'#6b6660'},grid:{color:'rgba(0,0,0,0.04)'}},y:{ticks:{font:{size:10},color:'#6b6660',callback:v=>fmtEur(v,0)},grid:{color:'rgba(0,0,0,0.04)'},afterDataLimits(ax){ax.min=Math.min(ax.min,0);}}}});
 
-  const iLabels=['Ahorro electricidad','Excedente red','Venta hueso','Fertiliz. digestato','Ahorro transporte'];
-  const iVals=[r.ahorro_electricidad,r.ingreso_excedente,r.ingreso_hueso,r.ahorro_fertilizante,r.ahorro_transporte];
+  const iLabels=['Ahorro electricidad','Excedente red','Venta hueso','Digestato','Ahorro transporte'];
+  const iVals=[r.ahorro_electricidad,r.ingreso_excedente,r.ingreso_hueso,r.ingreso_digestato,r.ahorro_transporte];
   const lgPos=window.innerWidth<640?'bottom':'right';
   mkChart('chart-ingresos','doughnut',{labels:iLabels,datasets:[{data:iVals,backgroundColor:OP,borderWidth:1,borderColor:'#fff'}]},{plugins:{legend:{display:true,position:lgPos,labels:{font:{size:10},boxWidth:9,color:'#6b6660',padding:6}},tooltip:{callbacks:{label:ctx=>ctx.label+': '+fmtEur(ctx.raw,0)}}}});
 
@@ -1409,7 +1418,7 @@ function updateCharts(){const r=R;if(!r.fc)return;
       {label:'Ahorro electricidad',    data:[0, r.ahorro_electricidad],          backgroundColor:'#4a6741', stack:'s'},
       {label:'Venta hueso biomasa',    data:[0, r.ingreso_hueso],               backgroundColor:'#6b8f5e', stack:'s'},
       {label:'Excedente red',          data:[0, r.ingreso_excedente],            backgroundColor:'#8aaf7b', stack:'s'},
-      {label:'Fertilizante digestato', data:[0, r.ahorro_fertilizante],          backgroundColor:'#b5d1a5', stack:'s'},
+      {label:'Digestato',               data:[0, r.ingreso_digestato],            backgroundColor:'#b5d1a5', stack:'s'},
       {label:'Factura eléctrica',      data:[-r.p.factura_electrica_anual, 0],   backgroundColor:'rgba(192,83,74,0.82)', stack:'s'},
       {label:'Pérdida ingr. alperujo', data:[0, r.perdida_alperujo],             backgroundColor:'rgba(150,75,45,0.82)', stack:'s'},
       {label:'Costes O&M',             data:[0, -r.costes_OM_anuales],           backgroundColor:'rgba(155,122,85,0.82)', stack:'s'},
@@ -1541,7 +1550,7 @@ function updateDiagnosis(){
 function updatePnLTable(){
   const r=R, el=$('rep-pnl');
   if(!el)return;
-  const iB=r.ahorro_electricidad+r.ahorro_transporte+r.ahorro_fertilizante+r.ingreso_excedente+r.ingreso_hueso;
+  const iB=r.ahorro_electricidad+r.ahorro_transporte+r.ingreso_digestato+r.ingreso_excedente+r.ingreso_hueso;
   const pI=v=>iB>0?fmtN(v/iB*100,1)+'%':'—';
   const pO=v=>r.costes_OM_anuales>0?fmtN(v/r.costes_OM_anuales*100,1)+'%':'—';
   const ri=(label,val,pctFn,color)=>`<tr class="rep-tbl"><td style="padding:5px 14px;font-size:12px;color:${color||'#555'}">${label}</td><td style="padding:5px 14px;font-size:12px;text-align:right;font-family:monospace;color:${color||'#444'}">${fmtEur(val,0)}</td><td style="padding:5px 14px;font-size:11px;text-align:right;font-family:monospace;color:var(--text-sec)">${pctFn(Math.abs(val))}</td></tr>`;
@@ -1552,7 +1561,7 @@ function updatePnLTable(){
     ${ri('Ahorro factura eléctrica',r.ahorro_electricidad,pI)}
     ${ri('Venta hueso biomasa',r.ingreso_hueso,pI)}
     ${ri('Excedente eléctrico a red',r.ingreso_excedente,pI)}
-    ${ri('Fertilizante (N digestato)',r.ahorro_fertilizante,pI)}
+    ${ri('Digestato (biofertilizante)',r.ingreso_digestato,pI)}
     ${r.ahorro_transporte>0?ri('Ahorro transporte',r.ahorro_transporte,pI):''}
     ${rs('Ingresos brutos',iB)}
     ${ri('(−) Pérdida ingreso alperujo',r.perdida_alperujo,pI,'var(--neg)')}
@@ -1598,7 +1607,7 @@ function updateRecommendations(){
   if(r.p.horas_operacion<7500){const imp=compute({horas_operacion:7500}).van-base;recs.push({t:'Mejorar la disponibilidad del motor CHP',d:'Aumentar las horas de operación a 7.500 h/año (85% disponibilidad) mediante contrato de mantenimiento preventivo incrementaría la generación eléctrica y el VAN en '+fmtEur(imp,0)+' €.',imp});}
   if(r.p.rendimiento_biogas<150){const imp=compute({rendimiento_biogas:155}).van-base;recs.push({t:'Optimizar el rendimiento del digestor',d:'Alcanzar 155 m³ biogás/t paté (temperatura estable 37°C, inóculo adecuado, HRT 25-30 d) mejoraría el VAN en '+fmtEur(imp,0)+' €.',imp});}
   if(r.p.precio_venta_excedente<75){const imp=compute({precio_venta_excedente:75}).van-base;recs.push({t:'Negociar contrato PPA para venta de excedente',d:'Un precio de venta de 75 €/MWh mediante PPA directo con comercializadora (en lugar del precio spot) mejoraría el VAN en '+fmtEur(imp,0)+' €.',imp});}
-  if(r.p.precio_N<1.5){const imp=compute({precio_N:1.5}).van-base;recs.push({t:'Certificar el digestato como fertilizante orgánico',d:'La certificación bajo el Reglamento (UE) 2019/1009 permitiría comercializarlo a ≥1,50 €/kg N equiv., mejorando el VAN en '+fmtEur(imp,0)+' €.',imp});}
+  if(r.p.precio_digestato<18){const imp=compute({precio_digestato:18}).van-base;recs.push({t:'Certificar el digestato como fertilizante orgánico',d:'La certificación bajo el Reglamento (UE) 2019/1009 permitiría comercializar el digestato a ≥18 €/t (vs. '+r.p.precio_digestato+' €/t actual), mejorando el VAN en '+fmtEur(imp,0)+' €.',imp});}
   const list=$('rec-list');if(!list)return;
   if(!recs.length){list.innerHTML='<div style="color:var(--text-sec);font-size:13px;">No se identifican mejoras significativas en la configuración actual.</div>';return;}
   list.innerHTML=recs.map(rec=>`<div class="rec-item"><div class="rec-item-title">${rec.t}</div><div class="rec-item-desc">${rec.d}</div>${rec.imp!==null?`<span class="rec-impact">Impacto VAN: ${rec.imp>=0?'+':''}${fmtEur(rec.imp,0)}</span>`:''}</div>`).join('');
