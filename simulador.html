@@ -1604,10 +1604,8 @@ function updateRecommendations(){
 
 // ===== STAGES =====
 const STAGES=[
-  {title:'Recepción de alperujo',sub:'Subproducto de almazara de 2 fases · 94,9% s/aceituna',desc:'El alperujo es el subproducto sólido húmedo generado en las almazaras de centrifugación en dos fases. Con un contenido en humedad del 25-35% y un 3-6% de aceite residual, constituye la materia prima del modelo de valorización energética y agronómica propuesto.',pills:['Humedad: ~30%','Aceite residual: 3-6%','Origen: centrifugación 2 fases']},
-  {title:'Proceso en almazara',sub:'Centrifugación · rendimiento alperujo 94,9%',desc:'La almazara de dos fases produce aceite de oliva virgen mediante molienda y centrifugación sin adición de agua. Esto genera alperujo en mayor cantidad pero con menor contenido hídrico que el sistema de tres fases, lo que facilita su posterior tratamiento anaerobio.',pills:['Rend. alperujo: 94,9%','Sistema: 2 fases','Sin agua añadida']},
-  {title:'Deshuesadora de alperujo',sub:'Separación de núcleo leñoso · 10% s/alperujo · 97% eficiencia',desc:'La deshuesadora de alperujo es un equipo específico que separa el núcleo leñoso de la aceituna del resto del alperujo mediante rodillos tamizadores calibrados. Es una inversión adicional a la línea estándar de la almazara (la despedregadora de aceitunas ya existe en la planta). Produce dos corrientes: hueso, con PCI de 18-19 MJ/kg, que se comercializa como biomasa; y alperujo deshuesado —denominado paté— con menor carga lignocelulósica y mayor biodegradabilidad para la digestión anaerobia.',pills:['Equipo adicional a la almazara','Hueso separado: 10% s/alperujo','Eficiencia: 97% · PCI hueso: ~18-19 MJ/kg']},
-  {title:'Separación de hueso',sub:'Biomasa sólida · 10% s/alperujo · 97% eficiencia',desc:'El hueso de aceituna separado del alperujo es una biomasa lignocelulósica de alto poder calorífico (18-19 MJ/kg). Se comercializa como combustible para calderas de biomasa, generando un ingreso adicional y reduciendo la carga orgánica del digestor.',pills:['Contenido: 10% s/alperujo (real: 8-9%)','Eficiencia sep.: 97%','PCI: ~18-19 MJ/kg']},
+  {title:'Almazara y generación de alperujo',sub:'Centrifugación 2 fases · sin agua añadida · rendimiento 94,9%',desc:'La almazara de dos fases produce aceite de oliva virgen mediante molienda y centrifugación sin adición de agua. El subproducto resultante es el alperujo, con un 25-35% de humedad y un 3-6% de aceite residual. Al no incorporar agua al proceso, el alperujo de dos fases presenta menor contenido hídrico que el de tres fases, lo que favorece su posterior tratamiento anaerobio.',pills:['Rend. alperujo: 94,9%','Humedad: ~30%','Aceite residual: 3-6%']},
+  {title:'Deshuesadora: biomasa y paté',sub:'Separación núcleo leñoso · hueso (biomasa) + alperujo deshuesado',desc:'La deshuesadora de alperujo separa el núcleo leñoso de la aceituna mediante rodillos tamizadores calibrados. Produce dos corrientes: el hueso, biomasa con PCI de 18-19 MJ/kg que se comercializa directamente; y el alperujo deshuesado —denominado paté—, con menor carga lignocelulósica y mayor biodegradabilidad para la digestión anaerobia.',pills:['Hueso: 10% s/alperujo · efic. 97%','PCI hueso: 18-19 MJ/kg','Paté: mayor biodegradabilidad']},
   {title:'Digestor anaerobio',sub:'Régimen mesofílico · HRT 25 días · 60% CH₄',desc:'El alperujo sin hueso se introduce en el digestor anaerobio de régimen mesofílico (35-40°C). El consorcio bacteriano acetogénico degrada la materia orgánica en ausencia de oxígeno, produciendo biogás rico en metano y digestato como subproducto valorizable.',pills:['Temperatura: 35-40 °C','HRT: ~25 días','Biogás: ~60% CH₄']},
   {title:'Biofertilizante (digestato)',sub:'Cierre del ciclo de nutrientes · fertirrigación 750 ha',desc:'El digestato efluente del digestor es un biofertilizante rico en N, P y K en formas biodisponibles. Se aplica mediante fertirrigación en el olivar, cerrando el ciclo de nutrientes y sustituyendo fertilizantes minerales de síntesis, con el consiguiente ahorro económico y ambiental.',pills:['N+P+K biodisponible','Aplicación: fertirrigación','750 ha olivar tratables']},
   {title:'Motor CHP',sub:'Cogeneración · 100-300 kWe · η_el 38% · η_term 44%',desc:'El biogás producido alimenta un motor de cogeneración que genera simultáneamente electricidad y calor. Con 100-300 kWe (según escenario) y 7.150-7.600 horas de operación anuales, la planta cubre su autoconsumo y vende los excedentes a red, maximizando los ingresos del sistema.',pills:['Potencia: 100-300 kWe','Horas: 7.150-7.600 h/año','η global: >80%']},
@@ -1652,25 +1650,10 @@ function drawStage(ctx,W,H,t,idx){
   else if(idx===3)s3(ctx,W,H,t,ox,oy,sc);
   else if(idx===4)s4(ctx,W,H,t,ox,oy,sc);
   else if(idx===5)s5(ctx,W,H,t,ox,oy,sc);
-  else if(idx===6)s6(ctx,W,H,t,ox,oy,sc);
-  else if(idx===7)s7(ctx,W,H,t,ox,oy,sc);
-  else s8(ctx,W,H,t,ox,oy,sc);
+  else s6(ctx,W,H,t,ox,oy,sc);
 }
 
 function s0(ctx,W,H,t,ox,oy,sc){
-  _box(ctx,-3,-3,0,8,6,0.25,ox,oy,sc,ST,SL,SR);
-  [[-1.5,0],[0.5,-1],[2,1]].forEach(([tx,ty],i)=>{
-    _box(ctx,tx-0.14,ty-0.14,0.25,0.28,0.28,1.1+i*0.15,ox,oy,sc,SR2,SL2,SR2);
-    const[cx,cy]=_ip(tx,ty,1.4+i*0.15,ox,oy,sc);const r=(0.72+i*0.04)*sc;
-    const g=ctx.createRadialGradient(cx-r*0.2,cy-r*0.3,r*0.08,cx,cy,r);g.addColorStop(0,'rgba(88,118,70,0.95)');g.addColorStop(0.6,'rgba(63,93,48,0.85)');g.addColorStop(1,'rgba(43,68,33,0.35)');
-    ctx.beginPath();ctx.ellipse(cx,cy,r*1.1,r*0.78,0,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
-  });
-  for(let i=0;i<18;i++){const ph=((i/18)+t*0.38)%1;const[px,py]=_ip(-1.5+(i%3)*2,(i%3-1)*0.5,2-ph*2.4,ox,oy,sc);ctx.beginPath();ctx.ellipse(px,py,2.2,3,0,0,Math.PI*2);ctx.fillStyle=`rgba(48,68,28,${(1-ph)*0.82})`;ctx.fill();}
-  _box(ctx,2.5,0.5,0.25,1.2,1,0.65,ox,oy,sc,ST,OL,OD);
-  _lbl(ctx,W,H,'RECEPCIÓN ALPERUJO','Subproducto almazara · 94,9% s/aceituna');
-}
-
-function s1(ctx,W,H,t,ox,oy,sc){
   _box(ctx,-3.5,-2.5,0,7,5,0.22,ox,oy,sc,ST,SL,SR);
   const[dcx,dcy]=_ip(0,0,0.22,ox,oy,sc);const dr=sc*1.3;
   ctx.beginPath();ctx.ellipse(dcx,dcy,dr,dr*0.56,0,0,Math.PI*2);ctx.fillStyle=SL;ctx.fill();ctx.strokeStyle=EDGE;ctx.lineWidth=0.7;ctx.stroke();
@@ -1679,10 +1662,10 @@ function s1(ctx,W,H,t,ox,oy,sc){
   _box(ctx,-3.5,-0.4,0.45,1,0.8,0.45,ox,oy,sc,OL,OL,OD);
   _box(ctx,2,-0.3,0.45,1.5,0.6,0.3,ox,oy,sc,BR,BR,BRD);
   for(let i=0;i<8;i++){const ph=((i/8)+t*0.58)%1;const[px,py]=_ip(-3.5+ph*1.15,-0.08,0.65,ox,oy,sc);ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fillStyle=`rgba(74,103,65,${(1-ph)*0.75})`;ctx.fill();}
-  _lbl(ctx,W,H,'ALMAZARA 2 FASES','Centrifugación · sin agua añadida');
+  _lbl(ctx,W,H,'ALMAZARA 2 FASES','Centrifugación · sin agua añadida · alperujo 94,9%');
 }
 
-function s2(ctx,W,H,t,ox,oy,sc){
+function s1(ctx,W,H,t,ox,oy,sc){
   _box(ctx,-3.5,-2.5,0,7,5,0.2,ox,oy,sc,ST,SL,SR);
   const vib=Math.sin(t*18)*0.045;
   _box(ctx,-1.8+vib,-1.2,0.2,3.6,2.4,1.8,ox,oy,sc,ST,SL,SR);
@@ -1692,21 +1675,10 @@ function s2(ctx,W,H,t,ox,oy,sc){
   for(let i=0;i<14;i++){const ph=((i/14)+t*0.68)%1;const[px,py]=_ip(-0.8+(i%4)*0.5+vib,-1.5,1.85-ph*1.65,ox,oy,sc);ctx.beginPath();ctx.arc(px,py,1.4,0,Math.PI*2);ctx.fillStyle=i%3===0?`rgba(145,125,95,${(1-ph)*0.68})`:`rgba(74,103,65,${(1-ph)*0.68})`;ctx.fill();}
   _box(ctx,-2.8,1.2,0.2,1.2,0.8,0.55,ox,oy,sc,SR2,SL2,SR2);
   _box(ctx,1.8,1.2,0.2,1.2,0.8,0.55,ox,oy,sc,ST,OL,OD);
-  _lbl(ctx,W,H,'DESHUESADORA DE ALPERUJO','Separación núcleo leñoso · biomasa + paté digestor');
+  _lbl(ctx,W,H,'DESHUESADORA DE ALPERUJO','Biomasa (hueso) + paté · 10% s/alperujo · 97% efic.');
 }
 
-function s3(ctx,W,H,t,ox,oy,sc){
-  _box(ctx,-3.5,-2.5,0,7,5,0.2,ox,oy,sc,ST,SL,SR);
-  _box(ctx,-1.5,-1,0.2,3,2,1.5,ox,oy,sc,ST,SL,SR);
-  const slOff=(t*1.2)%0.5;
-  for(let i=0;i<6;i++){const bx=-1.3+(i*0.5+slOff)%3;_box(ctx,bx,-0.8,1.7,0.33,1.6,0.11,ox,oy,sc,ST2,SL2,SR2);}
-  for(let i=0;i<12;i++){const ph=((i/12)+t*0.48)%1;const[px,py]=_ip(1.5+ph*1.5,-0.2,0.5,ox,oy,sc);ctx.beginPath();ctx.ellipse(px,py,2.8,1.8,0,0,Math.PI*2);ctx.fillStyle=`rgba(138,112,78,${(1-ph)*0.78})`;ctx.fill();}
-  _box(ctx,2.5,-0.5,0.2,1.2,1.2,3.5,ox,oy,sc,ST,OL,OD);
-  const fhv=Math.sin(t*0.3)*0.15+0.6;_box(ctx,2.55,-0.45,0.25,1.1,1.1,3.5*fhv,ox,oy,sc,'rgba(122,92,58,0.28)','rgba(122,92,58,0.22)','rgba(122,92,58,0.18)');
-  _lbl(ctx,W,H,'SEPARACIÓN DE HUESO','10% s/alperujo (real 8-9%) · 97% eficiencia · PCI 18-19 MJ/kg');
-}
-
-function s4(ctx,W,H,t,ox,oy,sc){
+function s2(ctx,W,H,t,ox,oy,sc){
   _box(ctx,-3.5,-2.5,0,7,5,0.2,ox,oy,sc,ST,SL,SR);
   _box(ctx,-1.8,-1.5,0.2,3.6,3,3,ox,oy,sc,ST,SL,SR);
   const[dcx,dcy]=_ip(0,0,3.2,ox,oy,sc);const dr=sc*1.65;
@@ -1722,7 +1694,7 @@ function s4(ctx,W,H,t,ox,oy,sc){
   _lbl(ctx,W,H,'DIGESTOR ANAEROBIO','Mesofílico 35-40°C · HRT 25d · 60% CH₄');
 }
 
-function s5(ctx,W,H,t,ox,oy,sc){
+function s3(ctx,W,H,t,ox,oy,sc){
   _box(ctx,-3.5,-2.5,0,7,5,0.2,ox,oy,sc,ST,SL,SR);
   _box(ctx,-2.8,-1.2,0.2,2,2,2.5,ox,oy,sc,ST,SL,SR);
   const[dcx2,dcy2]=_ip(-1.8,-0.2,2.7,ox,oy,sc);ctx.beginPath();ctx.ellipse(dcx2,dcy2,sc*0.9,sc*0.33,0,0,Math.PI*2);ctx.fillStyle=ST2;ctx.fill();ctx.strokeStyle=EDGE;ctx.lineWidth=0.5;ctx.stroke();
@@ -1738,7 +1710,7 @@ function s5(ctx,W,H,t,ox,oy,sc){
   _lbl(ctx,W,H,'BIOFERTILIZANTE — DIGESTATO','N+P+K biodisponible · cierre ciclo nutrientes');
 }
 
-function s6(ctx,W,H,t,ox,oy,sc){
+function s4(ctx,W,H,t,ox,oy,sc){
   _box(ctx,-3.5,-2.5,0,7,5,0.2,ox,oy,sc,ST,SL,SR);
   _box(ctx,-2,-1.2,0.2,3.5,2.4,1.8,ox,oy,sc,ST,SL,SR);
   for(let i=0;i<5;i++)_box(ctx,-1.7+i*0.6,-1,2,0.33,2.2,0.48,ox,oy,sc,ST2,SL2,SR2);
@@ -1752,10 +1724,10 @@ function s6(ctx,W,H,t,ox,oy,sc){
   ctx.setLineDash([5,8]);ctx.lineDashOffset=-t*15;const[ip0x,ip0y]=_ip(-3.5,-0.05,0.82,ox,oy,sc);const[ip1x,ip1y]=_ip(-2,-0.05,0.82,ox,oy,sc);ctx.strokeStyle='rgba(74,103,65,0.52)';ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(ip0x,ip0y);ctx.lineTo(ip1x,ip1y);ctx.stroke();ctx.setLineDash([]);
   const bph=(t*2.5)%1;const[ex,ey]=_ip(3.8,0,1.1,ox,oy,sc);ctx.fillStyle=`rgba(74,103,65,${0.58+bph*0.38})`;ctx.font='bold 16px system-ui';ctx.textAlign='center';ctx.fillText('↯',ex,ey+6);
   for(let i=0;i<6;i++){const wph=((i*0.2)+t*0.48)%1;const[wx,wy]=_ip(-1.5+i*0.6,-1,2.5,ox,oy,sc);ctx.beginPath();for(let d=0;d<=16;d++){const p={x:wx+d-8,y:wy-wph*33-Math.sin((d/3.8)+t*3.8+i)*3.8};d===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y);}ctx.strokeStyle=`rgba(122,92,58,${(1-wph)*0.45})`;ctx.lineWidth=1.4;ctx.stroke();}
-  _lbl(ctx,W,H,'MOTOR CHP — COGENERACIÓN','500 kWe · η_el 38% · η_term 44% · >80% global');
+  _lbl(ctx,W,H,'MOTOR CHP — COGENERACIÓN','100-300 kWe · η_el 38% · η_term 44% · >80% global');
 }
 
-function s7(ctx,W,H,t,ox,oy,sc){
+function s5(ctx,W,H,t,ox,oy,sc){
   _box(ctx,-3.5,-2.5,0,7,5,0.15,ox,oy,sc,ST,SL,SR);
   const poles=[[-2.5,0],[0,0],[2.2,0]];
   poles.forEach(([px,py])=>{
@@ -1772,7 +1744,7 @@ function s7(ctx,W,H,t,ox,oy,sc){
   _lbl(ctx,W,H,'RED DE DISTRIBUCIÓN ELÉCTRICA','Autoconsumo + excedente a red · ahorro factura');
 }
 
-function s8(ctx,W,H,t,ox,oy,sc){
+function s6(ctx,W,H,t,ox,oy,sc){
   _box(ctx,-3.5,-2.5,0,7,5,0.15,ox,oy,sc,ST,SL,SR);
   _box(ctx,-2.5,-1,0.15,5,2,2,ox,oy,sc,ST,SL,SR);
   for(let i=0;i<3;i++)_box(ctx,-2+i*1.5,-0.8,2.15,0.78,1.6,0.33,ox,oy,sc,OL,OL,OD);
