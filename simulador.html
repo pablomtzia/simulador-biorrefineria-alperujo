@@ -201,6 +201,7 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
 .cref-table tr.cref-key > td { background: var(--olive-pale); }
 .cref-table tr.cref-key2 > td { background: var(--warn-bg); }
 .cref-table tr.cref-total > td { border-top: 1px solid var(--border2); font-weight: 600; color: var(--text); background: var(--surface2); padding-top: 5px; }
+.cref-table tr[data-scale] td:first-child::after { content: '↕'; font-size: 9px; margin-left: 4px; color: #b08a3e; opacity: .75; vertical-align: super; line-height: 1; }
 .cref-badge { font-size: 9px; padding: 1px 5px; border-radius: 3px; font-family: 'Courier New', monospace; display: inline-block; white-space: nowrap; }
 .cref-badge.olive { background: var(--olive-pale); color: var(--olive); }
 .cref-badge.warn { background: var(--warn-bg); color: var(--warn); }
@@ -340,16 +341,16 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
       <div class="cref-section-title">Otros ingresos — Total: <span id="lbl_total_ing">202.153,73</span> €</div>
       <table class="cref-table">
         <tbody>
-          <tr class="cref-key"><td>Alpeorujo campaña <em>(materia prima → biogás)</em></td><td><input class="cref-input" id="ing_alpeorujo" value="36803.46" oninput="recalcFinancials()"> €</td><td><span class="cref-badge olive">→ precio_alperujo_orujera</span></td></tr>
+          <tr class="cref-key" data-scale><td>Alpeorujo campaña <em>(materia prima → biogás)</em></td><td><input class="cref-input" id="ing_alpeorujo" value="36803.46" oninput="recalcFinancials()"> €</td><td><span class="cref-badge olive">→ precio_alperujo_orujera</span></td></tr>
           <tr><td>Intereses bancos cuentas corrientes</td><td><input class="cref-input" id="ing_intereses" value="17261.57" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Venta de hojarasca</td><td><input class="cref-input" id="ing_hojarasca" value="3210.25" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Tienda (alim., drog., ferr., maq.)</td><td><input class="cref-input" id="ing_tienda" value="14369.03" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Benef. venta abonos y fitosanitarios</td><td><input class="cref-input" id="ing_abonos" value="17076.03" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Beneficio surtidor</td><td><input class="cref-input" id="ing_surtidor" value="45235.18" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Venta turbios y aceitones</td><td><input class="cref-input" id="ing_turbios" value="2023.06" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr class="cref-key"><td>Venta hueso limpio <em>(ya existente)</em></td><td><input class="cref-input" id="ing_hueso" value="8747.10" oninput="recalcFinancials()"> €</td><td><span class="cref-badge olive">→ ingreso_hueso (ref.)</span></td></tr>
+          <tr data-scale><td>Venta de hojarasca</td><td><input class="cref-input" id="ing_hojarasca" value="3210.25" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr data-scale><td>Tienda (alim., drog., ferr., maq.)</td><td><input class="cref-input" id="ing_tienda" value="14369.03" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr data-scale><td>Benef. venta abonos y fitosanitarios</td><td><input class="cref-input" id="ing_abonos" value="17076.03" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr data-scale><td>Beneficio surtidor</td><td><input class="cref-input" id="ing_surtidor" value="45235.18" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr data-scale><td>Venta turbios y aceitones</td><td><input class="cref-input" id="ing_turbios" value="2023.06" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr class="cref-key" data-scale><td>Venta hueso limpio <em>(ya existente)</em></td><td><input class="cref-input" id="ing_hueso" value="8747.10" oninput="recalcFinancials()"> €</td><td><span class="cref-badge olive">→ ingreso_hueso (ref.)</span></td></tr>
           <tr><td>Ingresos excepcionales (envasadora, kit digital)</td><td><input class="cref-input" id="ing_excepcionales" value="24313.79" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Prestación de servicio socios</td><td><input class="cref-input" id="ing_servicio" value="22546.61" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr data-scale><td>Prestación de servicio socios</td><td><input class="cref-input" id="ing_servicio" value="22546.61" oninput="recalcFinancials()"> €</td><td></td></tr>
           <tr><td>Variación existencias</td><td><input class="cref-input" id="ing_existencias" value="10567.65" oninput="recalcFinancials()"> €</td><td></td></tr>
           <tr class="cref-total"><td><strong>TOTAL OTROS INGRESOS</strong></td><td><strong><span id="val_total_ing">202.153,73</span> €</strong></td><td></td></tr>
         </tbody>
@@ -362,24 +363,24 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
       <table class="cref-table">
         <tbody>
           <tr><td>Contrato mantenimiento programas</td><td><input class="cref-input" id="gas_mantenimiento" value="25135.50" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Cuotas Ecoembes, AECOR, SGS, FAECA, A.Oliva</td><td><input class="cref-input" id="gas_cuotas" value="21991.41" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Trabajos por otras empresas a fábrica</td><td><input class="cref-input" id="gas_trabajos" value="26763.03" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Envases, cajas y etiquetas</td><td><input class="cref-input" id="gas_envases" value="7182.02" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Retirada de hojarasca (hojas malas)</td><td><input class="cref-input" id="gas_hojarasca" value="500.00" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr data-scale><td>Cuotas Ecoembes, AECOR, SGS, FAECA, A.Oliva</td><td><input class="cref-input" id="gas_cuotas" value="21991.41" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr data-scale><td>Trabajos por otras empresas a fábrica</td><td><input class="cref-input" id="gas_trabajos" value="26763.03" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr data-scale><td>Envases, cajas y etiquetas</td><td><input class="cref-input" id="gas_envases" value="7182.02" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr data-scale><td>Retirada de hojarasca (hojas malas)</td><td><input class="cref-input" id="gas_hojarasca" value="500.00" oninput="recalcFinancials()"> €</td><td></td></tr>
           <tr><td>Asignación Junta Rectora</td><td><input class="cref-input" id="gas_junta" value="24961.42" oninput="recalcFinancials()"> €</td><td></td></tr>
           <tr><td>Teléfonos</td><td><input class="cref-input" id="gas_telefonos" value="2066.15" oninput="recalcFinancials()"> €</td><td></td></tr>
           <tr><td>Gestoría y asesoría</td><td><input class="cref-input" id="gas_gestoria" value="7753.11" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Seguros sociales</td><td><input class="cref-input" id="gas_seg_soc" value="57544.13" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Comisionistas venta aceite granell</td><td><input class="cref-input" id="gas_comisionistas" value="4519.49" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr class="cref-key2"><td>Recibo Sevillana + Talco <em>(electricidad)</em></td><td><input class="cref-input" id="gas_electricidad" value="34509.70" oninput="recalcFinancials()"> €</td><td><span class="cref-badge warn">→ factura_electrica_anual</span></td></tr>
-          <tr><td>Combustible vehículos empresa</td><td><input class="cref-input" id="gas_combustible" value="1110.64" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr data-scale><td>Seguros sociales</td><td><input class="cref-input" id="gas_seg_soc" value="57544.13" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr data-scale><td>Comisionistas venta aceite granell</td><td><input class="cref-input" id="gas_comisionistas" value="4519.49" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr class="cref-key2" data-scale><td>Recibo Sevillana + Talco <em>(electricidad)</em></td><td><input class="cref-input" id="gas_electricidad" value="34509.70" oninput="recalcFinancials()"> €</td><td><span class="cref-badge warn">→ factura_electrica_anual</span></td></tr>
+          <tr data-scale><td>Combustible vehículos empresa</td><td><input class="cref-input" id="gas_combustible" value="1110.64" oninput="recalcFinancials()"> €</td><td></td></tr>
           <tr><td>Publicidad (ferias, revistas)</td><td><input class="cref-input" id="gas_publicidad" value="3660.73" oninput="recalcFinancials()"> €</td><td></td></tr>
           <tr><td>Material oficina y equipos informáticos</td><td><input class="cref-input" id="gas_material" value="2161.74" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Patronato (recibos, impuestos, tasas)</td><td><input class="cref-input" id="gas_patronato" value="3465.61" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr data-scale><td>Patronato (recibos, impuestos, tasas)</td><td><input class="cref-input" id="gas_patronato" value="3465.61" oninput="recalcFinancials()"> €</td><td></td></tr>
           <tr><td>Intereses bancos (póliza, préstamo)</td><td><input class="cref-input" id="gas_intereses" value="1466.34" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Comisión bancos (tarjeta tienda, surtidor)</td><td><input class="cref-input" id="gas_comision" value="4983.00" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Transportes (paquetería tienda + orujera)</td><td><input class="cref-input" id="gas_transportes" value="46108.83" oninput="recalcFinancials()"> €</td><td></td></tr>
-          <tr><td>Reparaciones vehículos e ITV</td><td><input class="cref-input" id="gas_reparacion_vh" value="2348.83" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr data-scale><td>Comisión bancos (tarjeta tienda, surtidor)</td><td><input class="cref-input" id="gas_comision" value="4983.00" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr data-scale><td>Transportes (paquetería tienda + orujera)</td><td><input class="cref-input" id="gas_transportes" value="46108.83" oninput="recalcFinancials()"> €</td><td></td></tr>
+          <tr data-scale><td>Reparaciones vehículos e ITV</td><td><input class="cref-input" id="gas_reparacion_vh" value="2348.83" oninput="recalcFinancials()"> €</td><td></td></tr>
           <tr class="cref-key"><td>Amortización inmovilizado mat. e inmat.</td><td><input class="cref-input" id="gas_amortizacion" value="62952.49" oninput="recalcFinancials()"> €</td><td><span class="cref-badge olive">→ ref. amortización actual</span></td></tr>
           <tr><td>Créditos incobrables</td><td><input class="cref-input" id="gas_incobrables" value="7186.49" oninput="recalcFinancials()"> €</td><td></td></tr>
           <tr class="cref-total"><td><strong>TOTAL GASTOS</strong></td><td><strong><span id="val_total_gas">348.370,66</span> €</strong></td><td></td></tr>
