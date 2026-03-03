@@ -672,12 +672,12 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
 
   <div class="card">
     <div class="card-header">Materia Prima</div>
-    <div class="param-row"><label>Toneladas de aceituna</label><input type="number" id="t_aceituna" value="15000" min="1000" max="100000" step="500" oninput="onInput()"><span class="param-unit">t/año</span></div>
-    <div class="param-row"><label>Rendimiento alperujo</label><input type="number" id="rend_alperujo" value="77.3" min="50" max="95" step="0.1" oninput="onInput()"><span class="param-unit">%</span></div>
+    <div class="param-row"><label>Toneladas de aceituna</label><input type="number" id="t_aceituna" value="3265" min="1000" max="100000" step="500" oninput="onInput()"><span class="param-unit">t/año</span></div>
+    <div class="param-row"><label>Rendimiento alperujo</label><input type="number" id="rend_alperujo" value="94.9" min="50" max="95" step="0.1" oninput="onInput()"><span class="param-unit">%</span></div>
     <div class="param-row"><label>Contenido hueso</label><input type="number" id="contenido_hueso" value="10" min="5" max="30" step="0.1" oninput="onInput()"><span class="param-unit">%</span></div>
     <div class="param-row"><label>Eficiencia separación hueso</label><input type="number" id="rend_separacion" value="97" min="70" max="100" step="0.5" oninput="onInput()"><span class="param-unit">%</span></div>
-    <div class="param-row"><label>Precio alperujo a orujera</label><input type="number" id="precio_alperujo_orujera" value="6.0" min="0" max="30" step="0.5" oninput="onInput()"><span class="param-unit">€/t</span></div>
-    <div class="param-row" data-scale><label>Coste transporte total</label><input type="number" id="coste_transporte_total" value="42300" min="0" max="500000" step="1000" oninput="onInput()"><span class="param-unit">€/año</span></div>
+    <div class="param-row"><label>Precio alperujo a orujera</label><input type="number" id="precio_alperujo_orujera" value="11.88" min="0" max="30" step="0.5" oninput="onInput()"><span class="param-unit">€/t</span></div>
+    <div class="param-row" data-scale><label>Coste transporte total</label><input type="number" id="coste_transporte_total" value="0" min="0" max="500000" step="1000" oninput="onInput()"><span class="param-unit">€/año</span></div>
     <div class="derived-section">
       <div class="dpill">Alperujo: <strong id="d-alperujo">—</strong> t/año</div>
       <div class="dpill">Hueso sep.: <strong id="d-hueso">—</strong> t/año</div>
@@ -724,12 +724,12 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
 
   <div class="card">
     <div class="card-header">Motor CHP</div>
-    <div class="param-row" data-scale><label>Potencia eléctrica CHP</label><input type="number" id="potencia_CHP_kwe" value="500" min="50" max="5000" step="50" oninput="onInput()"><span class="param-unit">kWe</span></div>
-    <div class="param-row" data-scale><label>Horas de operación</label><input type="number" id="horas_operacion" value="7326" min="1000" max="8760" step="100" oninput="onInput()"><span class="param-unit">h/año</span></div>
+    <div class="param-row" data-scale><label>Potencia eléctrica CHP</label><input type="number" id="potencia_CHP_kwe" value="100" min="50" max="5000" step="50" oninput="onInput()"><span class="param-unit">kWe</span></div>
+    <div class="param-row" data-scale><label>Horas de operación</label><input type="number" id="horas_operacion" value="7600" min="1000" max="8760" step="100" oninput="onInput()"><span class="param-unit">h/año</span></div>
     <div class="param-row"><label>Rendimiento eléctrico</label><input type="number" id="rend_electrico_CHP" value="38" min="20" max="55" step="0.5" oninput="onInput()"><span class="param-unit">%</span></div>
     <div class="param-row"><label>Rendimiento térmico</label><input type="number" id="rend_termico_CHP" value="44" min="20" max="60" step="0.5" oninput="onInput()"><span class="param-unit">%</span></div>
     <div class="param-row"><label>Autoconsumo eléctrico</label><input type="number" id="pct_autoconsumo_elec" value="14.5" min="0" max="50" step="0.5" oninput="onInput()"><span class="param-unit">%</span></div>
-    <div class="param-row"><label>Factura eléctrica actual</label><input type="number" id="factura_electrica_anual" value="62301" min="0" max="1000000" step="1000" oninput="onInput()"><span class="param-unit">€/año</span></div>
+    <div class="param-row"><label>Factura eléctrica actual</label><input type="number" id="factura_electrica_anual" value="34510" min="0" max="1000000" step="1000" oninput="onInput()"><span class="param-unit">€/año</span></div>
     <div class="derived-section">
       <div class="dpill">Elect. bruta: <strong id="d-elec-bruta">—</strong> MWh/año</div>
       <div class="dpill">Elect. neta: <strong id="d-elec-neta">—</strong> MWh/año</div>
@@ -739,7 +739,7 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
     <div class="param-legend">
       <table class="legend-table">
         <tr><td>Potencia CHP (kWe)</td><td><span class="legend-badge lb-est">EST</span>Dimensionado según biogás anual disponible · motores estándar: 100/200/300 kWe por escenario</td></tr>
-        <tr><td>Horas operación</td><td><span class="legend-badge lb-est">EST</span>Horas que el motor necesita para agotar el biogás generado · disponibilidad de planta ~87% igual en todos los escenarios</td></tr>
+        <tr><td>Horas operación</td><td><span class="legend-badge lb-est">EST</span>Horas anuales de operación del motor · con 10% hueso el biogás soporta 8.168/7.630/7.505 h en Scen A/B/C · configurado al 93-95% como margen de disponibilidad (mantenimiento, paradas)</td></tr>
         <tr><td>Rend. eléctrico 38%</td><td><span class="legend-badge lb-bib">BIB</span>Eficiencia eléctrica estándar motores biogás Jenbacher JGS / Caterpillar CG &lt;500 kWe</td></tr>
         <tr><td>Rend. térmico 44%</td><td><span class="legend-badge lb-bib">BIB</span>Calor recuperado (agua proceso + calefacción digestor) · eficiencia estándar cogeneración biogás</td></tr>
         <tr><td>Autoconsumo eléctrico 14,5%</td><td><span class="legend-badge lb-est">EST</span>Consumo auxiliares del motor CHP (bombas, refrigeración, controles) sobre producción bruta</td></tr>
@@ -776,11 +776,11 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
 
   <div class="card">
     <div class="card-header">Inversión (CAPEX)</div>
-    <div class="param-row" data-scale><label>Deshuesadora de alperujo</label><input type="number" id="inv_deshuesadora" value="85000" min="0" max="500000" step="5000" oninput="onInput()"><span class="param-unit">€</span></div>
-    <div class="param-row" data-scale><label>Digestor anaerobio</label><input type="number" id="inv_digestor" value="850000" min="0" max="5000000" step="10000" oninput="onInput()"><span class="param-unit">€</span></div>
-    <div class="param-row" data-scale><label>Motor CHP</label><input type="number" id="inv_CHP" value="700000" min="0" max="5000000" step="10000" oninput="onInput()"><span class="param-unit">€</span></div>
-    <div class="param-row" data-scale><label>Instalación eléctrica</label><input type="number" id="inv_instalacion_electrica" value="320000" min="0" max="2000000" step="10000" oninput="onInput()"><span class="param-unit">€</span></div>
-    <div class="param-row" data-scale><label>Otros</label><input type="number" id="inv_otros" value="245000" min="0" max="2000000" step="5000" oninput="onInput()"><span class="param-unit">€</span></div>
+    <div class="param-row" data-scale><label>Deshuesadora de alperujo</label><input type="number" id="inv_deshuesadora" value="80000" min="0" max="500000" step="5000" oninput="onInput()"><span class="param-unit">€</span></div>
+    <div class="param-row" data-scale><label>Digestor anaerobio</label><input type="number" id="inv_digestor" value="230000" min="0" max="5000000" step="10000" oninput="onInput()"><span class="param-unit">€</span></div>
+    <div class="param-row" data-scale><label>Motor CHP</label><input type="number" id="inv_CHP" value="100000" min="0" max="5000000" step="10000" oninput="onInput()"><span class="param-unit">€</span></div>
+    <div class="param-row" data-scale><label>Instalación eléctrica</label><input type="number" id="inv_instalacion_electrica" value="70000" min="0" max="2000000" step="10000" oninput="onInput()"><span class="param-unit">€</span></div>
+    <div class="param-row" data-scale><label>Otros</label><input type="number" id="inv_otros" value="70000" min="0" max="2000000" step="5000" oninput="onInput()"><span class="param-unit">€</span></div>
     <div class="param-row"><label>Subvención</label><input type="number" id="pct_subvencion" value="0" min="0" max="80" step="1" oninput="onInput()"><span class="param-unit">%</span></div>
     <div class="derived-section">
       <div class="dpill">CAPEX bruto: <strong id="d-capex-bruto">—</strong> €</div>
@@ -802,11 +802,11 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
   <div class="card">
     <div class="card-header">Costes O&amp;M y Parámetros Financieros</div>
     <div class="param-row"><label>Mant. CHP variable</label><input type="number" id="coste_mant_CHP_kwh" value="0.015" min="0.005" max="0.05" step="0.001" oninput="onInput()"><span class="param-unit">€/kWh</span></div>
-    <div class="param-row" data-scale><label>Personal</label><input type="number" id="coste_personal" value="35000" min="0" max="500000" step="1000" oninput="onInput()"><span class="param-unit">€/año</span></div>
-    <div class="param-row" data-scale><label>Consumibles</label><input type="number" id="coste_consumibles" value="10000" min="0" max="100000" step="1000" oninput="onInput()"><span class="param-unit">€/año</span></div>
-    <div class="param-row" data-scale><label>Seguros</label><input type="number" id="coste_seguros" value="11000" min="0" max="100000" step="500" oninput="onInput()"><span class="param-unit">€/año</span></div>
-    <div class="param-row" data-scale><label>Otros O&amp;M</label><input type="number" id="coste_otros_om" value="10000" min="0" max="100000" step="500" oninput="onInput()"><span class="param-unit">€/año</span></div>
-    <div class="param-row" data-scale><label>Revisión mayor</label><input type="number" id="coste_revision_mayor" value="120000" min="0" max="500000" step="5000" oninput="onInput()"><span class="param-unit">€</span></div>
+    <div class="param-row" data-scale><label>Personal</label><input type="number" id="coste_personal" value="25000" min="0" max="500000" step="1000" oninput="onInput()"><span class="param-unit">€/año</span></div>
+    <div class="param-row" data-scale><label>Consumibles</label><input type="number" id="coste_consumibles" value="8000" min="0" max="100000" step="1000" oninput="onInput()"><span class="param-unit">€/año</span></div>
+    <div class="param-row" data-scale><label>Seguros</label><input type="number" id="coste_seguros" value="8000" min="0" max="100000" step="500" oninput="onInput()"><span class="param-unit">€/año</span></div>
+    <div class="param-row" data-scale><label>Otros O&amp;M</label><input type="number" id="coste_otros_om" value="8000" min="0" max="100000" step="500" oninput="onInput()"><span class="param-unit">€/año</span></div>
+    <div class="param-row" data-scale><label>Revisión mayor</label><input type="number" id="coste_revision_mayor" value="40000" min="0" max="500000" step="5000" oninput="onInput()"><span class="param-unit">€</span></div>
     <div class="param-row"><label>Año revisión mayor</label><input type="number" id="anyo_revision_mayor" value="8" min="1" max="20" step="1" oninput="onInput()"><span class="param-unit">año</span></div>
     <div class="param-row"><label>Tasa de descuento</label><input type="number" id="tasa_descuento" value="5" min="0" max="20" step="0.25" oninput="onInput()"><span class="param-unit">%</span></div>
     <div class="param-row"><label>Horizonte temporal</label><input type="number" id="horizonte" value="15" min="5" max="30" step="1" oninput="onInput()"><span class="param-unit">años</span></div>
@@ -998,8 +998,9 @@ const SCENARIOS = {
     kg_N_digestato: 5,         // kg N/t digestato (contenido nitrógeno total, rango 3-7)
     kg_N_ha: 50,               // Kg nitrógeno aplicado/ha (agronomía mediterránea)
     // ── CHP (Motor cogeneración) ──
-    // Paté al digestor: 2.666 t → biogás neto: ~342.000 m³ → CH4: ~205.000 m³
-    // Energía eléctrica disponible: ~778 MWh/año → potencia: 100 kWe × 7.600 h
+    // Paté al digestor: ~2.798 t → biogás neto: ~359.000 m³ → CH4: ~215.600 m³
+    // Energía eléctrica disponible desde biogás: ~817 MWh/año → motor: 100 kWe × 7.600 h = 760 MWh
+    // (7.600h = 93% del máximo posible; margen para paradas programadas y mantenimiento)
     potencia_CHP_kwe: 100,     // kWe instalados (dimensionado por biogás disponible)
     horas_operacion: 7600,     // h/año (317 días, digestor opera >campaña)
     rend_electrico_CHP: 38,    // % eficiencia eléctrica (motor gas natural/biogás)
@@ -1047,13 +1048,12 @@ const SCENARIOS = {
     kg_N_digestato: 5,
     kg_N_ha: 50,
     // ── CHP ──
-    // Paté: ~4.980 t → biogás neto: ~639.000 m³ → CH4: ~383.000 m³
-    // Energía eléctrica disponible: ~1.454 MWh → potencia: 200 kWe × 7.270 h = 1.454 MWh
-    // Horas < Scen A (7.600h) porque el motor 200 kWe es proporcionalmente mayor que el biogás:
-    // biogás escala ×1,87 (778→1.454 MWh) pero motor escala ×2 (100→200 kWe) → motor consume
-    // el biogás disponible en 7.270h en lugar de las 7.600h del escenario A.
+    // Paté: ~5.227 t → biogás neto: ~671.000 m³ → CH4: ~402.800 m³
+    // Energía eléctrica disponible desde biogás: ~1.526 MWh → motor: 200 kWe × 7.270 h = 1.454 MWh
+    // (7.270h = 95% del máximo posible; horas < Scen A porque motor escala ×2 mientras
+    // biogás solo escala ×1,87 — motor ligeramente sobredimensionado respecto al biogás)
     potencia_CHP_kwe: 200,
-    horas_operacion: 7270,     // h/año — 200kWe×7270h = 1.454 MWh = biogás disponible exacto
+    horas_operacion: 7270,     // h/año — 200kWe×7270h = 1.454 MWh (~95% del disponible)
     rend_electrico_CHP: 38,
     rend_termico_CHP: 44,
     pct_autoconsumo_elec: 14.5,
@@ -1100,12 +1100,12 @@ const SCENARIOS = {
     kg_N_digestato: 5,
     kg_N_ha: 50,
     // ── CHP ──
-    // Paté: ~7.347 t → biogás neto: ~943.000 m³ → CH4: ~566.000 m³
-    // Energía eléctrica disponible: ~2.145 MWh → potencia: 300 kWe × 7.150 h = 2.145 MWh
-    // Horas < Scen A porque motor 300 kWe escala ×3 mientras biogás solo escala ×2,76
-    // (778→2.145 MWh). Motor ligeramente sobredimensionado → agota biogás en 7.150h.
+    // Paté: ~7.713 t → biogás neto: ~991.000 m³ → CH4: ~594.300 m³
+    // Energía eléctrica disponible desde biogás: ~2.252 MWh → motor: 300 kWe × 7.150 h = 2.145 MWh
+    // (7.150h = 95% del máximo posible; motor escala ×3 mientras biogás escala ×2,76
+    // → motor ligeramente sobredimensionado → puede agotar biogás en ~7.500h máximo)
     potencia_CHP_kwe: 300,
-    horas_operacion: 7150,     // h/año — 300kWe×7150h = 2.145 MWh = biogás disponible exacto
+    horas_operacion: 7150,     // h/año — 300kWe×7150h = 2.145 MWh (~95% del disponible)
     rend_electrico_CHP: 38,
     rend_termico_CHP: 44,
     pct_autoconsumo_elec: 14.5,
@@ -1339,6 +1339,8 @@ function compute(ov={}){
   const t_alperujo=p.t_aceituna*p.rend_alperujo/100;
   const t_hueso_separado=t_alperujo*(p.contenido_hueso/100)*(p.rend_separacion/100);
   const t_alperujo_deshuesado=t_alperujo-t_hueso_separado;
+  // Factor 0,69: se estima que ~31% de la masa del paté se convierte en biogás y vapor de agua;
+  // el 69% restante permanece como digestato semisólido (rango típico bibliográfico: 65-75%)
   const digestato_estimado=t_alperujo_deshuesado*0.69;
   const biogas_bruto=t_alperujo_deshuesado*p.rendimiento_biogas;
   const biogas_neto=biogas_bruto*(1-p.pct_autoconsumo_biogas/100);
@@ -1347,7 +1349,9 @@ function compute(ov={}){
   const autoconsumo_mwh=p.factura_electrica_anual/p.precio_compra_red;
   const excedente_red=Math.max(0,energia_electrica_neta-autoconsumo_mwh);
   const energia_termica=p.potencia_CHP_kwe*(p.rend_termico_CHP/p.rend_electrico_CHP)*p.horas_operacion/1000;
-  const ahorro_electricidad=p.factura_electrica_anual;
+  // Si el CHP no cubre toda la demanda eléctrica, el ahorro es proporcional a lo cubierto
+  const cobertura_elec=autoconsumo_mwh>0?Math.min(1,energia_electrica_neta/autoconsumo_mwh):1;
+  const ahorro_electricidad=p.factura_electrica_anual*cobertura_elec;
   const ahorro_transporte=p.coste_transporte_total;
   const N_total_kg=digestato_estimado*p.kg_N_digestato;
   const ha_fertilizables=p.kg_N_ha>0?N_total_kg/p.kg_N_ha:0;
