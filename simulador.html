@@ -752,7 +752,7 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
     <div class="card-header">Ingresos y Precios</div>
     <div class="param-row"><label>Precio venta hueso</label><input type="number" id="precio_venta_hueso" value="120" min="0" max="500" step="5" oninput="onInput()"><span class="param-unit">€/t</span></div>
     <div class="param-row"><label>Precio digestato</label><input type="number" id="precio_digestato" value="10" min="0" max="80" step="1" oninput="onInput()"><span class="param-unit">€/t</span></div>
-    <div class="param-row"><label>Precio compra red</label><input type="number" id="precio_compra_red" value="120" min="50" max="400" step="5" oninput="onInput()"><span class="param-unit">€/MWh</span></div>
+    <div class="param-row"><label>Precio compra red</label><input type="number" id="precio_compra_red" value="188" min="50" max="400" step="5" oninput="onInput()"><span class="param-unit">€/MWh</span></div>
     <div class="param-row"><label>Precio venta excedente</label><input type="number" id="precio_venta_excedente" value="65" min="20" max="200" step="5" oninput="onInput()"><span class="param-unit">€/MWh</span></div>
     <div class="param-row" data-scale><label>Hectáreas olivar socios</label><input type="number" id="ha_olivar" value="750" min="0" max="5000" step="50" oninput="onInput()"><span class="param-unit">ha</span></div>
     <div class="derived-section">
@@ -767,7 +767,7 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
       <table class="legend-table">
         <tr><td>Precio hueso 120 €/t</td><td><span class="legend-badge lb-bib">BIB</span>IDAE (2018) · boletín precios biomasa · mercado biomasa industrial (calderas industriales y pellet)</td></tr>
         <tr><td>Precio digestato 10 €/t</td><td><span class="legend-badge lb-est">EST</span>Precio de cesión/venta del digestato a socios como biofertilizante · rango mercado 5-20 €/t según calidad y demanda local</td></tr>
-        <tr><td>Precio compra red 120 €/MWh</td><td><span class="legend-badge lb-est">EST</span>Tarifa PVPC industria media 2024 (Ministerio para la Transición Ecológica) · referencia mercado regulado</td></tr>
+        <tr><td>Precio compra red 188 €/MWh</td><td><span class="legend-badge lb-bib">BIB</span>Eurostat (2025) · precio electricidad consumidores industriales España, 2.º semestre 2024 · precio todo incluido (energía + peajes + impuestos)</td></tr>
         <tr><td>Precio venta excedente 65 €/MWh</td><td><span class="legend-badge lb-est">EST</span>Precio spot mercado ibérico OMIE 2024 · promedio anual · fluctúa según oferta/demanda</td></tr>
         <tr><td>Ha olivar socios</td><td><span class="legend-badge lb-est">EST</span>Superficie total de los socios de la cooperativa · referencia para comparar con las ha fertilizables que genera la planta</td></tr>
       </table>
@@ -948,7 +948,7 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
 
 <script>
 'use strict';
-const DEFAULTS={t_aceituna:3265,rend_alperujo:94.9,contenido_hueso:10,rend_separacion:97,precio_alperujo_orujera:11.88,coste_transporte_total:0,factura_electrica_anual:34510,ha_olivar:750,kg_N_ha:50,kg_N_digestato:5,rendimiento_biogas:142.7,pct_CH4:60,pct_autoconsumo_biogas:10,potencia_CHP_kwe:100,horas_operacion:7600,rend_electrico_CHP:38,rend_termico_CHP:44,pct_autoconsumo_elec:14.5,precio_venta_hueso:120,precio_digestato:10,inv_deshuesadora:80000,inv_digestor:230000,inv_CHP:100000,inv_instalacion_electrica:70000,inv_otros:70000,pct_subvencion:0,precio_compra_red:120,precio_venta_excedente:65,coste_mant_CHP_kwh:0.015,coste_personal:25000,coste_consumibles:8000,coste_seguros:8000,coste_otros_om:8000,coste_revision_mayor:40000,anyo_revision_mayor:8,tasa_descuento:5,horizonte:15,pct_valor_residual:10};
+const DEFAULTS={t_aceituna:3265,rend_alperujo:94.9,contenido_hueso:10,rend_separacion:97,precio_alperujo_orujera:11.88,coste_transporte_total:0,factura_electrica_anual:34510,ha_olivar:750,kg_N_ha:50,kg_N_digestato:5,rendimiento_biogas:142.7,pct_CH4:60,pct_autoconsumo_biogas:10,potencia_CHP_kwe:100,horas_operacion:7600,rend_electrico_CHP:38,rend_termico_CHP:44,pct_autoconsumo_elec:14.5,precio_venta_hueso:120,precio_digestato:10,inv_deshuesadora:80000,inv_digestor:230000,inv_CHP:100000,inv_instalacion_electrica:70000,inv_otros:70000,pct_subvencion:0,precio_compra_red:188,precio_venta_excedente:65,coste_mant_CHP_kwh:0.015,coste_personal:25000,coste_consumibles:8000,coste_seguros:8000,coste_otros_om:8000,coste_revision_mayor:40000,anyo_revision_mayor:8,tasa_descuento:5,horizonte:15,pct_valor_residual:10};
 
 // Datos reales campaña 2024-2025 (cooperativa andaluza)
 const CAMPAIGN_2425={
@@ -1010,7 +1010,7 @@ const SCENARIOS = {
     // ── Precios ──
     precio_venta_hueso: 120,   // €/t hueso limpio (mercado biomasa, IDAE 2018)
     precio_digestato: 10,      // €/t digestato cedido/vendido a socios como biofertilizante
-    precio_compra_red: 120,    // €/MWh precio compra red (mercado regulado)
+    precio_compra_red: 188,    // €/MWh precio compra red (Eurostat 2025, todo incluido)
     precio_venta_excedente: 65,// €/MWh venta excedentes (mercado spot medio)
     ha_olivar: 750,            // Ha olivar socios (referencia cobertura digestato)
     // ── CAPEX (Inversión total: 550.000 €, 5.500 €/kWe instalado) ──
@@ -1062,7 +1062,7 @@ const SCENARIOS = {
     // ── Precios ──
     precio_venta_hueso: 120,
     precio_digestato: 10,
-    precio_compra_red: 120,
+    precio_compra_red: 188,
     precio_venta_excedente: 65,
     ha_olivar: 1400,           // Proporcional: 750 × (6100/3265) ≈ 1.400 ha socios
     // ── CAPEX (Inversión total: 900.000 €, 4.500 €/kWe; economía de escala) ──
@@ -1114,7 +1114,7 @@ const SCENARIOS = {
     // ── Precios ──
     precio_venta_hueso: 120,
     precio_digestato: 10,
-    precio_compra_red: 120,
+    precio_compra_red: 188,
     precio_venta_excedente: 65,
     ha_olivar: 2000,           // Proporcional: 750 × (9000/3265) ≈ 2.070 → 2.000 ha socios
     // ── CAPEX (Inversión total: 1.200.000 €, 4.000 €/kWe; máxima economía de escala) ──
