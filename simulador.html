@@ -987,154 +987,149 @@ const SCENARIOS = {
     // ── Materia prima ──
     t_aceituna: 3265,          // Real campaña 2024-25: 3.265.802 kg
     rend_alperujo: 94.9,       // Real: 3.098.820 / 3.265.802 = 94,9%
-    contenido_hueso: 10,       // Fracción leñosa del alperujo (dato real almazara: 8-9%, peor caso 10%)
+    contenido_hueso: 10,       // Fracción leñosa del alperujo (dato real almazara)
     rend_separacion: 97,       // Eficiencia deshuesadora industrial
     precio_alperujo_orujera: 11.88, // Real: 36.803,46 € / 3.098,82 t = 11,88 €/t
     coste_transporte_total: 0, // Extractora recoge el alperujo (coste neto = 0)
     // ── Digestor ──
-    rendimiento_biogas: 142.7, // m³ biogás/t paté (bibliográfico, conservador)
-    pct_CH4: 60,               // Contenido metano biogás (típico alperujo)
-    pct_autoconsumo_biogas: 10,// Consumo propio del digestor
-    kg_N_digestato: 5,         // kg N/t digestato (contenido nitrógeno total, rango 3-7)
-    kg_N_ha: 50,               // Kg nitrógeno aplicado/ha (agronomía mediterránea)
+    rendimiento_biogas: 113.4, // m³ biogás/t alperujo deshuesado (La Cal Herrera, com. pers. 3/3/2026)
+    pct_CH4: 55,               // % metano biogás (La Cal Herrera, com. pers. 3/3/2026)
+    pct_autoconsumo_biogas: 12.5,// % biogás consumo propio digestor y auxiliares
+    kg_N_digestato: 5,         // kg N/t digestato
+    kg_N_ha: 50,               // Kg N aplicado/ha
     // ── CHP (Motor cogeneración) ──
-    // Paté al digestor: ~2.798 t → biogás neto: ~359.000 m³ → CH4: ~215.600 m³
-    // Energía eléctrica disponible desde biogás: ~817 MWh/año → motor: 100 kWe × 7.600 h = 760 MWh
-    // (7.600h = 93% del máximo posible; margen para paradas programadas y mantenimiento)
-    potencia_CHP_kwe: 100,     // kWe instalados (dimensionado por biogás disponible)
-    horas_operacion: 7600,     // h/año (317 días, digestor opera >campaña)
-    rend_electrico_CHP: 38,    // % eficiencia eléctrica (motor gas natural/biogás)
-    rend_termico_CHP: 44,      // % eficiencia térmica
-    pct_autoconsumo_elec: 14.5,// % autoconsumo eléctrico del motor
-    factura_electrica_anual: 34510, // Real: 34.509,70 €/año (escala base)
+    // Alperujo deshuesado: ~2.798 t → biogás neto: ~278.000 m³ → CH4: ~152.800 m³
+    // Energía eléctrica disponible: ~450 MWh → motor: 100 kWe × 4.500 h = 450 MWh
+    potencia_CHP_kwe: 100,     // kWe instalados
+    horas_operacion: 4500,     // h/año (derivadas del biogás neto disponible)
+    rend_electrico_CHP: 29.5,  // % eficiencia eléctrica (La Cal Herrera, com. pers. 3/3/2026)
+    rend_termico_CHP: 45,      // % eficiencia térmica
+    pct_autoconsumo_elec: 5,   // % autoconsumo eléctrico auxiliares planta
+    factura_electrica_anual: 34510, // Real: 34.509,70 €/año
     // ── Precios ──
-    precio_venta_hueso: 120,   // €/t hueso limpio (mercado biomasa, IDAE 2018)
-    precio_digestato: 10,      // €/t digestato cedido/vendido a socios como biofertilizante
-    precio_compra_red: 188,    // €/MWh precio compra red (Eurostat 2025, todo incluido)
+    precio_venta_hueso: 135,   // €/t hueso (La Cal Herrera, com. pers. 3/3/2026; IDAE 2018)
+    precio_digestato: 10,      // €/t digestato como biofertilizante
+    precio_compra_red: 120,    // €/MWh precio red cooperativa (La Cal Herrera, com. pers. 3/3/2026)
     precio_venta_excedente: 65,// €/MWh venta excedentes (mercado spot medio)
-    ha_olivar: 750,            // Ha olivar socios (referencia cobertura digestato)
-    // ── CAPEX (Inversión total: 550.000 €, 5.500 €/kWe instalado) ──
-    inv_deshuesadora: 80000, // 80.000 € — Deshuesadora para ~35 t alperujo/día de campaña
-    inv_digestor: 230000,      // 230.000 € — Digestor anaerobio + agitación + calefacción
-    inv_CHP: 100000,           // 100.000 € — Motor cogeneración 100 kWe + instalación
-    inv_instalacion_electrica: 70000, // 70.000 € — Conexión red, transformador, cuadros
-    inv_otros: 70000,          // 70.000 € — Obra civil, gasómetro, automatización, ingeniería
-    pct_subvencion: 0,         // Base conservadora (sin subvención)
+    ha_olivar: 750,            // Ha olivar socios
+    // ── CAPEX (Inversión total: 448.500 €; La Cal Herrera, com. pers. 3/3/2026) ──
+    inv_deshuesadora: 11000,   // 11.000 €
+    inv_digestor: 300000,      // 300.000 € — incluye obra civil, ingeniería y permisos
+    inv_CHP: 133000,           // 133.000 € — motor 100 kWe + auxiliares
+    inv_instalacion_electrica: 4500, // 4.500 €
+    inv_otros: 0,              // 0 € — costes integrados en inv_digestor
+    pct_subvencion: 0,
     // ── O&M ──
-    coste_mant_CHP_kwh: 0.015, // €/kWh (mantenimiento variable motor cogeneración)
-    coste_personal: 25000,     // 25.000 €/año — 0,5 FTE técnico planta biogás
-    coste_consumibles: 8000,   // 8.000 €/año — reactivos, análisis, lubricantes
-    coste_seguros: 8000,       // 8.000 €/año — ~1,5% CAPEX, planta + responsabilidad
-    coste_otros_om: 8000,      // 8.000 €/año — gestión residuos, inspecciones, miscelánea
-    coste_revision_mayor: 40000,// 40.000 € — revisión mayor motor CHP en año 8, ~40% inv_CHP
-    anyo_revision_mayor: 8,    // Año del horizonte con revisión mayor
+    coste_mant_CHP_kwh: 0.015, // €/kWh (mantenimiento variable motor)
+    coste_personal: 37500,     // 37.500 €/año — 0,5 FTE técnico planta
+    coste_consumibles: 5500,   // 5.500 €/año — reactivos, análisis, lubricantes
+    coste_seguros: 2400,       // 2.400 €/año — seguro instalación
+    coste_otros_om: 5000,      // 5.000 €/año — gestión residuos, inspecciones
+    coste_revision_mayor: 10000,// 10.000 € — revisión mayor motor CHP en año 10
+    anyo_revision_mayor: 10,
     // ── Parámetros financieros ──
-    tasa_descuento: 5,         // % (coste oportunidad capital, referencia cooperativa)
-    horizonte: 15,             // años (vida útil estimada instalación)
+    tasa_descuento: 5,         // % (coste oportunidad capital)
+    horizonte: 20,             // años (vida útil estimada instalación)
     pct_valor_residual: 10     // % sobre CAPEX bruto al final del horizonte
   },
   B: {
     // ── Materia prima ──
     t_aceituna: 6100,          // Escenario ampliación: fusión o crecimiento cooperativa
-    rend_alperujo: 94.9,       // Idem — proceso no cambia
-    contenido_hueso: 10,       // Dato real almazara: 8-9%, peor caso 10%
-    rend_separacion: 97,
-    precio_alperujo_orujera: 11.88, // Precio mercado no varía con volumen
-    coste_transporte_total: 0,
-    // ── Digestor ──
-    rendimiento_biogas: 142.7,
-    pct_CH4: 60,
-    pct_autoconsumo_biogas: 10,
-    kg_N_digestato: 5,
-    kg_N_ha: 50,
-    // ── CHP ──
-    // Paté: ~5.227 t → biogás neto: ~671.000 m³ → CH4: ~402.800 m³
-    // Energía eléctrica disponible desde biogás: ~1.526 MWh → motor: 200 kWe × 7.270 h = 1.454 MWh
-    // (7.270h = 95% del máximo posible; horas < Scen A porque motor escala ×2 mientras
-    // biogás solo escala ×1,87 — motor ligeramente sobredimensionado respecto al biogás)
-    potencia_CHP_kwe: 200,
-    horas_operacion: 7270,     // h/año — 200kWe×7270h = 1.454 MWh (~95% del disponible)
-    rend_electrico_CHP: 38,
-    rend_termico_CHP: 44,
-    pct_autoconsumo_elec: 14.5,
-    // Factura eléctrica escalada: componente fija 20%×34.510 + variable 80%×34.510×(6100/3265)
-    factura_electrica_anual: 58500, // ≈ 6.902 + 51.571 = 58.473 € → 58.500 €
-    // ── Precios ──
-    precio_venta_hueso: 120,
-    precio_digestato: 10,
-    precio_compra_red: 188,
-    precio_venta_excedente: 65,
-    ha_olivar: 1400,           // Proporcional: 750 × (6100/3265) ≈ 1.400 ha socios
-    // ── CAPEX (Inversión total: 900.000 €, 4.500 €/kWe; economía de escala) ──
-    inv_deshuesadora: 115000, // 115.000 € — Mayor capacidad: ~65 t/día campaña
-    inv_digestor: 400000,       // 400.000 € — Conservador: ley potencial (^0.6) daría ~335k; +65k por obra civil, permisos y diseño específico alperujo
-    inv_CHP: 175000,            // 175.000 € — Conservador: ley potencial (^0.7) daría ~162k; +13k por margen de instalación 200 kWe
-    inv_instalacion_electrica: 110000, // 110.000 € — Escala: 70k × (200/100)^0.6 = 106k → 110k
-    inv_otros: 100000,          // 100.000 € — Sub-lineal: más volumen, misma ingeniería base
-    pct_subvencion: 0,
-    // ── O&M ──
-    coste_mant_CHP_kwh: 0.015,
-    coste_personal: 35000,     // 35.000 €/año — 0,75 FTE técnico; mayor escala no duplica
-    coste_consumibles: 14000,  // 14.000 €/año
-    coste_seguros: 12000,      // 12.000 €/año — ~1,3% CAPEX
-    coste_otros_om: 12000,     // 12.000 €/año
-    coste_revision_mayor: 80000,// 80.000 € — ~46% inv_CHP (mayor máquina, mayor revisión)
-    anyo_revision_mayor: 8,
-    // ── Financiero ──
-    tasa_descuento: 5,
-    horizonte: 15,
-    pct_valor_residual: 10
-  },
-  C: {
-    // ── Materia prima ──
-    t_aceituna: 9000,          // Escenario gran cooperativa / almazara industrial
     rend_alperujo: 94.9,
-    contenido_hueso: 10,       // Dato real almazara: 8-9%, peor caso 10%
+    contenido_hueso: 10,
     rend_separacion: 97,
     precio_alperujo_orujera: 11.88,
     coste_transporte_total: 0,
     // ── Digestor ──
-    rendimiento_biogas: 142.7,
-    pct_CH4: 60,
-    pct_autoconsumo_biogas: 10,
+    rendimiento_biogas: 113.4,
+    pct_CH4: 55,
+    pct_autoconsumo_biogas: 12.5,
     kg_N_digestato: 5,
     kg_N_ha: 50,
     // ── CHP ──
-    // Paté: ~7.713 t → biogás neto: ~991.000 m³ → CH4: ~594.300 m³
-    // Energía eléctrica disponible desde biogás: ~2.252 MWh → motor: 300 kWe × 7.150 h = 2.145 MWh
-    // (7.150h = 95% del máximo posible; motor escala ×3 mientras biogás escala ×2,76
-    // → motor ligeramente sobredimensionado → puede agotar biogás en ~7.500h máximo)
-    potencia_CHP_kwe: 300,
-    horas_operacion: 7150,     // h/año — 300kWe×7150h = 2.145 MWh (~95% del disponible)
-    rend_electrico_CHP: 38,
-    rend_termico_CHP: 44,
-    pct_autoconsumo_elec: 14.5,
-    // Factura eléctrica escalada: 6.902 + 80%×34.510×(9000/3265)
-    factura_electrica_anual: 83000, // ≈ 6.902 + 76.116 = 83.018 € → 83.000 €
+    // Alperujo deshuesado: ~5.227 t → biogás neto: ~519.000 m³ → CH4: ~285.400 m³
+    // Energía eléctrica disponible: ~841 MWh → motor: 200 kWe × 4.200 h = 840 MWh
+    potencia_CHP_kwe: 200,
+    horas_operacion: 4200,     // h/año (derivadas del biogás neto disponible)
+    rend_electrico_CHP: 29.5,
+    rend_termico_CHP: 45,
+    pct_autoconsumo_elec: 5,
+    // Factura eléctrica: 20% fija + 80% variable escalada con producción
+    factura_electrica_anual: 58500, // ≈ 6.902 + 51.571 = 58.473 € → 58.500 €
     // ── Precios ──
-    precio_venta_hueso: 120,
+    precio_venta_hueso: 135,
     precio_digestato: 10,
-    precio_compra_red: 188,
+    precio_compra_red: 120,
     precio_venta_excedente: 65,
-    ha_olivar: 2000,           // Proporcional: 750 × (9000/3265) ≈ 2.070 → 2.000 ha socios
-    // ── CAPEX (Inversión total: 1.200.000 €, 4.000 €/kWe; máxima economía de escala) ──
-    inv_deshuesadora: 145000, // 145.000 € — Capacidad: ~95 t/día campaña
-    inv_digestor: 530000,       // 530.000 € — Conservador: ley potencial (^0.6) daría ~423k; +107k por obra civil, permisos y diseño para planta grande
-    inv_CHP: 240000,            // 240.000 € — Conservador: ley potencial (^0.7) daría ~216k; +24k por margen de instalación 300 kWe
-    inv_instalacion_electrica: 145000, // 145.000 € — Conservador: ley potencial (^0.6) daría ~135k; +10k por protecciones y conexión AT
-    inv_otros: 140000,          // 140.000 € — Sub-lineal pero mayor volumen de obra civil
+    ha_olivar: 1400,
+    // ── CAPEX (Inversión total: 635.000 €; ley potencial ^0,60–0,70) ──
+    inv_deshuesadora: 16000,   // 16.000 €
+    inv_digestor: 396000,      // 396.000 € — incluye obra civil, ingeniería y permisos
+    inv_CHP: 216000,           // 216.000 € — motor 200 kWe
+    inv_instalacion_electrica: 7000, // 7.000 €
+    inv_otros: 0,
     pct_subvencion: 0,
     // ── O&M ──
     coste_mant_CHP_kwh: 0.015,
-    coste_personal: 45000,     // 45.000 €/año — 1 FTE técnico; planta grande requiere dedicación completa
-    coste_consumibles: 20000,  // 20.000 €/año
-    coste_seguros: 15000,      // 15.000 €/año — ~1,25% CAPEX
-    coste_otros_om: 15000,     // 15.000 €/año
-    coste_revision_mayor: 120000,// 120.000 € — ~50% inv_CHP
-    anyo_revision_mayor: 8,
+    coste_personal: 51000,
+    coste_consumibles: 9000,
+    coste_seguros: 3300,
+    coste_otros_om: 7000,
+    coste_revision_mayor: 15000,// 15.000 €
+    anyo_revision_mayor: 10,
     // ── Financiero ──
     tasa_descuento: 5,
-    horizonte: 15,
+    horizonte: 20,
+    pct_valor_residual: 10
+  },
+  C: {
+    // ── Materia prima ──
+    t_aceituna: 9000,
+    rend_alperujo: 94.9,
+    contenido_hueso: 10,
+    rend_separacion: 97,
+    precio_alperujo_orujera: 11.88,
+    coste_transporte_total: 0,
+    // ── Digestor ──
+    rendimiento_biogas: 113.4,
+    pct_CH4: 55,
+    pct_autoconsumo_biogas: 12.5,
+    kg_N_digestato: 5,
+    kg_N_ha: 50,
+    // ── CHP ──
+    // Alperujo deshuesado: ~7.713 t → biogás neto: ~766.000 m³ → CH4: ~421.300 m³
+    // Energía eléctrica disponible: ~1.242 MWh → motor: 300 kWe × 4.150 h = 1.245 MWh
+    potencia_CHP_kwe: 300,
+    horas_operacion: 4150,     // h/año (derivadas del biogás neto disponible)
+    rend_electrico_CHP: 29.5,
+    rend_termico_CHP: 45,
+    pct_autoconsumo_elec: 5,
+    // Factura eléctrica: 20% fija + 80% variable escalada con producción
+    factura_electrica_anual: 83000,
+    // ── Precios ──
+    precio_venta_hueso: 135,
+    precio_digestato: 10,
+    precio_compra_red: 120,
+    precio_venta_excedente: 65,
+    ha_olivar: 2000,
+    // ── CAPEX (Inversión total: 833.000 €; ley potencial ^0,60–0,70) ──
+    inv_deshuesadora: 22000,   // 22.000 €
+    inv_digestor: 515000,      // 515.000 € — incluye obra civil, ingeniería y permisos
+    inv_CHP: 287000,           // 287.000 € — motor 300 kWe
+    inv_instalacion_electrica: 9000, // 9.000 €
+    inv_otros: 0,
+    pct_subvencion: 0,
+    // ── O&M ──
+    coste_mant_CHP_kwh: 0.015,
+    coste_personal: 62000,
+    coste_consumibles: 12000,
+    coste_seguros: 4400,
+    coste_otros_om: 9000,
+    coste_revision_mayor: 25000,// 25.000 €
+    anyo_revision_mayor: 10,
+    // ── Financiero ──
+    tasa_descuento: 5,
+    horizonte: 20,
     pct_valor_residual: 10
   }
 };
