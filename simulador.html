@@ -148,6 +148,15 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
 /* ===== RESULTADOS ===== */
 .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 @media (max-width: 780px) { .res-grid { grid-template-columns: 1fr; } }
+.res-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+@media (max-width: 900px) { .res-grid-3 { grid-template-columns: 1fr; } }
+.subv-info-box { display: flex; flex-wrap: wrap; align-items: stretch; gap: 12px; margin-bottom: 16px; }
+.subv-threshold-pill { display: flex; flex-direction: column; justify-content: center; background: var(--warn-bg); border: 1.5px solid #c0a040; border-radius: 8px; padding: 12px 20px; min-width: 180px; }
+.subv-threshold-pill .pill-val { font-size: 26px; font-weight: 700; color: var(--warn); font-family: 'Courier New', monospace; line-height: 1.1; }
+.subv-threshold-pill .pill-lbl { font-size: 11px; color: var(--text-sec); margin-top: 4px; line-height: 1.4; }
+.subv-stat-pill { display: flex; flex-direction: column; justify-content: center; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; min-width: 140px; }
+.subv-stat-pill .pill-val { font-size: 18px; font-weight: 600; font-family: 'Courier New', monospace; line-height: 1.2; }
+.subv-stat-pill .pill-lbl { font-size: 10px; color: var(--text-sec); margin-top: 3px; }
 .diag-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--border2); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 20px; }
 .diag-card.pos { border-left-color: var(--pos); }
 .diag-card.neg { border-left-color: var(--neg); }
@@ -1185,17 +1194,28 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
             <th>Payback</th>
             <th>TIR</th>
             <th>VAN (20 a.)</th>
+            <th>Brecha VAN</th>
             <th>Viabilidad</th>
           </tr>
         </thead>
         <tbody id="rsm-sc-tbody"></tbody>
       </table>
     </div>
-    <div style="padding:8px 18px 12px;font-size:10px;color:var(--text-sec);">Parámetros técnicos validados por José Antonio de la Cal Herrera (30/04/2026). El escenario A se evalúa a tres niveles de subvención pública (PRTR / FEADER). La fila resaltada corresponde al escenario activo en el simulador.</div>
+    <div style="padding:8px 18px 12px;font-size:10px;color:var(--text-sec);">Parámetros técnicos validados por José Antonio de la Cal Herrera (30/04/2026). El Escenario B se evalúa a tres niveles de subvención pública (PRTR / FEADER). La fila resaltada corresponde al escenario activo en el simulador.</div>
+  </div>
+
+  <!-- Sensibilidad subvención Escenario B -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-header">Sensibilidad a la subvención pública — Escenario Realista · 6.100 t</div>
+    <div style="padding:14px 18px 4px;">
+      <div class="subv-info-box" id="rsm-subv-info"></div>
+    </div>
+    <div style="position:relative;height:260px;padding:0 18px 4px;"><canvas id="rsm-chart-subv"></canvas></div>
+    <div style="padding:6px 18px 14px;font-size:10px;color:var(--text-sec);">VAN calculado manteniendo invariables los parámetros técnicos y operativos del Escenario B. La única variable es el porcentaje de subvención aplicado sobre el CAPEX total. Tasa de descuento: 5 %. Horizonte: 20 años. Convocatorias aplicables: PRTR, FEADER (PDR Andalucía), PERTE Agroalimentario.</div>
   </div>
 
   <!-- Gráficos -->
-  <div class="res-grid" style="margin-bottom:20px;">
+  <div class="res-grid-3" style="margin-bottom:20px;">
     <div class="chart-card">
       <div class="card-header">Desglose de ingresos anuales — escenario activo</div>
       <div class="chart-wrap" style="height:240px;"><canvas id="rsm-chart-ing"></canvas></div>
@@ -1203,6 +1223,10 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
     <div class="chart-card">
       <div class="card-header">Flujo de caja acumulado — escenario activo</div>
       <div class="chart-wrap" style="height:240px;"><canvas id="rsm-chart-fc"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="card-header">VAN comparativo — A / B / C (sin subvención)</div>
+      <div class="chart-wrap" style="height:240px;"><canvas id="rsm-chart-van"></canvas></div>
     </div>
   </div>
 
@@ -2338,15 +2362,15 @@ function updateResumen(){
       </div>`).join('');
   }
 
-  // Tabla comparativa: Escenario A (0/20/40% subvención) + B + C
+  // Tabla comparativa: A(0%) + B(0/20/40%) + C(0%)
   const stbody=$('rsm-sc-tbody');
   if(stbody){
     const scList=[
       {label:'Conservador · 3.265 t', base:'A', subv:0},
-      {label:'Conservador · 3.265 t', base:'A', subv:20},
-      {label:'Conservador · 3.265 t', base:'A', subv:40},
-      {label:'Realista · 6.100 t',    base:'B', subv:SCENARIOS.B.pct_subvencion},
-      {label:'Optimista · 9.000 t',   base:'C', subv:SCENARIOS.C.pct_subvencion},
+      {label:'Realista · 6.100 t',    base:'B', subv:0},
+      {label:'Realista · 6.100 t',    base:'B', subv:20},
+      {label:'Realista · 6.100 t',    base:'B', subv:40},
+      {label:'Optimista · 9.000 t',   base:'C', subv:0},
     ];
     const rows=scList.map(row=>{
       const sc={...SCENARIOS[row.base], pct_subvencion:row.subv};
@@ -2361,6 +2385,9 @@ function updateResumen(){
         :row.subv===20
           ?'<span style="color:var(--warn);font-weight:600">20 % PRTR</span>'
           :'<span style="color:var(--pos);font-weight:600">40 % máx.</span>';
+      const brecha=cr.van>=0
+        ?'<span style="color:var(--pos)">—</span>'
+        :`<span style="color:var(--neg)">${fmtEur(-cr.van,0)}</span>`;
       return`<tr class="${isAct?'rsm-active':''}">
         <td>${row.label}</td>
         <td style="text-align:center">${subvLabel}</td>
@@ -2370,10 +2397,47 @@ function updateResumen(){
         <td>${cr.payback!==null?cr.payback+' años':'> '+sc.horizonte+' a.'}</td>
         <td style="color:${cr.tir!==null&&cr.tir>sc.tasa_descuento?'var(--pos)':'var(--neg)'}">${cr.tir!==null?fmtPct(cr.tir,2):'&mdash;'}</td>
         <td style="color:${cr.van>=0?'var(--pos)':'var(--neg)'};font-weight:600">${fmtEur(cr.van,0)}</td>
+        <td style="text-align:right">${brecha}</td>
         <td>${diag}</td>
       </tr>`;
     }).join('');
     stbody.innerHTML=rows;
+  }
+
+  // Sensibilidad subvención Escenario B
+  const subvInfoEl=$('rsm-subv-info');
+  if(subvInfoEl){
+    // Calcular umbral exacto (bisección 0-80%)
+    let thLo=0,thHi=80,thPct=null;
+    if(compute({...SCENARIOS.B,pct_subvencion:80}).van>=0){
+      for(let i=0;i<40;i++){const m=(thLo+thHi)/2;const mv=compute({...SCENARIOS.B,pct_subvencion:m}).van;if(Math.abs(mv)<500){thPct=m;break;}if(mv<0)thLo=m;else thHi=m;}
+      if(thPct===null)thPct=(thLo+thHi)/2;
+    }
+    const vanB0=compute({...SCENARIOS.B,pct_subvencion:0}).van;
+    const vanB20=compute({...SCENARIOS.B,pct_subvencion:20}).van;
+    const vanB40=compute({...SCENARIOS.B,pct_subvencion:40}).van;
+    const pillsHTML=(thPct!==null
+      ?`<div class="subv-threshold-pill">
+          <div class="pill-val">${fmtN(thPct,1)} %</div>
+          <div class="pill-lbl">Subvención mínima<br>para viabilidad (VAN = 0)</div>
+        </div>`
+      :`<div class="subv-threshold-pill" style="background:var(--neg-bg);border-color:#8b3a2a;">
+          <div class="pill-val" style="color:var(--neg)">Inviable</div>
+          <div class="pill-lbl">No alcanza VAN = 0<br>ni con subv. máx. 80 %</div>
+        </div>`)
+      +`<div class="subv-stat-pill">
+          <div class="pill-val" style="color:var(--neg)">${fmtEur(vanB0,0)}</div>
+          <div class="pill-lbl">VAN sin subvención</div>
+        </div>
+        <div class="subv-stat-pill">
+          <div class="pill-val" style="color:${vanB20>=0?'var(--pos)':'var(--warn)'}">${fmtEur(vanB20,0)}</div>
+          <div class="pill-lbl">VAN con 20 % PRTR</div>
+        </div>
+        <div class="subv-stat-pill">
+          <div class="pill-val" style="color:${vanB40>=0?'var(--pos)':'var(--warn)'}">${fmtEur(vanB40,0)}</div>
+          <div class="pill-lbl">VAN con 40 % máx.</div>
+        </div>`;
+    subvInfoEl.innerHTML=pillsHTML;
   }
 
   // Gráficos — solo cuando el tab está visible (canvas size issue en elementos ocultos)
@@ -2409,6 +2473,65 @@ function updateResumen(){
     scales:{
       x:{ticks:{font:{size:10},color:'#6b6660'},grid:{color:'rgba(0,0,0,0.04)'}},
       y:{ticks:{font:{size:10},color:'#6b6660',callback:v=>fmtEur(v,0)},grid:{color:'rgba(0,0,0,0.04)'},afterDataLimits(ax){ax.min=Math.min(ax.min,0);}}
+    }
+  });
+
+  // Gráfico sensibilidad subvención B (barras 0%→40%)
+  const subvPcts=[0,5,10,15,20,25,30,35,40];
+  const subvVANs=subvPcts.map(p=>compute({...SCENARIOS.B,pct_subvencion:p}).van);
+  const subvColors=subvVANs.map(v=>v>=0?'rgba(74,103,65,0.80)':'rgba(139,58,42,0.75)');
+  const subvBorders=subvVANs.map(v=>v>=0?'#4a6741':'#8b3a2a');
+  mkChart('rsm-chart-subv','bar',{
+    labels:subvPcts.map(p=>p+'%'),
+    datasets:[{
+      label:'VAN Escenario B',
+      data:subvVANs,
+      backgroundColor:subvColors,
+      borderColor:subvBorders,
+      borderWidth:1.5,
+      borderRadius:3
+    }]
+  },{
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>'VAN: '+fmtEur(ctx.raw,0)}},
+      annotation:{
+        annotations:{
+          zeroLine:{
+            type:'line',scaleID:'y',value:0,
+            borderColor:'rgba(0,0,0,0.35)',borderWidth:1.5,borderDash:[4,3]
+          }
+        }
+      }
+    },
+    scales:{
+      x:{ticks:{font:{size:10},color:'#6b6660'},grid:{display:false},title:{display:true,text:'Subvención sobre CAPEX',font:{size:10},color:'#6b6660'}},
+      y:{ticks:{font:{size:10},color:'#6b6660',callback:v=>fmtEur(v,0)},grid:{color:'rgba(0,0,0,0.05)'},afterDataLimits(ax){ax.min=Math.min(ax.min,0);}}
+    }
+  });
+
+  // Gráfico VAN comparativo A/B/C (sin subvención)
+  const vanABC=['A','B','C'].map(k=>compute({...SCENARIOS[k],pct_subvencion:0}).van);
+  const vanColors=vanABC.map(v=>v>=0?'rgba(74,103,65,0.80)':'rgba(139,58,42,0.75)');
+  const vanBorders=vanABC.map(v=>v>=0?'#4a6741':'#8b3a2a');
+  mkChart('rsm-chart-van','bar',{
+    labels:['Conservador (A)','Realista (B)','Optimista (C)'],
+    datasets:[{
+      label:'VAN (20 años, sin subvención)',
+      data:vanABC,
+      backgroundColor:vanColors,
+      borderColor:vanBorders,
+      borderWidth:1.5,
+      borderRadius:3
+    }]
+  },{
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>'VAN: '+fmtEur(ctx.raw,0)}}
+    },
+    scales:{
+      x:{ticks:{font:{size:10},color:'#6b6660'},grid:{display:false}},
+      y:{ticks:{font:{size:10},color:'#6b6660',callback:v=>fmtEur(v,0)},grid:{color:'rgba(0,0,0,0.05)'},afterDataLimits(ax){ax.min=Math.min(ax.min,0);}}
     }
   });
 }
