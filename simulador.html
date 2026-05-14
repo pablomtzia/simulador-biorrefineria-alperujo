@@ -285,9 +285,9 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
   </div>
   <div class="nav-scenarios">
     <span class="nav-sc-label">Escenario:</span>
-    <button id="sc-btn-A" class="nav-sc-btn active" onclick="loadScenario('A')">A · 3.265 t</button>
-    <button id="sc-btn-B" class="nav-sc-btn" onclick="loadScenario('B')">B · 6.100 t</button>
-    <button id="sc-btn-C" class="nav-sc-btn" onclick="loadScenario('C')">C · 9.000 t</button>
+    <button id="sc-btn-A" class="nav-sc-btn active" onclick="loadScenario('A')">Conservador · 3.265 t</button>
+    <button id="sc-btn-B" class="nav-sc-btn" onclick="loadScenario('B')">Realista · 6.100 t</button>
+    <button id="sc-btn-C" class="nav-sc-btn" onclick="loadScenario('C')">Optimista · 9.000 t</button>
   </div>
 </nav>
 
@@ -739,11 +739,11 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
     <div class="param-legend">
       <table class="legend-table">
         <tr><td>Potencia CHP (kWe)</td><td><span class="legend-badge lb-est">EST</span>Dimensionado según biogás anual disponible · motores estándar: 100/200/300 kWe por escenario</td></tr>
-        <tr><td>Horas operación</td><td><span class="legend-badge lb-est">EST</span>Horas anuales de operación del motor · con 10% hueso el biogás soporta 8.168/7.630/7.505 h en Scen A/B/C · configurado al 93-95% como margen de disponibilidad (mantenimiento, paradas)</td></tr>
+        <tr><td>Horas operación</td><td><span class="legend-badge lb-est">EST</span>Horas anuales de operación del motor · con 10% hueso el biogás soporta 8.168/7.630/7.505 h en Conservador/Realista/Optimista · configurado al 93-95% como margen de disponibilidad (mantenimiento, paradas)</td></tr>
         <tr><td>Rend. eléctrico 38%</td><td><span class="legend-badge lb-bib">BIB</span>Eficiencia eléctrica estándar motores biogás Jenbacher JGS / Caterpillar CG &lt;500 kWe</td></tr>
         <tr><td>Rend. térmico 44%</td><td><span class="legend-badge lb-bib">BIB</span>Calor recuperado (agua proceso + calefacción digestor) · eficiencia estándar cogeneración biogás</td></tr>
         <tr><td>Autoconsumo eléctrico 14,5%</td><td><span class="legend-badge lb-est">EST</span>Consumo auxiliares del motor CHP (bombas, refrigeración, controles) sobre producción bruta</td></tr>
-        <tr><td>Factura eléctrica</td><td><span class="legend-badge lb-real">REAL</span>Scen A: dato real campaña 2024-25 (34.509,70 €/año) · B/C: fórmula semi-variable 20% fijo + 80% proporcional</td></tr>
+        <tr><td>Factura eléctrica</td><td><span class="legend-badge lb-real">REAL</span>Conservador: dato real campaña 2024-25 (34.509,70 €/año) · Realista/Optimista: fórmula semi-variable 20% fijo + 80% proporcional</td></tr>
       </table>
     </div>
   </div>
@@ -789,9 +789,9 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
     <div class="param-legend-toggle" onclick="toggleLegend(this)"><span class="legend-icon">ⓘ</span> Fuentes y metodología<span class="legend-chevron">▸</span></div>
     <div class="param-legend">
       <table class="legend-table">
-        <tr><td>Deshuesadora de alperujo</td><td><span class="legend-badge lb-bib">BIB</span>Estimación basada en referencias de mercado para equipos de separación de núcleo en almazaras (~2.000-3.500 €/(t·día) capacidad) · sin presupuesto real de proveedor · Scen B y C escalados desde A mediante ley potencial (exp. 0,55)</td></tr>
-        <tr><td>Digestor anaerobio</td><td><span class="legend-badge lb-bib">BIB</span>Estimación basada en referencias publicadas para digestores agrícolas pequeños (IDAE, Genia Bioenergy): ~80-130 €/(t·año) paté tratado · sin presupuesto real · Scen B y C escalados desde A (exp. 0,60)</td></tr>
-        <tr><td>Motor CHP</td><td><span class="legend-badge lb-bib">BIB</span>Estimación basada en precios de mercado para motores biogás pequeños (800-1.000 €/kWe instalado) · sin presupuesto real de fabricante · Scen B y C escalados desde A (exp. 0,70)</td></tr>
+        <tr><td>Deshuesadora de alperujo</td><td><span class="legend-badge lb-bib">BIB</span>Estimación basada en referencias de mercado para equipos de separación de núcleo en almazaras (~2.000-3.500 €/(t·día) capacidad) · sin presupuesto real de proveedor · Realista y Optimista escalados desde Conservador mediante ley potencial (exp. 0,55)</td></tr>
+        <tr><td>Digestor anaerobio</td><td><span class="legend-badge lb-bib">BIB</span>Estimación basada en referencias publicadas para digestores agrícolas pequeños (IDAE, Genia Bioenergy): ~80-130 €/(t·año) paté tratado · sin presupuesto real · Realista y Optimista escalados desde Conservador (exp. 0,60)</td></tr>
+        <tr><td>Motor CHP</td><td><span class="legend-badge lb-bib">BIB</span>Estimación basada en precios de mercado para motores biogás pequeños (800-1.000 €/kWe instalado) · sin presupuesto real de fabricante · Realista y Optimista escalados desde Conservador (exp. 0,70)</td></tr>
         <tr><td>Instalación eléctrica</td><td><span class="legend-badge lb-est">EST</span>Estimación ingeniería eléctrica MT/BT (conexión red, protecciones, cableado) · exponent 0,60</td></tr>
         <tr><td>Otros</td><td><span class="legend-badge lb-est">EST</span>Civil, instrumentación, puesta en marcha, ingeniería · ~10-15% del CAPEX total</td></tr>
         <tr><td>Subvención 0%</td><td><span class="legend-badge lb-est">EST</span>Escenario base conservador sin ayudas · PRTR (Plan de Recuperación) permite hasta 40% en instalaciones biogás</td></tr>
@@ -820,7 +820,7 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
       <table class="legend-table">
         <tr><td>Mant. CHP 0,015 €/kWh</td><td><span class="legend-badge lb-bib">BIB</span>Estándar contratos mantenimiento preventivo motores biogás · incluye revisiones periódicas, aceite, filtros</td></tr>
         <tr><td>Personal (25-45 k€/año)</td><td><span class="legend-badge lb-est">EST</span>0,5-1 FTE técnico de planta · no escala linealmente con volumen (economía operativa de escala)</td></tr>
-        <tr><td>Consumibles</td><td><span class="legend-badge lb-est">EST</span>Reactivos, análisis de digestato, agua proceso · +75% Scen B y +150% Scen C respecto Scen A</td></tr>
+        <tr><td>Consumibles</td><td><span class="legend-badge lb-est">EST</span>Reactivos, análisis de digestato, agua proceso · +75% Realista y +150% Optimista respecto Conservador</td></tr>
         <tr><td>Seguros</td><td><span class="legend-badge lb-est">EST</span>~1,3-1,5% del CAPEX anual · seguro todo riesgo industrial instalación biogás</td></tr>
         <tr><td>Revisión mayor (año 8)</td><td><span class="legend-badge lb-est">EST</span>~40-50% del coste inicial del motor CHP · revisión mayor de cigüeñal, pistones y turbo cada ~40.000 h</td></tr>
         <tr><td>Tasa descuento 5%</td><td><span class="legend-badge lb-bib">BIB</span>Coste de oportunidad cooperativa agraria · referencia BCE / Banco de España para sector agroalimentario</td></tr>
