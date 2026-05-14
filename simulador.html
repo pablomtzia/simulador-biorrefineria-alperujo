@@ -1250,25 +1250,25 @@ const SCENARIOS = {
   A: {
     // ── Materia prima (3.265 t — Escenario conservador) ──
     t_aceituna: 3265,
-    rend_alperujo: 83,           // Validado J.A. de la Cal (30/04/2026)
-    contenido_hueso: 20,         // Validado J.A. de la Cal
+    rend_alperujo: 94.9,         // Dato real Coop. San Isidro de Periana (campaña 2024-25)
+    contenido_hueso: 10,         // Dato real ajustado (peor caso conservador)
     rend_separacion: 97,
-    precio_alperujo_orujera: 7.5,// Validado J.A. de la Cal
+    precio_alperujo_orujera: 11.88,// Dato real: 36.803,46 € ÷ 3.098,82 t = 11,88 €/t
     coste_transporte_total: 0,
     // ── Digestor ──
-    rendimiento_biogas: 113.4,   // Validado J.A. de la Cal
+    rendimiento_biogas: 113.4,   // Validado J.A. de la Cal (30/04/2026)
     pct_CH4: 55,                 // Validado J.A. de la Cal
     pct_autoconsumo_biogas: 12.5,// Validado J.A. de la Cal
     kg_N_digestato: 3.5,         // Validado J.A. de la Cal
     kg_N_ha: 80,                 // Validado J.A. de la Cal
-    // ── CHP — 100 kWe = 400 × (3265/15000), redondeado a múltiplo de 50 kWe ──
+    // ── CHP — 100 kWe; horas derivadas del biogás disponible con parámetros reales ──
     potencia_CHP_kwe: 100,
-    horas_operacion: 3500,       // Derivado del biogás disponible: 351 MWh ÷ 100 kWe × 1000
+    horas_operacion: 4500,       // Derivado biogás real: ~449 MWh ÷ 100 kWe × 1000
     rend_electrico_CHP: 29.5,    // Validado J.A. de la Cal
     rend_termico_CHP: 45,        // Validado J.A. de la Cal
     pct_autoconsumo_elec: 0,     // Validado J.A. de la Cal
-    // factura = 20%×41.000 + 80%×41.000×(3265/15000) = 8.200 + 7.139 ≈ 15.300 €
-    factura_electrica_anual: 15300,
+    // Factura real: Recibo Sevillana + Talco (campaña 2024-25)
+    factura_electrica_anual: 34510,
     // ── Precios ──
     precio_venta_hueso: 135,
     precio_digestato: 10,
@@ -1286,7 +1286,7 @@ const SCENARIOS = {
     coste_mant_CHP_kwh: 0.015,
     coste_personal: 37000,       // 80.000 × (3265/15000)^0.50
     coste_consumibles: 5000,     // 18.000 × (3265/15000)^0.80
-    coste_seguros: 2500,         // 6.000 × (448.500/1.140.000)
+    coste_seguros: 3400,         // Calibrado con documento TFG (sin dato real disponible)
     coste_otros_om: 5000,        // 12.000 × (3265/15000)^0.60
     coste_revision_mayor: 10000, // 40.000 × (100/400)
     anyo_revision_mayor: 10,
@@ -1298,10 +1298,10 @@ const SCENARIOS = {
   B: {
     // ── Materia prima (6.100 t — Escenario realista) ──
     t_aceituna: 6100,
-    rend_alperujo: 83,
-    contenido_hueso: 20,
+    rend_alperujo: 94.9,         // Dato real escalado (mismo rendimiento que Periana)
+    contenido_hueso: 10,         // Dato real ajustado
     rend_separacion: 97,
-    precio_alperujo_orujera: 7.5,
+    precio_alperujo_orujera: 11.88,// Dato real (precio de mercado idéntico)
     coste_transporte_total: 0,
     // ── Digestor ──
     rendimiento_biogas: 113.4,
@@ -1309,34 +1309,34 @@ const SCENARIOS = {
     pct_autoconsumo_biogas: 12.5,
     kg_N_digestato: 3.5,
     kg_N_ha: 80,
-    // ── CHP — 150 kWe = 400 × (6100/15000), redondeado a múltiplo de 50 kWe ──
-    potencia_CHP_kwe: 150,
-    horas_operacion: 4400,       // Derivado del biogás disponible: 655 MWh ÷ 150 kWe × 1000
+    // ── CHP — 200 kWe; horas derivadas del biogás real (840 MWh ÷ 200 kWe × 1000) ──
+    potencia_CHP_kwe: 200,
+    horas_operacion: 4200,
     rend_electrico_CHP: 29.5,
     rend_termico_CHP: 45,
     pct_autoconsumo_elec: 0,
-    // factura = 8.200 + 80%×41.000×(6100/15000) = 8.200 + 13.339 ≈ 21.500 €
-    factura_electrica_anual: 21500,
+    // Factura escalada desde dato real: 20%×34.510 + 80%×34.510×(6100/3265) ≈ 58.500 €
+    factura_electrica_anual: 58500,
     // ── Precios ──
     precio_venta_hueso: 135,
     precio_digestato: 10,
     precio_compra_red: 120,
     precio_venta_excedente: 65,
-    ha_olivar: 305,              // 750 × (6100/15000) ≈ 305 ha
-    // ── CAPEX — ley potencial desde base JA (CAPEX total ≈ 635.500 €) ──
-    inv_deshuesadora: 17000,     // 30.000 × (6100/15000)^0.65
-    inv_digestor: 437000,        // 750.000 × (6100/15000)^0.60
-    inv_CHP: 176000,             // 350.000 × (150/400)^0.70
-    inv_instalacion_electrica: 5500, // 10.000 × (150/400)^0.60
+    ha_olivar: 158,
+    // ── CAPEX (Tabla 2 TFG — total 635.000 €) ──
+    inv_deshuesadora: 16000,
+    inv_digestor: 396000,
+    inv_CHP: 216000,
+    inv_instalacion_electrica: 7000,
     inv_otros: 0,
-    pct_subvencion: 20,
+    pct_subvencion: 0,           // Caso base sin subvención (análisis subv. en pestaña Resumen)
     // ── O&M ──
     coste_mant_CHP_kwh: 0.015,
-    coste_personal: 51000,       // 80.000 × (6100/15000)^0.50
-    coste_consumibles: 9000,     // 18.000 × (6100/15000)^0.80
-    coste_seguros: 3500,         // 6.000 × (635.500/1.140.000)
-    coste_otros_om: 7000,        // 12.000 × (6100/15000)^0.60
-    coste_revision_mayor: 15000, // 40.000 × (150/400)
+    coste_personal: 51000,
+    coste_consumibles: 9000,
+    coste_seguros: 3500,
+    coste_otros_om: 7000,
+    coste_revision_mayor: 15000,
     anyo_revision_mayor: 10,
     // ── Financiero ──
     tasa_descuento: 5,
@@ -1346,10 +1346,10 @@ const SCENARIOS = {
   C: {
     // ── Materia prima (9.000 t — Escenario optimista) ──
     t_aceituna: 9000,
-    rend_alperujo: 83,
-    contenido_hueso: 20,
+    rend_alperujo: 94.9,         // Dato real escalado
+    contenido_hueso: 10,         // Dato real ajustado
     rend_separacion: 97,
-    precio_alperujo_orujera: 7.5,
+    precio_alperujo_orujera: 11.88,// Dato real
     coste_transporte_total: 0,
     // ── Digestor ──
     rendimiento_biogas: 113.4,
@@ -1357,34 +1357,34 @@ const SCENARIOS = {
     pct_autoconsumo_biogas: 12.5,
     kg_N_digestato: 3.5,
     kg_N_ha: 80,
-    // ── CHP — 250 kWe = 400 × (9000/15000), redondeado a múltiplo de 50 kWe ──
-    potencia_CHP_kwe: 250,
-    horas_operacion: 3900,       // Derivado del biogás disponible: 966 MWh ÷ 250 kWe × 1000
+    // ── CHP — 300 kWe; horas derivadas del biogás real (1.239 MWh ÷ 300 kWe × 1000) ──
+    potencia_CHP_kwe: 300,
+    horas_operacion: 4150,
     rend_electrico_CHP: 29.5,
     rend_termico_CHP: 45,
     pct_autoconsumo_elec: 0,
-    // factura = 8.200 + 80%×41.000×(9000/15000) = 8.200 + 19.680 ≈ 28.000 €
-    factura_electrica_anual: 28000,
+    // Factura escalada desde dato real: 20%×34.510 + 80%×34.510×(9000/3265) ≈ 83.000 €
+    factura_electrica_anual: 83000,
     // ── Precios ──
     precio_venta_hueso: 135,
     precio_digestato: 10,
     precio_compra_red: 120,
     precio_venta_excedente: 65,
-    ha_olivar: 450,              // 750 × (9000/15000) = 450 ha
-    // ── CAPEX — ley potencial desde base JA (CAPEX total ≈ 833.000 €) ──
-    inv_deshuesadora: 21500,     // 30.000 × (9000/15000)^0.65
-    inv_digestor: 552000,        // 750.000 × (9000/15000)^0.60
-    inv_CHP: 252000,             // 350.000 × (250/400)^0.70
-    inv_instalacion_electrica: 7500, // 10.000 × (250/400)^0.60
+    ha_olivar: 233,
+    // ── CAPEX (Tabla 2 TFG — total 833.000 €) ──
+    inv_deshuesadora: 22000,
+    inv_digestor: 515000,
+    inv_CHP: 287000,
+    inv_instalacion_electrica: 9000,
     inv_otros: 0,
-    pct_subvencion: 0,           // Sin subvención en escenario optimista
+    pct_subvencion: 0,
     // ── O&M ──
     coste_mant_CHP_kwh: 0.015,
-    coste_personal: 62000,       // 80.000 × (9000/15000)^0.50
-    coste_consumibles: 12000,    // 18.000 × (9000/15000)^0.80
-    coste_seguros: 4500,         // 6.000 × (833.000/1.140.000)
-    coste_otros_om: 9000,        // 12.000 × (9000/15000)^0.60
-    coste_revision_mayor: 25000, // 40.000 × (250/400)
+    coste_personal: 62000,
+    coste_consumibles: 12000,
+    coste_seguros: 4500,
+    coste_otros_om: 9000,
+    coste_revision_mayor: 25000,
     anyo_revision_mayor: 10,
     // ── Financiero ──
     tasa_descuento: 5,
@@ -1787,9 +1787,9 @@ function compute(ov={}){
   const t_alperujo=p.t_aceituna*p.rend_alperujo/100;
   const t_hueso_separado=t_alperujo*(p.contenido_hueso/100)*(p.rend_separacion/100);
   const t_alperujo_deshuesado=t_alperujo-t_hueso_separado;
-  // Factor 0,69: se estima que ~31% de la masa del paté se convierte en biogás y vapor de agua;
-  // el 69% restante permanece como digestato semisólido (rango típico bibliográfico: 65-75%)
-  const digestato_estimado=t_alperujo_deshuesado*0.69;
+  // Factor 0,638: ~36% de la masa del paté se convierte en biogás y vapor de agua;
+  // el 64% restante permanece como digestato semisólido (calibrado con datos reales campaña 2024-25)
+  const digestato_estimado=t_alperujo_deshuesado*0.638;
   const biogas_bruto=t_alperujo_deshuesado*p.rendimiento_biogas;
   const biogas_neto=biogas_bruto*(1-p.pct_autoconsumo_biogas/100);
   const energia_electrica_bruta=p.potencia_CHP_kwe*p.horas_operacion/1000;
