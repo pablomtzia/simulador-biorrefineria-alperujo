@@ -118,7 +118,7 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
 .lb-est { background:#fff3cd; color:#856404; }
 
 /* ===== FINANCIERO ===== */
-.kpi-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 22px; }
+.kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 22px; }
 .kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); border-top: 3px solid var(--border2); padding: 16px 18px; box-shadow: var(--shadow); transition: background 0.2s, border-top-color 0.2s; }
 .kpi-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-sec); margin-bottom: 7px; font-family: 'Courier New', monospace; }
 .kpi-value { font-size: 24px; font-weight: 600; font-family: 'Courier New', monospace; color: var(--dark); line-height: 1.1; }
@@ -1053,6 +1053,11 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
       <div class="kpi-value" id="kpi-pb">—</div>
       <div class="kpi-sub">Retorno simple de la inversión</div>
     </div>
+    <div class="kpi-card" id="kpi-roic-card">
+      <div class="kpi-label">ROIC — Retorno s/ Capital Invertido</div>
+      <div class="kpi-value" id="kpi-roic">—</div>
+      <div class="kpi-sub" id="kpi-roic-sub">FCO / CAPEX bruto</div>
+    </div>
   </div>
 
   <div class="chart-card" style="margin-bottom:16px;">
@@ -1860,7 +1865,8 @@ function compute(ov={}){
   const fc_disc=fc.map((v,i)=>v/Math.pow(1+r,i));
   const cum_fc=[],cum_fc_disc=[];let cs=0,csd=0;
   for(let i=0;i<=n;i++){cs+=fc[i];cum_fc.push(cs);csd+=fc_disc[i];cum_fc_disc.push(csd);}
-  return{p,t_alperujo,t_hueso_separado,t_alperujo_deshuesado,digestato_estimado,N_total_kg,ha_fertilizables,biogas_bruto,biogas_neto,energia_electrica_bruta,energia_electrica_neta,autoconsumo_mwh,excedente_red,energia_termica,ahorro_electricidad,ahorro_transporte,ingreso_digestato,ingreso_excedente,ingreso_hueso,perdida_alperujo,ingresos_netos,coste_mant_CHP_anual,costes_OM_anuales,fc_operativo,inversion_total,inversion_neta,fc,fc_disc,cum_fc,cum_fc_disc,van,tir,payback,n};
+  const roic=inversion_total>0?fc_operativo/inversion_total*100:null;
+  return{p,t_alperujo,t_hueso_separado,t_alperujo_deshuesado,digestato_estimado,N_total_kg,ha_fertilizables,biogas_bruto,biogas_neto,energia_electrica_bruta,energia_electrica_neta,autoconsumo_mwh,excedente_red,energia_termica,ahorro_electricidad,ahorro_transporte,ingreso_digestato,ingreso_excedente,ingreso_hueso,perdida_alperujo,ingresos_netos,coste_mant_CHP_anual,costes_OM_anuales,fc_operativo,inversion_total,inversion_neta,roic,fc,fc_disc,cum_fc,cum_fc_disc,van,tir,payback,n};
 }
 
 const cVAN=v=>v>0?'var(--pos)':'var(--neg)';
@@ -1881,12 +1887,16 @@ function updateDerived(){const r=R;
   setText('d-opex',fmtEur(r.costes_OM_anuales,0));setText('d-fc-op',fmtEur(r.fc_operativo,0));
 }
 
+const cROIC=(roic,tasa)=>roic===null?'var(--neg)':roic>=tasa?'var(--pos)':roic>=tasa/2?'var(--warn)':'var(--neg)';
+const bgROIC=(roic,tasa)=>roic===null?'var(--neg-bg)':roic>=tasa?'var(--pos-bg)':roic>=tasa/2?'var(--warn-bg)':'var(--neg-bg)';
 function updateKPIs(){const r=R,tasa=r.p.tasa_descuento;
   setText('kpi-van',fmtEur(r.van,0));setText('kpi-tir',r.tir!==null?fmtPct(r.tir,2):'No definida');setText('kpi-pb',r.payback!==null?r.payback+' años':'> horizonte');
   setText('kpi-van-sub','Horizonte '+r.n+' años');setText('kpi-tir-sub','Tasa descuento: '+fmtPct(tasa,2));
-  const vc=$('kpi-van-card'),tc=$('kpi-tir-card'),pc=$('kpi-pb-card');
-  vc.style.borderTopColor=cVAN(r.van);tc.style.borderTopColor=cTIR(r.tir,tasa);pc.style.borderTopColor=cPB(r.payback);
-  vc.style.background=bgVAN(r.van);tc.style.background=bgTIR(r.tir,tasa);pc.style.background=bgPB(r.payback);
+  setText('kpi-roic',r.roic!==null?fmtPct(r.roic,1):'—');
+  setText('kpi-roic-sub','Tasa exigida: '+fmtPct(tasa,1)+' · CAPEX: '+fmtEur(r.inversion_total,0));
+  const vc=$('kpi-van-card'),tc=$('kpi-tir-card'),pc=$('kpi-pb-card'),rc=$('kpi-roic-card');
+  vc.style.borderTopColor=cVAN(r.van);tc.style.borderTopColor=cTIR(r.tir,tasa);pc.style.borderTopColor=cPB(r.payback);rc.style.borderTopColor=cROIC(r.roic,tasa);
+  vc.style.background=bgVAN(r.van);tc.style.background=bgTIR(r.tir,tasa);pc.style.background=bgPB(r.payback);rc.style.background=bgROIC(r.roic,tasa);
 }
 
 const OP=['#4a6741','#6b8f5e','#8aaf7b','#b5d1a5','#d6e9ce'];
@@ -2384,7 +2394,7 @@ function updateResumen(){
       {lbl:'VAN · Valor Actual Neto',val:fmtEur(r.van,0),sub:'Horizonte '+r.n+' años · r = '+fmtPct(r.p.tasa_descuento,1),pos:r.van>0},
       {lbl:'TIR · Tasa Interna Retorno',val:r.tir!==null?fmtPct(r.tir,2):'No definida',sub:'Tasa exigida: '+fmtPct(tasa,1),pos:r.tir!==null&&r.tir>tasa},
       {lbl:'Payback · Período de retorno',val:r.payback!==null?r.payback+' años':'> '+r.n+' a.',sub:'Retorno simple de la inversión',pos:r.payback!==null&&r.payback<=12},
-      {lbl:'FCO · Cash flow operativo',val:fmtEur(r.fc_operativo,0)+' €/año',sub:'CAPEX neto: '+fmtEur(r.inversion_neta,0),pos:r.fc_operativo>0},
+           {lbl:'ROIC · Retorno s/ Capital',val:r.roic!==null?fmtPct(r.roic,1):'--',sub:'FCO '+fmtEur(r.fc_operativo,0)+' / CAPEX '+fmtEur(r.inversion_total,0),pos:r.roic!==null&&r.roic>=tasa}
     ];
     kpisEl.innerHTML=kd.map(k=>{
       const c=k.pos?'var(--pos)':'var(--neg)';
