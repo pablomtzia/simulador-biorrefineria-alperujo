@@ -1179,6 +1179,7 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
         <thead>
           <tr>
             <th>Escenario</th>
+            <th>Subvención</th>
             <th>t aceituna/año</th>
             <th>CAPEX neto</th>
             <th>FCO anual</th>
@@ -1191,7 +1192,7 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
         <tbody id="rsm-sc-tbody"></tbody>
       </table>
     </div>
-    <div style="padding:8px 18px 12px;font-size:10px;color:var(--text-sec);">Parámetros técnicos validados por José Antonio de la Cal Herrera (30/04/2026). La fila resaltada corresponde al escenario activo en el simulador.</div>
+    <div style="padding:8px 18px 12px;font-size:10px;color:var(--text-sec);">Parámetros técnicos validados por José Antonio de la Cal Herrera (30/04/2026). El escenario A se evalúa a tres niveles de subvención pública (PRTR / FEADER). La fila resaltada corresponde al escenario activo en el simulador.</div>
   </div>
 
   <!-- Gráficos -->
@@ -2274,9 +2275,9 @@ function toggleLegend(toggleEl){
 function updateResumen(){
   const r=R;if(!r||!r.p)return;
   const tasa=r.p.tasa_descuento;
-  // Identificar escenario activo
-  const activeKey=['JA','A','B','C'].find(k=>{const s=SCENARIOS[k];return s&&Math.abs(r.p.t_aceituna-s.t_aceituna)<1;})||'Custom';
-  const scNames={JA:'JA · 15.000 t',A:'Conservador · 3.265 t',B:'Realista · 6.100 t',C:'Optimista · 9.000 t',Custom:'Configuración personalizada'};
+  // Identificar escenario activo (excluyendo JA del resumen)
+  const activeKey=['A','B','C'].find(k=>{const s=SCENARIOS[k];return s&&Math.abs(r.p.t_aceituna-s.t_aceituna)<1;})||'Custom';
+  const scNames={A:'Conservador · 3.265 t',B:'Realista · 6.100 t',C:'Optimista · 9.000 t',Custom:'Configuración personalizada'};
   setText('rsm-sc-name',scNames[activeKey]);
   setText('rsm-subtitle','CAPEX neto: '+fmtEur(r.inversion_neta,0)+' · FCO anual: '+fmtEur(r.fc_operativo,0)+'/año · Horizonte: '+r.n+' años');
 
@@ -2338,20 +2339,32 @@ function updateResumen(){
       </div>`).join('');
   }
 
-  // Tabla comparativa de escenarios
+  // Tabla comparativa: Escenario A (0/20/40% subvención) + B + C
   const stbody=$('rsm-sc-tbody');
   if(stbody){
-    const rows=['JA','A','B','C'].map(k=>{
-      const sc=SCENARIOS[k];if(!sc)return'';
+    const scList=[
+      {label:'Conservador · 3.265 t', base:'A', subv:0},
+      {label:'Conservador · 3.265 t', base:'A', subv:20},
+      {label:'Conservador · 3.265 t', base:'A', subv:40},
+      {label:'Realista · 6.100 t',    base:'B', subv:SCENARIOS.B.pct_subvencion},
+      {label:'Optimista · 9.000 t',   base:'C', subv:SCENARIOS.C.pct_subvencion},
+    ];
+    const rows=scList.map(row=>{
+      const sc={...SCENARIOS[row.base], pct_subvencion:row.subv};
       const cr=compute(sc);
-      const isAct=k===activeKey;
+      const isAct=Math.abs(r.p.t_aceituna-sc.t_aceituna)<1&&Math.abs(r.p.pct_subvencion-row.subv)<1;
       const diag=cr.van>0&&cr.tir!==null&&cr.tir>sc.tasa_descuento
         ?'<span style="color:var(--pos);font-weight:700;">&#10003; Viable</span>'
         :cr.van>0?'<span style="color:var(--warn);font-weight:700;">&#9650; Ajustado</span>'
         :'<span style="color:var(--neg);font-weight:700;">&#10007; No viable</span>';
-      const names={JA:'JA · 15.000 t',A:'Conservador · 3.265 t',B:'Realista · 6.100 t',C:'Optimista · 9.000 t'};
+      const subvLabel=row.subv===0
+        ?'<span style="color:var(--text-sec)">Sin subv.</span>'
+        :row.subv===20
+          ?'<span style="color:var(--warn);font-weight:600">20 % PRTR</span>'
+          :'<span style="color:var(--pos);font-weight:600">40 % máx.</span>';
       return`<tr class="${isAct?'rsm-active':''}">
-        <td>${names[k]}</td>
+        <td>${row.label}</td>
+        <td style="text-align:center">${subvLabel}</td>
         <td>${fmtN(sc.t_aceituna,0)}</td>
         <td>${fmtEur(cr.inversion_neta,0)}</td>
         <td style="color:${cr.fc_operativo>=0?'var(--pos)':'var(--neg)'}">${fmtEur(cr.fc_operativo,0)}</td>
