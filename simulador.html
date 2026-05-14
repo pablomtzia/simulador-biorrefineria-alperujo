@@ -271,6 +271,97 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
   .fc-table th, .fc-table td { padding: 5px 7px; }
   .chart-wrap { height: 200px; }
 }
+
+/* ─── OUTPUTS CARD ─── */
+.outputs-card{margin:16px 0;border-top:4px solid var(--olive);}
+.out-body{padding:14px 18px 18px;}
+.out-section-title{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--olive);margin:14px 0 8px 0;}
+.out-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+@media(max-width:640px){.out-grid{grid-template-columns:repeat(2,1fr);}}
+.out-pill{background:#f5f5f5;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:3px;border:1px solid #e0e0e0;}
+.pos-pill{background:#f0f7ee;border-color:#b2d4ab;}
+.neg-pill{background:#fdf2f0;border-color:#e8b4ad;}
+.out-label{font-size:0.70rem;color:#666;line-height:1.3;}
+.out-value{font-size:1.05rem;font-weight:700;color:#1a1a1a;}
+.out-unit{font-size:0.65rem;color:#999;}
+.out-total-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 10px;}
+.out-total-item{background:var(--olive-pale);border-radius:8px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;font-size:0.85rem;font-weight:600;border:1.5px solid var(--olive-mid);}
+.out-total-val{font-size:1.1rem;font-weight:800;}
+.out-kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.out-kpi{background:var(--olive);color:#fff;border-radius:8px;padding:10px 14px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.out-kpi-label{font-size:0.70rem;opacity:.85;font-weight:600;}
+.out-kpi-val{font-size:1.15rem;font-weight:800;}
+/* ─── PILL INFO MODAL ─── */
+.pill-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.48);z-index:9000;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .18s;}
+.pill-modal-overlay.open{opacity:1;pointer-events:auto;}
+.pill-modal{background:#fff;border-radius:12px;max-width:680px;width:100%;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 10px 48px rgba(0,0,0,0.22);transform:translateY(14px);transition:transform .18s;overflow:hidden;}
+.pill-modal-overlay.open .pill-modal{transform:translateY(0);}
+.pill-modal-head{background:var(--olive);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.pill-modal-title{font-size:0.96rem;font-weight:700;}
+.pill-modal-close{background:none;border:none;color:#fff;font-size:1.4rem;cursor:pointer;line-height:1;padding:0 2px;opacity:.85;}
+.pill-modal-close:hover{opacity:1;}
+.pill-modal-body{padding:20px 24px 26px;overflow-y:auto;}
+.pill-modal-value{font-size:2rem;font-weight:800;color:var(--olive-dk);margin-bottom:18px;letter-spacing:-0.02em;}
+.pill-modal-section{margin-bottom:14px;}
+.pill-modal-label{font-size:0.70rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--olive);margin-bottom:6px;}
+.pill-modal-formula{background:#f6f6f2;border-left:3px solid var(--olive-mid);border-radius:0 6px 6px 0;padding:13px 16px;font-family:monospace;font-size:0.86rem;line-height:1.72;color:#2a2a2a;white-space:pre-wrap;word-break:break-word;}
+.pill-modal-note{font-size:0.80rem;color:#555;line-height:1.55;margin:0;}
+.out-pill{cursor:pointer;transition:box-shadow .12s,filter .12s;}
+.out-pill:hover{filter:brightness(0.96);box-shadow:0 2px 10px rgba(0,0,0,0.10);}
+.out-kpi{cursor:pointer;transition:filter .12s;}
+.out-kpi:hover{filter:brightness(1.12);}
+.out-total-item{cursor:pointer;transition:background .12s;}
+.out-total-item:hover{background:#d8ecd0;}
+
+/* ─── PARAMS TOGGLE ─── */
+.params-toggle{width:100%;text-align:left;padding:12px 16px;margin:16px 0 0 0;background:var(--olive-pale);border:1.5px solid var(--olive-mid);border-radius:8px;cursor:pointer;font-size:0.92rem;font-weight:600;color:var(--olive-dk);display:flex;align-items:center;gap:8px;transition:background .15s;}
+.params-toggle:hover{background:#d4e3cc;}
+.params-toggle-icon{font-size:1.0rem;min-width:14px;}
+.params-toggle-hint{margin-left:auto;font-weight:400;font-size:0.80rem;color:#666;}
+
+/* ===== RESUMEN EJECUTIVO ===== */
+.rsm-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+@media(max-width:780px){.rsm-kpi-row{grid-template-columns:repeat(2,1fr);}}
+.rsm-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);border-top:4px solid var(--border2);padding:16px 18px;box-shadow:var(--shadow);}
+.rsm-kpi-lbl{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-sec);margin-bottom:6px;font-family:'Courier New',monospace;}
+.rsm-kpi-val{font-size:21px;font-weight:700;font-family:'Courier New',monospace;line-height:1.1;margin-bottom:4px;}
+.rsm-kpi-sub{font-size:11px;color:var(--text-sec);}
+.rsm-flow-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@media(max-width:640px){.rsm-flow-grid{grid-template-columns:repeat(2,1fr);}}
+.rsm-flow-item{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--olive);border-radius:var(--radius);padding:12px 14px;display:flex;flex-direction:column;gap:4px;}
+.rsm-flow-val{font-size:17px;font-weight:700;font-family:'Courier New',monospace;color:var(--dark);}
+.rsm-flow-label{font-size:11.5px;color:var(--text-sec);line-height:1.3;}
+.rsm-flow-unit{font-size:10px;color:#aaa;}
+.rsm-env-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:640px){.rsm-env-row{grid-template-columns:1fr;}}
+.rsm-env-item{background:var(--olive-pale);border:1px solid rgba(74,103,65,0.25);border-radius:var(--radius);padding:14px 16px;}
+.rsm-env-val{font-size:19px;font-weight:700;font-family:'Courier New',monospace;color:var(--olive);}
+.rsm-env-lbl{font-size:11px;color:var(--olive-light);margin-top:4px;line-height:1.45;}
+.rsm-sc-table{width:100%;border-collapse:collapse;font-size:12px;}
+.rsm-sc-table th{background:var(--surface2);padding:8px 10px;text-align:center;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-sec);border-bottom:1px solid var(--border2);}
+.rsm-sc-table th:first-child{text-align:left;}
+.rsm-sc-table td{padding:7px 10px;border-bottom:1px solid var(--bg);text-align:center;font-family:'Courier New',monospace;}
+.rsm-sc-table td:first-child{text-align:left;font-family:system-ui,sans-serif;font-size:11.5px;font-weight:600;color:var(--dark);}
+.rsm-sc-table tr.rsm-active td{background:var(--olive-pale);}
+.rsm-sc-table tr:hover td{background:var(--surface2);}
+.rsm-print-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;background:var(--olive);color:#fff;border:none;border-radius:var(--radius);font-size:13px;cursor:pointer;font-weight:500;transition:background .15s;white-space:nowrap;}
+.rsm-print-btn:hover{background:#3d5836;}
+.rsm-header-box{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.rsm-header-title{font-size:11px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-sec);margin-bottom:3px;}
+.rsm-header-main{font-size:15px;font-weight:700;color:var(--dark);}
+.rsm-header-sub{font-size:11.5px;color:var(--text-sec);margin-top:3px;}
+@media print{
+  .top-nav{display:none!important;}
+  .tab-section{display:none!important;}
+  #tab-resumen{display:block!important;}
+  .rsm-print-btn,.params-toggle{display:none!important;}
+  body{background:#fff!important;}
+  .container{max-width:100%!important;padding:10px 14px!important;}
+  .card,.chart-card,.rsm-kpi{box-shadow:none!important;border-color:#ccc!important;}
+  .rsm-flow-grid{grid-template-columns:repeat(3,1fr)!important;}
+  .rsm-env-row{grid-template-columns:repeat(3,1fr)!important;}
+  .rsm-kpi-row{grid-template-columns:repeat(4,1fr)!important;}
+}
 </style>
 </head>
 <body>
@@ -278,16 +369,18 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
 <nav class="top-nav">
   <div class="nav-brand">Simulador &mdash; <span>Alperujo</span></div>
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showTab('proceso')">Proceso</button>
-    <button class="nav-tab" onclick="showTab('dimensionado')">Dimensionado</button>
-    <button class="nav-tab" onclick="showTab('financiero')">Financiero</button>
-    <button class="nav-tab" onclick="showTab('resultados')">Resultados</button>
+    <button class="nav-tab active" data-tab="proceso" onclick="showTab('proceso')">Proceso</button>
+    <button class="nav-tab" data-tab="dimensionado" onclick="showTab('dimensionado')">Dimensionado</button>
+    <button class="nav-tab" data-tab="financiero" onclick="showTab('financiero')">Financiero</button>
+    <button class="nav-tab" data-tab="resultados" onclick="showTab('resultados')">Resultados</button>
+    <button class="nav-tab" data-tab="resumen" onclick="showTab('resumen')">Resumen</button>
   </div>
   <div class="nav-scenarios">
     <span class="nav-sc-label">Escenario:</span>
-    <button id="sc-btn-A" class="nav-sc-btn active" onclick="loadScenario('A')">Conservador · 3.265 t</button>
-    <button id="sc-btn-B" class="nav-sc-btn" onclick="loadScenario('B')">Realista · 6.100 t</button>
-    <button id="sc-btn-C" class="nav-sc-btn" onclick="loadScenario('C')">Optimista · 9.000 t</button>
+    <button id="sc-btn-JA" class="nav-sc-btn active" onclick="loadScenario('JA')" title="Parámetros validados por J.A. de la Cal (30/04/2026)">JA · 15.000 t</button>
+    <button id="sc-btn-A" class="nav-sc-btn" onclick="loadScenario('A')">A · 3.265 t</button>
+    <button id="sc-btn-B" class="nav-sc-btn" onclick="loadScenario('B')">B · 6.100 t</button>
+    <button id="sc-btn-C" class="nav-sc-btn" onclick="loadScenario('C')">C · 9.000 t</button>
   </div>
 </nav>
 
@@ -390,65 +483,6 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
 
   </div><!-- /cref-grid -->
 
-  <!-- ===== COMPARATIVA MODELO ACTUAL vs MODELO PROPUESTO ===== -->
-  <div class="cref-compare">
-    <div class="cref-compare-head">Comparativa de flujos — Modelo actual vs. Modelo con planta biogás</div>
-
-    <table class="cref-ctable">
-      <thead>
-        <tr>
-          <th>Concepto</th>
-          <th class="hcur">Sin planta biogás</th>
-          <th class="hprop">Con planta biogás</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Alperujo: venta a extractora / coste de oportunidad</td>
-          <td class="val" id="cmp_ing_alp">—</td>
-          <td class="val" id="cmp_alp_prop">—</td>
-        </tr>
-        <tr>
-          <td>Electricidad: factura anual / ahorro por autoconsumo</td>
-          <td class="val" id="cmp_gas_elec_act">—</td>
-          <td class="val" id="cmp_ahorro_elec">—</td>
-        </tr>
-        <tr>
-          <td>Excedente eléctrico vendido a red</td>
-          <td class="val-none">—</td>
-          <td class="val" id="cmp_excedente_elec">—</td>
-        </tr>
-        <tr>
-          <td>Venta hueso limpio (biomasa)</td>
-          <td class="val" id="cmp_ing_hueso_act">—</td>
-          <td class="val" id="cmp_ingr_hueso">—</td>
-        </tr>
-        <tr>
-          <td>Biofertilizante / digestato</td>
-          <td class="val-none">—</td>
-          <td class="val" id="cmp_fertilizante">—</td>
-        </tr>
-        <tr class="sep">
-          <td>OPEX planta biogás (personal, mantenimiento, consumibles)</td>
-          <td class="val-none">—</td>
-          <td class="val" id="cmp_opex_planta">—</td>
-        </tr>
-        <tr class="ctot">
-          <td>Resultado neto</td>
-          <td class="val" id="cmp_total_act">—</td>
-          <td class="val" id="cmp_fc_op">—</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="cref-delta-bar">
-      <span class="cref-delta-lbl">Mejora anual neta</span>
-      <span class="cref-delta-num" id="cmp_delta">—</span>
-      <span class="cref-delta-note" id="cmp_delta_note"></span>
-    </div>
-    <div style="font-size:10px;color:var(--text-sec);margin-top:6px;">Los valores del modelo propuesto se calculan con los parámetros del tab Dimensionado y se actualizan en tiempo real. El modelo actual refleja los datos de referencia de la sección anterior.</div>
-  </div><!-- /cref-compare -->
-
   <div class="cref-footer">
     <button class="btn btn-primary btn-sm" onclick="loadCampaignData()">Aplicar datos campaña real al simulador</button>
     <span id="cref-footer-desc" style="font-size:11px;color:var(--text-sec);">Carga: aceitunas 3.265 t · rend. alperujo 94,9% · precio alperujo 11,88 €/t · factura eléctrica 34.510 €/año · transporte alperujo 0 € (extractora recoge).</span>
@@ -460,7 +494,7 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
 
     <!-- COLUMNA IZQUIERDA: Producción por variedad -->
     <div>
-      <div class="cref-section-title" style="margin-bottom:8px;">Producción aceitunas-aceite (editable)</div>
+      <div class="cref-section-title" style="margin-bottom:8px;">Producción aceitunas-aceite</div>
       <table style="width:100%;border-collapse:collapse;font-size:11px;">
         <thead>
           <tr style="background:var(--surface2);">
@@ -585,6 +619,65 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
 
   </div><!-- /cref-excel-grid -->
 
+  <!-- ===== COMPARATIVA MODELO ACTUAL vs MODELO PROPUESTO ===== -->
+  <div class="cref-compare">
+    <div class="cref-compare-head">Comparativa de flujos — Modelo actual vs. Modelo con planta biogás</div>
+
+    <table class="cref-ctable">
+      <thead>
+        <tr>
+          <th>Concepto</th>
+          <th class="hcur">Sin planta biogás</th>
+          <th class="hprop">Con planta biogás</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Alperujo: venta a extractora / coste de oportunidad</td>
+          <td class="val" id="cmp_ing_alp">—</td>
+          <td class="val" id="cmp_alp_prop">—</td>
+        </tr>
+        <tr>
+          <td>Electricidad: factura anual / ahorro por autoconsumo</td>
+          <td class="val" id="cmp_gas_elec_act">—</td>
+          <td class="val" id="cmp_ahorro_elec">—</td>
+        </tr>
+        <tr>
+          <td>Excedente eléctrico vendido a red</td>
+          <td class="val-none">—</td>
+          <td class="val" id="cmp_excedente_elec">—</td>
+        </tr>
+        <tr>
+          <td>Venta hueso limpio (biomasa)</td>
+          <td class="val" id="cmp_ing_hueso_act">—</td>
+          <td class="val" id="cmp_ingr_hueso">—</td>
+        </tr>
+        <tr>
+          <td>Biofertilizante / digestato</td>
+          <td class="val-none">—</td>
+          <td class="val" id="cmp_fertilizante">—</td>
+        </tr>
+        <tr class="sep">
+          <td>OPEX planta biogás (personal, mantenimiento, consumibles)</td>
+          <td class="val-none">—</td>
+          <td class="val" id="cmp_opex_planta">—</td>
+        </tr>
+        <tr class="ctot">
+          <td>Resultado neto</td>
+          <td class="val" id="cmp_total_act">—</td>
+          <td class="val" id="cmp_fc_op">—</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="cref-delta-bar">
+      <span class="cref-delta-lbl">Mejora anual neta</span>
+      <span class="cref-delta-num" id="cmp_delta">—</span>
+      <span class="cref-delta-note" id="cmp_delta_note"></span>
+    </div>
+    <div style="font-size:10px;color:var(--text-sec);margin-top:6px;">Los valores del modelo propuesto se calculan con los parámetros del tab Dimensionado y se actualizan en tiempo real. El modelo actual refleja los datos de referencia de la sección anterior.</div>
+  </div><!-- /cref-compare -->
+
   <!-- Leyenda de cálculos -->
   <div id="cref-calc" style="display:none; border-top:1px solid var(--border); padding:14px 18px 16px;">
     <div class="cref-section-title" style="margin-bottom:10px;">Derivación de parámetros — Campaña 2024-2025</div>
@@ -668,6 +761,13 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
   <span style="font-size:11px;color:#b08a3e;margin-top:2px;">↕ Parámetro que varía con la escala de producción</span>
 </div>
 
+<!-- PARÁMETROS — colapsables -->
+<button class="params-toggle" onclick="toggleParams(this)">
+  <span class="params-toggle-icon">▸</span>
+  Parámetros de la nueva instalación
+  <span class="params-toggle-hint">haz clic para editar</span>
+</button>
+<div id="params-nueva" style="display:none;">
 <div class="dim-grid">
 
   <div class="card">
@@ -739,11 +839,11 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
     <div class="param-legend">
       <table class="legend-table">
         <tr><td>Potencia CHP (kWe)</td><td><span class="legend-badge lb-est">EST</span>Dimensionado según biogás anual disponible · motores estándar: 100/200/300 kWe por escenario</td></tr>
-        <tr><td>Horas operación</td><td><span class="legend-badge lb-est">EST</span>Horas anuales de operación del motor · con 10% hueso el biogás soporta 8.168/7.630/7.505 h en Conservador/Realista/Optimista · configurado al 93-95% como margen de disponibilidad (mantenimiento, paradas)</td></tr>
+        <tr><td>Horas operación</td><td><span class="legend-badge lb-est">EST</span>Horas anuales de operación del motor · con 10% hueso el biogás soporta 8.168/7.630/7.505 h en Scen A/B/C · configurado al 93-95% como margen de disponibilidad (mantenimiento, paradas)</td></tr>
         <tr><td>Rend. eléctrico 38%</td><td><span class="legend-badge lb-bib">BIB</span>Eficiencia eléctrica estándar motores biogás Jenbacher JGS / Caterpillar CG &lt;500 kWe</td></tr>
         <tr><td>Rend. térmico 44%</td><td><span class="legend-badge lb-bib">BIB</span>Calor recuperado (agua proceso + calefacción digestor) · eficiencia estándar cogeneración biogás</td></tr>
         <tr><td>Autoconsumo eléctrico 14,5%</td><td><span class="legend-badge lb-est">EST</span>Consumo auxiliares del motor CHP (bombas, refrigeración, controles) sobre producción bruta</td></tr>
-        <tr><td>Factura eléctrica</td><td><span class="legend-badge lb-real">REAL</span>Conservador: dato real campaña 2024-25 (34.509,70 €/año) · Realista/Optimista: fórmula semi-variable 20% fijo + 80% proporcional</td></tr>
+        <tr><td>Factura eléctrica</td><td><span class="legend-badge lb-real">REAL</span>Scen A: dato real campaña 2024-25 (34.509,70 €/año) · B/C: fórmula semi-variable 20% fijo + 80% proporcional</td></tr>
       </table>
     </div>
   </div>
@@ -752,7 +852,7 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
     <div class="card-header">Ingresos y Precios</div>
     <div class="param-row"><label>Precio venta hueso</label><input type="number" id="precio_venta_hueso" value="120" min="0" max="500" step="5" oninput="onInput()"><span class="param-unit">€/t</span></div>
     <div class="param-row"><label>Precio digestato</label><input type="number" id="precio_digestato" value="10" min="0" max="80" step="1" oninput="onInput()"><span class="param-unit">€/t</span></div>
-    <div class="param-row"><label>Precio compra red</label><input type="number" id="precio_compra_red" value="188" min="50" max="400" step="5" oninput="onInput()"><span class="param-unit">€/MWh</span></div>
+    <div class="param-row"><label>Precio compra red</label><input type="number" id="precio_compra_red" value="120" min="50" max="400" step="5" oninput="onInput()"><span class="param-unit">€/MWh</span></div>
     <div class="param-row"><label>Precio venta excedente</label><input type="number" id="precio_venta_excedente" value="65" min="20" max="200" step="5" oninput="onInput()"><span class="param-unit">€/MWh</span></div>
     <div class="param-row" data-scale><label>Hectáreas olivar socios</label><input type="number" id="ha_olivar" value="750" min="0" max="5000" step="50" oninput="onInput()"><span class="param-unit">ha</span></div>
     <div class="derived-section">
@@ -767,7 +867,7 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
       <table class="legend-table">
         <tr><td>Precio hueso 120 €/t</td><td><span class="legend-badge lb-bib">BIB</span>IDAE (2018) · boletín precios biomasa · mercado biomasa industrial (calderas industriales y pellet)</td></tr>
         <tr><td>Precio digestato 10 €/t</td><td><span class="legend-badge lb-est">EST</span>Precio de cesión/venta del digestato a socios como biofertilizante · rango mercado 5-20 €/t según calidad y demanda local</td></tr>
-        <tr><td>Precio compra red 188 €/MWh</td><td><span class="legend-badge lb-bib">BIB</span>Eurostat (2025) · precio electricidad consumidores industriales España, 2.º semestre 2024 · precio todo incluido (energía + peajes + impuestos)</td></tr>
+        <tr><td>Precio compra red 120 €/MWh</td><td><span class="legend-badge lb-est">EST</span>Tarifa PVPC industria media 2024 (Ministerio para la Transición Ecológica) · referencia mercado regulado</td></tr>
         <tr><td>Precio venta excedente 65 €/MWh</td><td><span class="legend-badge lb-est">EST</span>Precio spot mercado ibérico OMIE 2024 · promedio anual · fluctúa según oferta/demanda</td></tr>
         <tr><td>Ha olivar socios</td><td><span class="legend-badge lb-est">EST</span>Superficie total de los socios de la cooperativa · referencia para comparar con las ha fertilizables que genera la planta</td></tr>
       </table>
@@ -789,9 +889,9 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
     <div class="param-legend-toggle" onclick="toggleLegend(this)"><span class="legend-icon">ⓘ</span> Fuentes y metodología<span class="legend-chevron">▸</span></div>
     <div class="param-legend">
       <table class="legend-table">
-        <tr><td>Deshuesadora de alperujo</td><td><span class="legend-badge lb-bib">BIB</span>Estimación basada en referencias de mercado para equipos de separación de núcleo en almazaras (~2.000-3.500 €/(t·día) capacidad) · sin presupuesto real de proveedor · Realista y Optimista escalados desde Conservador mediante ley potencial (exp. 0,55)</td></tr>
-        <tr><td>Digestor anaerobio</td><td><span class="legend-badge lb-bib">BIB</span>Estimación basada en referencias publicadas para digestores agrícolas pequeños (IDAE, Genia Bioenergy): ~80-130 €/(t·año) paté tratado · sin presupuesto real · Realista y Optimista escalados desde Conservador (exp. 0,60)</td></tr>
-        <tr><td>Motor CHP</td><td><span class="legend-badge lb-bib">BIB</span>Estimación basada en precios de mercado para motores biogás pequeños (800-1.000 €/kWe instalado) · sin presupuesto real de fabricante · Realista y Optimista escalados desde Conservador (exp. 0,70)</td></tr>
+        <tr><td>Deshuesadora de alperujo</td><td><span class="legend-badge lb-bib">BIB</span>Estimación basada en referencias de mercado para equipos de separación de núcleo en almazaras (~2.000-3.500 €/(t·día) capacidad) · sin presupuesto real de proveedor · Scen B y C escalados desde A mediante ley potencial (exp. 0,55)</td></tr>
+        <tr><td>Digestor anaerobio</td><td><span class="legend-badge lb-bib">BIB</span>Estimación basada en referencias publicadas para digestores agrícolas pequeños (IDAE, Genia Bioenergy): ~80-130 €/(t·año) paté tratado · sin presupuesto real · Scen B y C escalados desde A (exp. 0,60)</td></tr>
+        <tr><td>Motor CHP</td><td><span class="legend-badge lb-bib">BIB</span>Estimación basada en precios de mercado para motores biogás pequeños (800-1.000 €/kWe instalado) · sin presupuesto real de fabricante · Scen B y C escalados desde A (exp. 0,70)</td></tr>
         <tr><td>Instalación eléctrica</td><td><span class="legend-badge lb-est">EST</span>Estimación ingeniería eléctrica MT/BT (conexión red, protecciones, cableado) · exponent 0,60</td></tr>
         <tr><td>Otros</td><td><span class="legend-badge lb-est">EST</span>Civil, instrumentación, puesta en marcha, ingeniería · ~10-15% del CAPEX total</td></tr>
         <tr><td>Subvención 0%</td><td><span class="legend-badge lb-est">EST</span>Escenario base conservador sin ayudas · PRTR (Plan de Recuperación) permite hasta 40% en instalaciones biogás</td></tr>
@@ -820,7 +920,7 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
       <table class="legend-table">
         <tr><td>Mant. CHP 0,015 €/kWh</td><td><span class="legend-badge lb-bib">BIB</span>Estándar contratos mantenimiento preventivo motores biogás · incluye revisiones periódicas, aceite, filtros</td></tr>
         <tr><td>Personal (25-45 k€/año)</td><td><span class="legend-badge lb-est">EST</span>0,5-1 FTE técnico de planta · no escala linealmente con volumen (economía operativa de escala)</td></tr>
-        <tr><td>Consumibles</td><td><span class="legend-badge lb-est">EST</span>Reactivos, análisis de digestato, agua proceso · +75% Realista y +150% Optimista respecto Conservador</td></tr>
+        <tr><td>Consumibles</td><td><span class="legend-badge lb-est">EST</span>Reactivos, análisis de digestato, agua proceso · +75% Scen B y +150% Scen C respecto Scen A</td></tr>
         <tr><td>Seguros</td><td><span class="legend-badge lb-est">EST</span>~1,3-1,5% del CAPEX anual · seguro todo riesgo industrial instalación biogás</td></tr>
         <tr><td>Revisión mayor (año 8)</td><td><span class="legend-badge lb-est">EST</span>~40-50% del coste inicial del motor CHP · revisión mayor de cigüeñal, pistones y turbo cada ~40.000 h</td></tr>
         <tr><td>Tasa descuento 5%</td><td><span class="legend-badge lb-bib">BIB</span>Coste de oportunidad cooperativa agraria · referencia BCE / Banco de España para sector agroalimentario</td></tr>
@@ -831,6 +931,98 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
   </div>
 
 </div>
+</div><!-- /params-nueva -->
+
+<!-- OUTPUTS CARD — siempre visible -->
+<div class="card outputs-card">
+  <div class="card-header">Resultados de la nueva instalación</div>
+  <div class="out-body">
+  <div class="out-section-title">Flujos físicos</div>
+  <div class="out-grid">
+    <div class="out-pill" onclick="showPillInfo('alperujo')">
+      <span class="out-label">Alperujo tratado</span>
+      <span class="out-value" id="out-alperujo">—</span>
+      <span class="out-unit">t/año</span>
+    </div>
+    <div class="out-pill" onclick="showPillInfo('hueso')">
+      <span class="out-label">Hueso separado</span>
+      <span class="out-value" id="out-hueso">—</span>
+      <span class="out-unit">t/año</span>
+    </div>
+    <div class="out-pill" onclick="showPillInfo('digestato')">
+      <span class="out-label">Digestato producido</span>
+      <span class="out-value" id="out-digestato">—</span>
+      <span class="out-unit">t/año</span>
+    </div>
+    <div class="out-pill" onclick="showPillInfo('biogas')">
+      <span class="out-label">Biogás neto</span>
+      <span class="out-value" id="out-biogas">—</span>
+      <span class="out-unit">m³/año</span>
+    </div>
+    <div class="out-pill" onclick="showPillInfo('elec')">
+      <span class="out-label">Energía eléctrica neta</span>
+      <span class="out-value" id="out-elec">—</span>
+      <span class="out-unit">MWh/año</span>
+    </div>
+    <div class="out-pill" onclick="showPillInfo('excedente')">
+      <span class="out-label">Excedente volcado a red</span>
+      <span class="out-value" id="out-excedente">—</span>
+      <span class="out-unit">MWh/año</span>
+    </div>
+  </div>
+
+  <div class="out-section-title">Impacto económico anual</div>
+  <div class="out-grid">
+    <div class="out-pill pos-pill" onclick="showPillInfo('ing-hueso')">
+      <span class="out-label">Ingreso venta de hueso</span>
+      <span class="out-value pos-val" id="out-ing-hueso">—</span>
+      <span class="out-unit">€/año</span>
+    </div>
+    <div class="out-pill pos-pill" onclick="showPillInfo('ing-digestato')">
+      <span class="out-label">Ingreso venta digestato</span>
+      <span class="out-value pos-val" id="out-ing-digestato">—</span>
+      <span class="out-unit">€/año</span>
+    </div>
+    <div class="out-pill pos-pill" onclick="showPillInfo('ahorro-elec')">
+      <span class="out-label">Ahorro factura eléctrica</span>
+      <span class="out-value pos-val" id="out-ahorro-elec">—</span>
+      <span class="out-unit">€/año</span>
+    </div>
+    <div class="out-pill pos-pill" onclick="showPillInfo('ing-excedente')">
+      <span class="out-label">Ingreso excedente a red</span>
+      <span class="out-value pos-val" id="out-ing-excedente">—</span>
+      <span class="out-unit">€/año</span>
+    </div>
+    <div class="out-pill neg-pill" onclick="showPillInfo('perdida')">
+      <span class="out-label">Coste oportunidad alperujo</span>
+      <span class="out-value neg-val" id="out-perdida">—</span>
+      <span class="out-unit">€/año</span>
+    </div>
+    <div class="out-pill neg-pill" onclick="showPillInfo('om')">
+      <span class="out-label">Costes O&amp;M totales</span>
+      <span class="out-value neg-val" id="out-om">—</span>
+      <span class="out-unit">€/año</span>
+    </div>
+  </div>
+
+  <div class="out-total-row">
+    <div class="out-total-item" onclick="showPillInfo('ingresos-netos')">
+      <span>Ingresos netos anuales</span>
+      <span id="out-ingresos-netos" class="out-total-val">—</span>
+    </div>
+    <div class="out-total-item" onclick="showPillInfo('fc-operativo')">
+      <span>Cash flow operativo</span>
+      <span id="out-fc-operativo" class="out-total-val">—</span>
+    </div>
+  </div>
+
+  <div class="out-kpi-row">
+    <div class="out-kpi" onclick="showPillInfo('van')"><span class="out-kpi-label">VAN</span><span id="out-van" class="out-kpi-val">—</span></div>
+    <div class="out-kpi" onclick="showPillInfo('tir')"><span class="out-kpi-label">TIR</span><span id="out-tir" class="out-kpi-val">—</span></div>
+    <div class="out-kpi" onclick="showPillInfo('payback')"><span class="out-kpi-label">Payback</span><span id="out-payback" class="out-kpi-val">—</span></div>
+  </div>
+  </div><!-- /out-body -->
+</div><!-- /outputs-card -->
 </div>
 </section>
 
@@ -946,9 +1138,81 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
 </div>
 </section>
 
+<!-- RESUMEN EJECUTIVO -->
+<section id="tab-resumen" class="tab-section">
+<div class="container">
+
+  <div class="rsm-header-box">
+    <div>
+      <div class="rsm-header-title">Simulador Biorrefinería de Alperujo</div>
+      <div class="rsm-header-main">Resumen ejecutivo &mdash; <span id="rsm-sc-name" style="color:var(--olive)">—</span></div>
+      <div class="rsm-header-sub" id="rsm-subtitle">Planta de valorización del alperujo &middot; Biorrefinería cooperativa</div>
+    </div>
+    <button class="rsm-print-btn" onclick="window.print()">&#9113; Imprimir / Exportar PDF</button>
+  </div>
+
+  <!-- KPIs financieros -->
+  <div class="rsm-kpi-row" id="rsm-kpis"></div>
+
+  <!-- Flujos físicos -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-header">Flujos de materia y energía — producción anual</div>
+    <div style="padding:14px 18px 18px;">
+      <div class="rsm-flow-grid" id="rsm-flows"></div>
+    </div>
+  </div>
+
+  <!-- Indicadores de sostenibilidad -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-header">Indicadores de sostenibilidad ambiental</div>
+    <div style="padding:14px 18px 18px;">
+      <div class="rsm-env-row" id="rsm-env"></div>
+      <div style="font-size:10px;color:var(--text-sec);margin-top:10px;line-height:1.55;">Factor de emisión red eléctrica española: 0,18 kg CO&#8322;/kWh (REE, 2024) &middot; Consumo medio hogar: 3,5 MWh/año &middot; N biodisponible del digestato calculado a partir del contenido de nitrógeno Kjeldahl parametrizado.</div>
+    </div>
+  </div>
+
+  <!-- Comparativa escenarios -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-header">Análisis comparativo de escenarios de escala</div>
+    <div style="overflow-x:auto;">
+      <table class="rsm-sc-table">
+        <thead>
+          <tr>
+            <th>Escenario</th>
+            <th>t aceituna/año</th>
+            <th>CAPEX neto</th>
+            <th>FCO anual</th>
+            <th>Payback</th>
+            <th>TIR</th>
+            <th>VAN (20 a.)</th>
+            <th>Viabilidad</th>
+          </tr>
+        </thead>
+        <tbody id="rsm-sc-tbody"></tbody>
+      </table>
+    </div>
+    <div style="padding:8px 18px 12px;font-size:10px;color:var(--text-sec);">Parámetros técnicos validados por José Antonio de la Cal Herrera (30/04/2026). La fila resaltada corresponde al escenario activo en el simulador.</div>
+  </div>
+
+  <!-- Gráficos -->
+  <div class="res-grid" style="margin-bottom:20px;">
+    <div class="chart-card">
+      <div class="card-header">Desglose de ingresos anuales — escenario activo</div>
+      <div class="chart-wrap" style="height:240px;"><canvas id="rsm-chart-ing"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="card-header">Flujo de caja acumulado — escenario activo</div>
+      <div class="chart-wrap" style="height:240px;"><canvas id="rsm-chart-fc"></canvas></div>
+    </div>
+  </div>
+
+</div>
+</section>
+
 <script>
 'use strict';
-const DEFAULTS={t_aceituna:3265,rend_alperujo:94.9,contenido_hueso:10,rend_separacion:97,precio_alperujo_orujera:11.88,coste_transporte_total:0,factura_electrica_anual:34510,ha_olivar:750,kg_N_ha:50,kg_N_digestato:5,rendimiento_biogas:142.7,pct_CH4:60,pct_autoconsumo_biogas:10,potencia_CHP_kwe:100,horas_operacion:7600,rend_electrico_CHP:38,rend_termico_CHP:44,pct_autoconsumo_elec:14.5,precio_venta_hueso:120,precio_digestato:10,inv_deshuesadora:80000,inv_digestor:230000,inv_CHP:100000,inv_instalacion_electrica:70000,inv_otros:70000,pct_subvencion:0,precio_compra_red:188,precio_venta_excedente:65,coste_mant_CHP_kwh:0.015,coste_personal:25000,coste_consumibles:8000,coste_seguros:8000,coste_otros_om:8000,coste_revision_mayor:40000,anyo_revision_mayor:8,tasa_descuento:5,horizonte:15,pct_valor_residual:10};
+// Parámetros validados por José Antonio de la Cal Herrera (30/04/2026)
+const DEFAULTS={t_aceituna:15000,rend_alperujo:83,contenido_hueso:20,rend_separacion:97,precio_alperujo_orujera:7.5,coste_transporte_total:0,factura_electrica_anual:41000,ha_olivar:750,kg_N_ha:80,kg_N_digestato:3.5,rendimiento_biogas:113.4,pct_CH4:55,pct_autoconsumo_biogas:12.5,potencia_CHP_kwe:400,horas_operacion:4000,rend_electrico_CHP:29.5,rend_termico_CHP:45,pct_autoconsumo_elec:0,precio_venta_hueso:135,precio_digestato:10,inv_deshuesadora:30000,inv_digestor:750000,inv_CHP:350000,inv_instalacion_electrica:10000,inv_otros:0,pct_subvencion:20,precio_compra_red:120,precio_venta_excedente:65,coste_mant_CHP_kwh:0.015,coste_personal:80000,coste_consumibles:18000,coste_seguros:6000,coste_otros_om:12000,coste_revision_mayor:40000,anyo_revision_mayor:10,tasa_descuento:5,horizonte:20,pct_valor_residual:10};
 
 // Datos reales campaña 2024-2025 (cooperativa andaluza)
 const CAMPAIGN_2425={
@@ -972,110 +1236,107 @@ const CREF_BASE={
   gas_envases:7182.02, gas_comision:4983.00, gas_reparacion_vh:2348.83,
   ex_alperujo:3098820, ex_ing_alp:36803.46, ex_ing_aceite:2847628.80, ex_gastos:579416.84};
 // ─── ESCENARIOS ────────────────────────────────────────────────────────────
-// Escenario A: Campaña real 2024-2025 (cooperativa base, 3.265 t)
-// Escenario B: Ampliación media — fusión/crecimiento a 6.100 t
-// Escenario C: Ampliación plena — gran cooperativa a 9.000 t
-//
-// Criterios de escalado:
-//  - Parámetros FIJOS: biológicos (rendimientos), mercado (precios), tecnológicos (eficiencias)
-//  - Parámetros LINEALES: ha_olivar (proporcional a aceitunas), factura_electrica (80% variable+20% fija)
-//  - Parámetros SUBLINEALES (ley potencial ~0.6-0.7): CAPEX digestor, CHP, instalación eléctrica
-//  - Parámetros SEMIVARIABLES: personal planta, consumibles, seguros O&M
-//  - potencia_CHP: dimensionada para aprovechar el biogás disponible (100/200/300 kWe)
+// Escenario A: Conservador — 3.265 t (volumen campaña real cooperativa)
+// Escenario B: Realista   — 6.100 t (ampliación media)
+// Escenario C: Optimista  — 9.000 t (gran cooperativa)
+// Todos los escenarios usan los parámetros técnicos validados por J.A. de la Cal (30/04/2026)
+// Solo varían los parámetros directamente relacionados con el volumen de producción:
+//  - potencia_CHP: proporcional a t_aceituna, redondeada a múltiplo de 50 kWe (base JA: 400 kWe/15.000t)
+//  - CAPEX: ley potencial desde base JA (digestor ^0.60, CHP ^0.70, deshuesadora ^0.65, eléctrica ^0.60)
+//  - factura_electrica: 20% fijo + 80% variable proporcional a t_aceituna (base JA: 41.000 €/15.000t)
+//  - ha_olivar: proporcional a t_aceituna (base JA: 750 ha/15.000t)
+//  - O&M: personal ^0.50, consumibles ^0.80, seguros proporcional a CAPEX, otros_om ^0.60
 const SCENARIOS = {
   A: {
-    // ── Materia prima ──
-    t_aceituna: 3265,          // Real campaña 2024-25: 3.265.802 kg
-    rend_alperujo: 94.9,       // Real: 3.098.820 / 3.265.802 = 94,9%
-    contenido_hueso: 10,       // Fracción leñosa del alperujo (dato real almazara)
-    rend_separacion: 97,       // Eficiencia deshuesadora industrial
-    precio_alperujo_orujera: 11.88, // Real: 36.803,46 € / 3.098,82 t = 11,88 €/t
-    coste_transporte_total: 0, // Extractora recoge el alperujo (coste neto = 0)
-    // ── Digestor ──
-    rendimiento_biogas: 113.4, // m³ biogás/t alperujo deshuesado (La Cal Herrera, com. pers. 3/3/2026)
-    pct_CH4: 55,               // % metano biogás (La Cal Herrera, com. pers. 3/3/2026)
-    pct_autoconsumo_biogas: 12.5,// % biogás consumo propio digestor y auxiliares
-    kg_N_digestato: 5,         // kg N/t digestato
-    kg_N_ha: 50,               // Kg N aplicado/ha
-    // ── CHP (Motor cogeneración) ──
-    // Alperujo deshuesado: ~2.798 t → biogás neto: ~278.000 m³ → CH4: ~152.800 m³
-    // Energía eléctrica disponible: ~450 MWh → motor: 100 kWe × 4.500 h = 450 MWh
-    potencia_CHP_kwe: 100,     // kWe instalados
-    horas_operacion: 4500,     // h/año (derivadas del biogás neto disponible)
-    rend_electrico_CHP: 29.5,  // % eficiencia eléctrica (La Cal Herrera, com. pers. 3/3/2026)
-    rend_termico_CHP: 45,      // % eficiencia térmica
-    pct_autoconsumo_elec: 5,   // % autoconsumo eléctrico auxiliares planta
-    factura_electrica_anual: 34510, // Real: 34.509,70 €/año
-    // ── Precios ──
-    precio_venta_hueso: 135,   // €/t hueso (La Cal Herrera, com. pers. 3/3/2026; IDAE 2018)
-    precio_digestato: 10,      // €/t digestato como biofertilizante
-    precio_compra_red: 120,    // €/MWh precio red cooperativa (La Cal Herrera, com. pers. 3/3/2026)
-    precio_venta_excedente: 65,// €/MWh venta excedentes (mercado spot medio)
-    ha_olivar: 750,            // Ha olivar socios
-    // ── CAPEX (Inversión total: 448.500 €; La Cal Herrera, com. pers. 3/3/2026) ──
-    inv_deshuesadora: 11000,   // 11.000 €
-    inv_digestor: 300000,      // 300.000 € — incluye obra civil, ingeniería y permisos
-    inv_CHP: 133000,           // 133.000 € — motor 100 kWe + auxiliares
-    inv_instalacion_electrica: 4500, // 4.500 €
-    inv_otros: 0,              // 0 € — costes integrados en inv_digestor
-    pct_subvencion: 0,
-    // ── O&M ──
-    coste_mant_CHP_kwh: 0.015, // €/kWh (mantenimiento variable motor)
-    coste_personal: 37500,     // 37.500 €/año — 0,5 FTE técnico planta
-    coste_consumibles: 5500,   // 5.500 €/año — reactivos, análisis, lubricantes
-    coste_seguros: 2400,       // 2.400 €/año — seguro instalación
-    coste_otros_om: 5000,      // 5.000 €/año — gestión residuos, inspecciones
-    coste_revision_mayor: 10000,// 10.000 € — revisión mayor motor CHP en año 10
-    anyo_revision_mayor: 10,
-    // ── Parámetros financieros ──
-    tasa_descuento: 5,         // % (coste oportunidad capital)
-    horizonte: 20,             // años (vida útil estimada instalación)
-    pct_valor_residual: 10     // % sobre CAPEX bruto al final del horizonte
-  },
-  B: {
-    // ── Materia prima ──
-    t_aceituna: 6100,          // Escenario ampliación: fusión o crecimiento cooperativa
-    rend_alperujo: 94.9,
-    contenido_hueso: 10,
+    // ── Materia prima (3.265 t — Escenario conservador) ──
+    t_aceituna: 3265,
+    rend_alperujo: 83,           // Validado J.A. de la Cal (30/04/2026)
+    contenido_hueso: 20,         // Validado J.A. de la Cal
     rend_separacion: 97,
-    precio_alperujo_orujera: 11.88,
+    precio_alperujo_orujera: 7.5,// Validado J.A. de la Cal
     coste_transporte_total: 0,
     // ── Digestor ──
-    rendimiento_biogas: 113.4,
-    pct_CH4: 55,
-    pct_autoconsumo_biogas: 12.5,
-    kg_N_digestato: 5,
-    kg_N_ha: 50,
-    // ── CHP ──
-    // Alperujo deshuesado: ~5.227 t → biogás neto: ~519.000 m³ → CH4: ~285.400 m³
-    // Energía eléctrica disponible: ~841 MWh → motor: 200 kWe × 4.200 h = 840 MWh
-    potencia_CHP_kwe: 200,
-    horas_operacion: 4200,     // h/año (derivadas del biogás neto disponible)
-    rend_electrico_CHP: 29.5,
-    rend_termico_CHP: 45,
-    pct_autoconsumo_elec: 5,
-    // Factura eléctrica: 20% fija + 80% variable escalada con producción
-    factura_electrica_anual: 58500, // ≈ 6.902 + 51.571 = 58.473 € → 58.500 €
+    rendimiento_biogas: 113.4,   // Validado J.A. de la Cal
+    pct_CH4: 55,                 // Validado J.A. de la Cal
+    pct_autoconsumo_biogas: 12.5,// Validado J.A. de la Cal
+    kg_N_digestato: 3.5,         // Validado J.A. de la Cal
+    kg_N_ha: 80,                 // Validado J.A. de la Cal
+    // ── CHP — 100 kWe = 400 × (3265/15000), redondeado a múltiplo de 50 kWe ──
+    potencia_CHP_kwe: 100,
+    horas_operacion: 3500,       // Derivado del biogás disponible: 351 MWh ÷ 100 kWe × 1000
+    rend_electrico_CHP: 29.5,    // Validado J.A. de la Cal
+    rend_termico_CHP: 45,        // Validado J.A. de la Cal
+    pct_autoconsumo_elec: 0,     // Validado J.A. de la Cal
+    // factura = 20%×41.000 + 80%×41.000×(3265/15000) = 8.200 + 7.139 ≈ 15.300 €
+    factura_electrica_anual: 15300,
     // ── Precios ──
     precio_venta_hueso: 135,
     precio_digestato: 10,
     precio_compra_red: 120,
     precio_venta_excedente: 65,
-    ha_olivar: 1400,
-    // ── CAPEX (Inversión total: 635.000 €; ley potencial ^0,60–0,70) ──
-    inv_deshuesadora: 16000,   // 16.000 €
-    inv_digestor: 396000,      // 396.000 € — incluye obra civil, ingeniería y permisos
-    inv_CHP: 216000,           // 216.000 € — motor 200 kWe
-    inv_instalacion_electrica: 7000, // 7.000 €
+    ha_olivar: 165,              // 750 × (3265/15000) ≈ 163 ha
+    // ── CAPEX — ley potencial desde base JA (CAPEX total ≈ 448.500 €) ──
+    inv_deshuesadora: 11000,     // 30.000 × (3265/15000)^0.65
+    inv_digestor: 300000,        // 750.000 × (3265/15000)^0.60
+    inv_CHP: 133000,             // 350.000 × (100/400)^0.70
+    inv_instalacion_electrica: 4500, // 10.000 × (100/400)^0.60
     inv_otros: 0,
-    pct_subvencion: 0,
+    pct_subvencion: 0,           // Sin subvención en escenario conservador
     // ── O&M ──
     coste_mant_CHP_kwh: 0.015,
-    coste_personal: 51000,
-    coste_consumibles: 9000,
-    coste_seguros: 3300,
-    coste_otros_om: 7000,
-    coste_revision_mayor: 15000,// 15.000 €
+    coste_personal: 37000,       // 80.000 × (3265/15000)^0.50
+    coste_consumibles: 5000,     // 18.000 × (3265/15000)^0.80
+    coste_seguros: 2500,         // 6.000 × (448.500/1.140.000)
+    coste_otros_om: 5000,        // 12.000 × (3265/15000)^0.60
+    coste_revision_mayor: 10000, // 40.000 × (100/400)
+    anyo_revision_mayor: 10,
+    // ── Financiero ──
+    tasa_descuento: 5,
+    horizonte: 20,
+    pct_valor_residual: 10
+  },
+  B: {
+    // ── Materia prima (6.100 t — Escenario realista) ──
+    t_aceituna: 6100,
+    rend_alperujo: 83,
+    contenido_hueso: 20,
+    rend_separacion: 97,
+    precio_alperujo_orujera: 7.5,
+    coste_transporte_total: 0,
+    // ── Digestor ──
+    rendimiento_biogas: 113.4,
+    pct_CH4: 55,
+    pct_autoconsumo_biogas: 12.5,
+    kg_N_digestato: 3.5,
+    kg_N_ha: 80,
+    // ── CHP — 150 kWe = 400 × (6100/15000), redondeado a múltiplo de 50 kWe ──
+    potencia_CHP_kwe: 150,
+    horas_operacion: 4400,       // Derivado del biogás disponible: 655 MWh ÷ 150 kWe × 1000
+    rend_electrico_CHP: 29.5,
+    rend_termico_CHP: 45,
+    pct_autoconsumo_elec: 0,
+    // factura = 8.200 + 80%×41.000×(6100/15000) = 8.200 + 13.339 ≈ 21.500 €
+    factura_electrica_anual: 21500,
+    // ── Precios ──
+    precio_venta_hueso: 135,
+    precio_digestato: 10,
+    precio_compra_red: 120,
+    precio_venta_excedente: 65,
+    ha_olivar: 305,              // 750 × (6100/15000) ≈ 305 ha
+    // ── CAPEX — ley potencial desde base JA (CAPEX total ≈ 635.500 €) ──
+    inv_deshuesadora: 17000,     // 30.000 × (6100/15000)^0.65
+    inv_digestor: 437000,        // 750.000 × (6100/15000)^0.60
+    inv_CHP: 176000,             // 350.000 × (150/400)^0.70
+    inv_instalacion_electrica: 5500, // 10.000 × (150/400)^0.60
+    inv_otros: 0,
+    pct_subvencion: 20,
+    // ── O&M ──
+    coste_mant_CHP_kwh: 0.015,
+    coste_personal: 51000,       // 80.000 × (6100/15000)^0.50
+    coste_consumibles: 9000,     // 18.000 × (6100/15000)^0.80
+    coste_seguros: 3500,         // 6.000 × (635.500/1.140.000)
+    coste_otros_om: 7000,        // 12.000 × (6100/15000)^0.60
+    coste_revision_mayor: 15000, // 40.000 × (150/400)
     anyo_revision_mayor: 10,
     // ── Financiero ──
     tasa_descuento: 5,
@@ -1083,51 +1344,90 @@ const SCENARIOS = {
     pct_valor_residual: 10
   },
   C: {
-    // ── Materia prima ──
+    // ── Materia prima (9.000 t — Escenario optimista) ──
     t_aceituna: 9000,
-    rend_alperujo: 94.9,
-    contenido_hueso: 10,
+    rend_alperujo: 83,
+    contenido_hueso: 20,
     rend_separacion: 97,
-    precio_alperujo_orujera: 11.88,
+    precio_alperujo_orujera: 7.5,
     coste_transporte_total: 0,
     // ── Digestor ──
     rendimiento_biogas: 113.4,
     pct_CH4: 55,
     pct_autoconsumo_biogas: 12.5,
-    kg_N_digestato: 5,
-    kg_N_ha: 50,
-    // ── CHP ──
-    // Alperujo deshuesado: ~7.713 t → biogás neto: ~766.000 m³ → CH4: ~421.300 m³
-    // Energía eléctrica disponible: ~1.242 MWh → motor: 300 kWe × 4.150 h = 1.245 MWh
-    potencia_CHP_kwe: 300,
-    horas_operacion: 4150,     // h/año (derivadas del biogás neto disponible)
+    kg_N_digestato: 3.5,
+    kg_N_ha: 80,
+    // ── CHP — 250 kWe = 400 × (9000/15000), redondeado a múltiplo de 50 kWe ──
+    potencia_CHP_kwe: 250,
+    horas_operacion: 3900,       // Derivado del biogás disponible: 966 MWh ÷ 250 kWe × 1000
     rend_electrico_CHP: 29.5,
     rend_termico_CHP: 45,
-    pct_autoconsumo_elec: 5,
-    // Factura eléctrica: 20% fija + 80% variable escalada con producción
-    factura_electrica_anual: 83000,
+    pct_autoconsumo_elec: 0,
+    // factura = 8.200 + 80%×41.000×(9000/15000) = 8.200 + 19.680 ≈ 28.000 €
+    factura_electrica_anual: 28000,
     // ── Precios ──
     precio_venta_hueso: 135,
     precio_digestato: 10,
     precio_compra_red: 120,
     precio_venta_excedente: 65,
-    ha_olivar: 2000,
-    // ── CAPEX (Inversión total: 833.000 €; ley potencial ^0,60–0,70) ──
-    inv_deshuesadora: 22000,   // 22.000 €
-    inv_digestor: 515000,      // 515.000 € — incluye obra civil, ingeniería y permisos
-    inv_CHP: 287000,           // 287.000 € — motor 300 kWe
-    inv_instalacion_electrica: 9000, // 9.000 €
+    ha_olivar: 450,              // 750 × (9000/15000) = 450 ha
+    // ── CAPEX — ley potencial desde base JA (CAPEX total ≈ 833.000 €) ──
+    inv_deshuesadora: 21500,     // 30.000 × (9000/15000)^0.65
+    inv_digestor: 552000,        // 750.000 × (9000/15000)^0.60
+    inv_CHP: 252000,             // 350.000 × (250/400)^0.70
+    inv_instalacion_electrica: 7500, // 10.000 × (250/400)^0.60
     inv_otros: 0,
-    pct_subvencion: 0,
+    pct_subvencion: 0,           // Sin subvención en escenario optimista
     // ── O&M ──
     coste_mant_CHP_kwh: 0.015,
-    coste_personal: 62000,
-    coste_consumibles: 12000,
-    coste_seguros: 4400,
-    coste_otros_om: 9000,
-    coste_revision_mayor: 25000,// 25.000 €
+    coste_personal: 62000,       // 80.000 × (9000/15000)^0.50
+    coste_consumibles: 12000,    // 18.000 × (9000/15000)^0.80
+    coste_seguros: 4500,         // 6.000 × (833.000/1.140.000)
+    coste_otros_om: 9000,        // 12.000 × (9000/15000)^0.60
+    coste_revision_mayor: 25000, // 40.000 × (250/400)
     anyo_revision_mayor: 10,
     // ── Financiero ──
+    tasa_descuento: 5,
+    horizonte: 20,
+    pct_valor_residual: 10
+  },
+  JA: {
+    // ── Parámetros validados por José Antonio de la Cal Herrera (30/04/2026) ──
+    t_aceituna: 15000,
+    rend_alperujo: 83,
+    contenido_hueso: 20,
+    rend_separacion: 97,
+    precio_alperujo_orujera: 7.5,
+    coste_transporte_total: 0,
+    rendimiento_biogas: 113.4,
+    pct_CH4: 55,
+    pct_autoconsumo_biogas: 12.5,
+    kg_N_digestato: 3.5,
+    kg_N_ha: 80,
+    potencia_CHP_kwe: 400,
+    horas_operacion: 4000,       // Derivado del biogás disponible: 1.611 MWh ÷ 400 kWe × 1000
+    rend_electrico_CHP: 29.5,
+    rend_termico_CHP: 45,
+    pct_autoconsumo_elec: 0,
+    factura_electrica_anual: 41000,
+    precio_venta_hueso: 135,
+    precio_digestato: 10,
+    precio_compra_red: 120,
+    precio_venta_excedente: 65,
+    ha_olivar: 750,
+    inv_deshuesadora: 30000,
+    inv_digestor: 750000,
+    inv_CHP: 350000,
+    inv_instalacion_electrica: 10000,
+    inv_otros: 0,
+    pct_subvencion: 20,
+    coste_mant_CHP_kwh: 0.015,
+    coste_personal: 80000,
+    coste_consumibles: 18000,
+    coste_seguros: 6000,
+    coste_otros_om: 12000,
+    coste_revision_mayor: 40000,
+    anyo_revision_mayor: 10,
     tasa_descuento: 5,
     horizonte: 20,
     pct_valor_residual: 10
@@ -1139,7 +1439,7 @@ function loadScenario(key){
   if(!sc)return;
   Object.keys(sc).forEach(k=>{const e=$(k);if(e)e.value=sc[k];});
   // Highlight active button
-  ['A','B','C'].forEach(k=>{
+  ['JA','A','B','C'].forEach(k=>{
     const btn=document.getElementById('sc-btn-'+k);
     if(btn)btn.className='nav-sc-btn'+(k===key?' active':'');
   });
@@ -1265,6 +1565,159 @@ function toggleCalcLegend(btn){
   el.style.display=open?'block':'none';
   btn.textContent=open?'▾ Ocultar leyenda de cálculos':'▸ Ver leyenda de cálculos';
 }
+function toggleParams(btn){
+  const panel=document.getElementById('params-nueva');
+  const open=panel.style.display!=='none';
+  panel.style.display=open?'none':'block';
+  btn.querySelector('.params-toggle-icon').textContent=open?'▸':'▾';
+}
+function updateOutputsCard(r){
+  setText('out-alperujo',fmtN(r.t_alperujo,0));
+  setText('out-hueso',fmtN(r.t_hueso_separado,1));
+  setText('out-digestato',fmtN(r.digestato_estimado,0));
+  setText('out-biogas',fmtN(r.biogas_neto,0));
+  setText('out-elec',fmtN(r.energia_electrica_neta,1));
+  setText('out-excedente',fmtN(r.excedente_red,1));
+  setText('out-ing-hueso',fmtEur(r.ingreso_hueso,0));
+  setText('out-ing-digestato',fmtEur(r.ingreso_digestato,0));
+  setText('out-ahorro-elec',fmtEur(r.ahorro_electricidad,0));
+  setText('out-ing-excedente',fmtEur(r.ingreso_excedente,0));
+  setText('out-perdida',fmtEur(r.perdida_alperujo,0));
+  setText('out-om',fmtEur(r.costes_OM_anuales,0));
+  const inEl=$('out-ingresos-netos');
+  const fcEl=$('out-fc-operativo');
+  if(inEl){inEl.textContent=fmtEur(r.ingresos_netos,0);inEl.className='out-total-val '+(r.ingresos_netos>=0?'pos-val':'neg-val');}
+  if(fcEl){fcEl.textContent=fmtEur(r.fc_operativo,0);fcEl.className='out-total-val '+(r.fc_operativo>=0?'pos-val':'neg-val');}
+  setText('out-van',fmtEur(r.van,0));
+  setText('out-tir',r.tir!==null?fmtPct(r.tir,2):'No definida');
+  setText('out-payback',r.payback!==null?r.payback+' años':'> horizonte');
+}
+
+function showPillInfo(key){
+  const r=R, p=r.p;
+  const N=(v,d=0)=>isFinite(v)?v.toLocaleString('es-ES',{maximumFractionDigits:d}):'—';
+  const E=(v,d=0)=>isFinite(v)?N(Math.abs(v),d)+' €':'—';
+  const Es=(v,d=0)=>isFinite(v)?(v<0?'−':'')+N(Math.abs(v),d)+' €':'—';
+  const cobertura=r.autoconsumo_mwh>0?Math.min(1,r.energia_electrica_neta/r.autoconsumo_mwh):1;
+  const defs={
+    'alperujo':{
+      title:'Alperujo tratado',
+      value:N(r.t_alperujo,0)+' t/año',
+      formula:'Alperujo tratado = Aceituna procesada × Rendimiento en alperujo ÷ 100\n= '+N(p.t_aceituna,0)+' t × '+N(p.rend_alperujo,1)+'% ÷ 100\n= '+N(r.t_alperujo,0)+' t/año',
+      note:'Dato real de campaña 2024-25. La cooperativa procesó '+N(p.t_aceituna,0)+' t de aceituna con un rendimiento en alperujo del '+N(p.rend_alperujo,1)+'%, obtenido de los registros de báscula de la propia almazara.'
+    },
+    'hueso':{
+      title:'Hueso separado',
+      value:N(r.t_hueso_separado,1)+' t/año',
+      formula:'Hueso separado = Alperujo tratado × Contenido de hueso% × Eficiencia de separación%\n= '+N(r.t_alperujo,0)+' t × '+N(p.contenido_hueso,1)+'% × '+N(p.rend_separacion,1)+'%\n= '+N(r.t_hueso_separado,1)+' t/año',
+      note:'El contenido de hueso ('+N(p.contenido_hueso,1)+'%) es un dato propio de la almazara (se usa 10% como peor caso conservador). La eficiencia de separación ('+N(p.rend_separacion,1)+'%) es estándar industrial para deshuesadoras de rodillos.'
+    },
+    'digestato':{
+      title:'Digestato producido',
+      value:N(r.digestato_estimado,0)+' t/año',
+      formula:'Alperujo deshuesado = Alperujo tratado − Hueso separado\n= '+N(r.t_alperujo,0)+' − '+N(r.t_hueso_separado,1)+' = '+N(r.t_alperujo_deshuesado,0)+' t\n\nDigestato producido = Alperujo deshuesado × 0,69\n= '+N(r.t_alperujo_deshuesado,0)+' t × 0,69\n= '+N(r.digestato_estimado,0)+' t/año',
+      note:'Factor 0,69: bibliográficamente se estima que ~31% de la masa del alperujo se convierte en biogás y vapor de agua durante la digestión anaerobia; el 69% restante queda como digestato semisólido (rango típico: 65-75%).'
+    },
+    'biogas':{
+      title:'Biogás neto',
+      value:N(r.biogas_neto,0)+' m³/año',
+      formula:'Biogás bruto = Alperujo deshuesado × Rendimiento biogás\n= '+N(r.t_alperujo_deshuesado,0)+' t × '+N(p.rendimiento_biogas,0)+' m³/t\n= '+N(r.biogas_bruto,0)+' m³\n\nBiogás neto = Biogás bruto × (1 − Autoconsumo del digestor%)\n= '+N(r.biogas_bruto,0)+' × (1 − '+N(p.pct_autoconsumo_biogas,0)+'%)\n= '+N(r.biogas_neto,0)+' m³/año',
+      note:'El rendimiento de biogás ('+N(p.rendimiento_biogas,0)+' m³/t) depende de la carga orgánica del alperujo. Un '+N(p.pct_autoconsumo_biogas,0)+'% del biogás bruto se recircula para mantener la temperatura del digestor.'
+    },
+    'elec':{
+      title:'Energía eléctrica neta',
+      value:N(r.energia_electrica_neta,1)+' MWh/año',
+      formula:'Electricidad bruta = Potencia del CHP × Horas de operación ÷ 1.000\n= '+N(p.potencia_CHP_kwe,0)+' kWe × '+N(p.horas_operacion,0)+' h ÷ 1.000\n= '+N(r.energia_electrica_bruta,1)+' MWh\n\nElectricidad neta = Electricidad bruta × (1 − Autoconsumo eléctrico%)\n= '+N(r.energia_electrica_bruta,1)+' × (1 − '+N(p.pct_autoconsumo_elec,0)+'%)\n= '+N(r.energia_electrica_neta,1)+' MWh/año',
+      note:'El CHP (Combined Heat and Power) tiene una potencia de '+N(p.potencia_CHP_kwe,0)+' kWe operando '+N(p.horas_operacion,0)+' h/año. El '+N(p.pct_autoconsumo_elec,0)+'% de la electricidad generada la consumen los propios equipos del sistema.'
+    },
+    'excedente':{
+      title:'Excedente volcado a red',
+      value:N(r.excedente_red,1)+' MWh/año',
+      formula:'Demanda propia = Factura eléctrica anual ÷ Precio de compra en red\n= '+E(p.factura_electrica_anual,0)+' ÷ '+N(p.precio_compra_red,1)+' €/MWh\n= '+N(r.autoconsumo_mwh,1)+' MWh\n\nExcedente a red = máx(0, Electricidad neta − Demanda propia)\n= máx(0, '+N(r.energia_electrica_neta,1)+' − '+N(r.autoconsumo_mwh,1)+')\n= '+N(r.excedente_red,1)+' MWh/año',
+      note:'Electricidad sobrante tras cubrir la demanda propia de la cooperativa. Se vende a la red al precio de '+N(p.precio_venta_excedente,1)+' €/MWh.'
+    },
+    'ing-hueso':{
+      title:'Ingreso venta de hueso',
+      value:E(r.ingreso_hueso,0),
+      formula:'Ingreso por hueso = Hueso separado × Precio de venta del hueso\n= '+N(r.t_hueso_separado,1)+' t × '+N(p.precio_venta_hueso,0)+' €/t\n= '+E(r.ingreso_hueso,0),
+      note:'El hueso de aceituna separado mecánicamente se vende como biomasa combustible (uso en calderas industriales). Precio de referencia: '+N(p.precio_venta_hueso,0)+' €/t.'
+    },
+    'ing-digestato':{
+      title:'Ingreso venta digestato',
+      value:E(r.ingreso_digestato,0),
+      formula:'Ingreso por digestato = Digestato producido × Precio del digestato\n= '+N(r.digestato_estimado,0)+' t × '+N(p.precio_digestato,2)+' €/t\n= '+E(r.ingreso_digestato,0),
+      note:'El digestato se valoriza como fertilizante orgánico. El precio ('+N(p.precio_digestato,2)+' €/t) refleja su contenido en nitrógeno y materia orgánica disponible para el suelo.'
+    },
+    'ahorro-elec':{
+      title:'Ahorro factura eléctrica',
+      value:E(r.ahorro_electricidad,0),
+      formula:'Cobertura de la demanda = mín(1, Electricidad neta ÷ Demanda propia)\n= mín(1, '+N(r.energia_electrica_neta,1)+' ÷ '+N(r.autoconsumo_mwh,1)+')\n= '+N(cobertura*100,1)+'%\n\nAhorro eléctrico = Factura anual × Cobertura de la demanda\n= '+E(p.factura_electrica_anual,0)+' × '+N(cobertura*100,1)+'%\n= '+E(r.ahorro_electricidad,0),
+      note:'La cooperativa tenía una factura eléctrica de '+E(p.factura_electrica_anual,0)+'/año. El CHP cubre el '+N(cobertura*100,1)+'% de esa demanda, eliminando ese porcentaje del gasto.'
+    },
+    'ing-excedente':{
+      title:'Ingreso excedente a red',
+      value:E(r.ingreso_excedente,0),
+      formula:'Ingreso por excedente = Excedente a red × Precio de venta excedente\n= '+N(r.excedente_red,1)+' MWh × '+N(p.precio_venta_excedente,1)+' €/MWh\n= '+E(r.ingreso_excedente,0),
+      note:'La electricidad sobrante ('+N(r.excedente_red,1)+' MWh/año) se vierte a la red y se factura al precio de mercado de '+N(p.precio_venta_excedente,1)+' €/MWh.'
+    },
+    'perdida':{
+      title:'Coste de oportunidad del alperujo',
+      value:Es(r.perdida_alperujo,0),
+      formula:'Coste de oportunidad = −(Alperujo tratado × Precio alperujo a orujera)\n= −('+N(r.t_alperujo,0)+' t × '+N(p.precio_alperujo_orujera,2)+' €/t)\n= −'+E(Math.abs(r.perdida_alperujo),0),
+      note:'Al destinar el alperujo al digestor en lugar de venderlo a la extractora de orujo, la cooperativa renuncia a '+E(Math.abs(r.perdida_alperujo),0)+'/año. Ese ingreso perdido es el coste de oportunidad del cambio de modelo.'
+    },
+    'om':{
+      title:'Costes O&M totales',
+      value:E(r.costes_OM_anuales,0),
+      formula:'Mantenimiento CHP  '+N(p.coste_mant_CHP_kwh,4)+' €/kWh × '+N(r.energia_electrica_bruta*1000,0)+' kWh\n                 = '+E(r.coste_mant_CHP_anual,0)+'\nPersonal         = '+E(p.coste_personal,0)+'\nConsumibles      = '+E(p.coste_consumibles,0)+'\nSeguros          = '+E(p.coste_seguros,0)+'\nOtros gastos     = '+E(p.coste_otros_om,0)+'\n─────────────────────────────────\nTotal O&M        = '+E(r.costes_OM_anuales,0),
+      note:'Los costes de operación y mantenimiento incluyen el mantenimiento del CHP (calculado por kWh producido) más los costes fijos anuales: personal, consumibles, seguros y otros gastos de explotación.'
+    },
+    'ingresos-netos':{
+      title:'Ingresos netos anuales',
+      value:Es(r.ingresos_netos,0),
+      formula:'  Ahorro electricidad     '+E(r.ahorro_electricidad,0)+'\n+ Venta de hueso         '+E(r.ingreso_hueso,0)+'\n+ Venta de digestato     '+E(r.ingreso_digestato,0)+'\n+ Excedente a red        '+E(r.ingreso_excedente,0)+'\n− Coste oport. alperujo  '+E(Math.abs(r.perdida_alperujo),0)+'\n─────────────────────────────────\nIngresos netos           '+Es(r.ingresos_netos,0),
+      note:'Suma de todos los beneficios económicos brutos de la instalación antes de deducir los costes anuales de operación y mantenimiento.'
+    },
+    'fc-operativo':{
+      title:'Cash flow operativo',
+      value:Es(r.fc_operativo,0),
+      formula:'Flujo operativo = Ingresos netos − Costes O&M anuales\n= '+Es(r.ingresos_netos,0)+'\n− '+E(r.costes_OM_anuales,0)+'\n= '+Es(r.fc_operativo,0)+'/año',
+      note:'Es la caja que genera la instalación cada año, antes de considerar la amortización del capital invertido (inversión neta: '+E(r.inversion_neta,0)+'). Si es positivo, la planta cubre sus propios gastos y genera liquidez.'
+    },
+    'van':{
+      title:'Valor Actual Neto (VAN)',
+      value:Es(r.van,0),
+      formula:'VAN = Σ Flujo de caja del año t / (1 + tasa)^t   (t = 0 … '+r.n+')\n\nAño 0: −'+E(r.inversion_neta,0)+' (inversión neta)\nAños 1–'+r.n+': '+Es(r.fc_operativo,0)+'/año\nTasa de descuento: '+N(p.tasa_descuento,2)+'%\n─────────────────────────────────\nVAN = '+Es(r.van,0),
+      note:(r.van>0?'VAN positivo: el proyecto crea valor neto por encima del coste de oportunidad del capital ('+N(p.tasa_descuento,1)+'%). La inversión es financieramente rentable.':'VAN negativo: el proyecto no cubre el coste de capital al '+N(p.tasa_descuento,1)+'%. La inversión destruye valor en términos actuales.')
+    },
+    'tir':{
+      title:'Tasa Interna de Retorno (TIR)',
+      value:r.tir!==null?N(r.tir,2)+'%':'No definida',
+      formula:'La TIR es la tasa de descuento que hace el VAN igual a cero\n0 = Σ Flujo de caja / (1 + TIR)^año\n\nAño 0: −'+E(r.inversion_neta,0)+'\nAños 1–'+r.n+': '+Es(r.fc_operativo,0)+'/año\n─────────────────────────────────\nTIR = '+(r.tir!==null?N(r.tir,2)+'%':'No calculable con estos parámetros'),
+      note:'Comparación: TIR ('+(r.tir!==null?N(r.tir,2)+'%':'—')+') frente a tasa de descuento ('+N(p.tasa_descuento,2)+'%). '+(r.tir!==null&&r.tir>p.tasa_descuento?'Al superar la TIR a la tasa exigida, el proyecto es rentable para el inversor.':'La TIR no supera la tasa de descuento: la rentabilidad no cubre el coste de oportunidad del capital.')
+    },
+    'payback':{
+      title:'Período de retorno (Payback)',
+      value:r.payback!==null?r.payback+' años':'> horizonte',
+      formula:'Payback = primer año en que el flujo acumulado ≥ 0\n\nInversión neta: '+E(r.inversion_neta,0)+'\nFlujo operativo anual: '+Es(r.fc_operativo,0)+'/año\n─────────────────────────────────\nAprox. simple: '+E(r.inversion_neta,0)+' ÷ '+E(r.fc_operativo,0)+'\n= '+(r.fc_operativo>0?N(r.inversion_neta/r.fc_operativo,1)+' años':'— (flujo negativo)'),
+      note:'El payback simple no descuenta el valor temporal del dinero. El payback descontado (basado en la curva del VAN acumulado) resulta algo superior. Ver gráfico de flujos en la pestaña Financiero.'
+    }
+  };
+  const d=defs[key];
+  if(!d)return;
+  setText('pmi-title',d.title);
+  setText('pmi-value',d.value);
+  $('pmi-content').innerHTML=
+    '<div class="pill-modal-section"><div class="pill-modal-label">Cálculo</div><pre class="pill-modal-formula">'+d.formula+'</pre></div>'+
+    '<div class="pill-modal-section"><div class="pill-modal-label">Interpretación</div><p class="pill-modal-note">'+d.note+'</p></div>';
+  document.getElementById('pill-modal-overlay').classList.add('open');
+}
+function closePillModal(e){
+  if(e&&e.target!==document.getElementById('pill-modal-overlay'))return;
+  document.getElementById('pill-modal-overlay').classList.remove('open');
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePillModal();});
+
 function recalcExcel(){
   let totKg=0,totAceite=0,totAc=0;
   for(let i=1;i<=6;i++){
@@ -1383,7 +1836,7 @@ const bgVAN=v=>v>0?'var(--pos-bg)':'var(--neg-bg)';
 const bgTIR=(tir,tasa)=>tir===null?'var(--neg-bg)':tir>tasa+2?'var(--pos-bg)':tir>tasa-2?'var(--warn-bg)':'var(--neg-bg)';
 const bgPB=pb=>pb===null?'var(--neg-bg)':pb<8?'var(--pos-bg)':pb<=12?'var(--warn-bg)':'var(--neg-bg)';
 
-function updateAll(){R=compute();updateDerived();updateKPIs();updateCharts();updateFCTable();updateThresholds();updateMarginChart();updateDiagnosis();updatePnLTable();updatePhysical();updateRecommendations();updateComparisonSection();}
+function updateAll(){R=compute();updateDerived();updateKPIs();updateCharts();updateFCTable();updateThresholds();updateMarginChart();updateDiagnosis();updatePnLTable();updatePhysical();updateRecommendations();updateComparisonSection();updateOutputsCard(R);updateResumen();}
 
 function updateDerived(){const r=R;
   setText('d-alperujo',fmtN(r.t_alperujo,0));setText('d-hueso',fmtN(r.t_hueso_separado,0));setText('d-digestion',fmtN(r.t_alperujo_deshuesado,0));
@@ -1805,8 +2258,9 @@ function showTab(id){
   document.querySelectorAll('.tab-section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
   const sec=document.getElementById('tab-'+id);if(sec)sec.classList.add('active');
-  document.querySelectorAll('.nav-tab').forEach(b=>{if(b.textContent.trim().toLowerCase().startsWith(id.substring(0,4)))b.classList.add('active');});
+  document.querySelectorAll('.nav-tab').forEach(b=>{if(b.dataset.tab===id)b.classList.add('active');});
   if(id==='proceso')startCanvas();
+  if(id==='resumen')updateResumen();
 }
 
 function resetDefaults(){Object.keys(DEFAULTS).forEach(k=>{const e=$(k);if(e)e.value=DEFAULTS[k];});updateAll();}
@@ -1817,11 +2271,156 @@ function toggleLegend(toggleEl){
   toggleEl.classList.toggle('open',open);
 }
 
+function updateResumen(){
+  const r=R;if(!r||!r.p)return;
+  const tasa=r.p.tasa_descuento;
+  // Identificar escenario activo
+  const activeKey=['JA','A','B','C'].find(k=>{const s=SCENARIOS[k];return s&&Math.abs(r.p.t_aceituna-s.t_aceituna)<1;})||'Custom';
+  const scNames={JA:'JA · 15.000 t',A:'Conservador · 3.265 t',B:'Realista · 6.100 t',C:'Optimista · 9.000 t',Custom:'Configuración personalizada'};
+  setText('rsm-sc-name',scNames[activeKey]);
+  setText('rsm-subtitle','CAPEX neto: '+fmtEur(r.inversion_neta,0)+' · FCO anual: '+fmtEur(r.fc_operativo,0)+'/año · Horizonte: '+r.n+' años');
+
+  // KPI cards
+  const kpisEl=$('rsm-kpis');
+  if(kpisEl){
+    const kd=[
+      {lbl:'VAN · Valor Actual Neto',val:fmtEur(r.van,0),sub:'Horizonte '+r.n+' años · r = '+fmtPct(r.p.tasa_descuento,1),pos:r.van>0},
+      {lbl:'TIR · Tasa Interna Retorno',val:r.tir!==null?fmtPct(r.tir,2):'No definida',sub:'Tasa exigida: '+fmtPct(tasa,1),pos:r.tir!==null&&r.tir>tasa},
+      {lbl:'Payback · Período de retorno',val:r.payback!==null?r.payback+' años':'> '+r.n+' a.',sub:'Retorno simple de la inversión',pos:r.payback!==null&&r.payback<=12},
+      {lbl:'FCO · Cash flow operativo',val:fmtEur(r.fc_operativo,0)+' €/año',sub:'CAPEX neto: '+fmtEur(r.inversion_neta,0),pos:r.fc_operativo>0},
+    ];
+    kpisEl.innerHTML=kd.map(k=>{
+      const c=k.pos?'var(--pos)':'var(--neg)';
+      const bg=k.pos?'var(--pos-bg)':'var(--neg-bg)';
+      return`<div class="rsm-kpi" style="border-top-color:${c};background:${bg};">
+        <div class="rsm-kpi-lbl">${k.lbl}</div>
+        <div class="rsm-kpi-val" style="color:${c}">${k.val}</div>
+        <div class="rsm-kpi-sub">${k.sub}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Flujos físicos
+  const flowsEl=$('rsm-flows');
+  if(flowsEl){
+    const BROWN='#9b7a55';
+    const fd=[
+      {val:fmtN(r.t_alperujo,0),lbl:'Alperujo tratado',unit:'t/año',c:'var(--olive)'},
+      {val:fmtN(r.t_hueso_separado,0),lbl:'Hueso separado (biomasa)',unit:'t/año · PCI 18–19 MJ/kg',c:BROWN},
+      {val:fmtN(r.digestato_estimado,0),lbl:'Digestato biofertilizante',unit:'t/año · '+fmtN(r.ha_fertilizables,0)+' ha fertilizables',c:'var(--olive)'},
+      {val:fmtN(r.biogas_neto,0),lbl:'Biogás neto al motor CHP',unit:'m³/año · '+fmtN(r.p.pct_CH4,0)+'% CH₄',c:'var(--olive-light)'},
+      {val:fmtN(r.energia_electrica_neta,1),lbl:'Electricidad neta generada',unit:'MWh/año · '+fmtN(r.excedente_red,1)+' MWh excedente',c:'var(--olive)'},
+      {val:fmtN(r.energia_termica,0),lbl:'Calor recuperado (CHP)',unit:'MWh/año · uso: digestor + planta',c:BROWN},
+    ];
+    flowsEl.innerHTML=fd.map(f=>`
+      <div class="rsm-flow-item" style="border-left-color:${f.c};">
+        <div class="rsm-flow-val">${f.val}</div>
+        <div class="rsm-flow-label">${f.lbl}</div>
+        <div class="rsm-flow-unit">${f.unit}</div>
+      </div>`).join('');
+  }
+
+  // Indicadores ambientales
+  const envEl=$('rsm-env');
+  if(envEl){
+    const co2t=r.energia_electrica_neta*1000*0.18/1000;
+    const hogares=r.energia_electrica_neta/3.5;
+    const nKg=r.digestato_estimado*r.p.kg_N_digestato;
+    const ev=[
+      {val:fmtN(co2t,0)+' t CO₂/año',lbl:'Emisiones de CO₂ evitadas respecto al mix eléctrico español (factor: 0,18 kg/kWh)'},
+      {val:fmtN(hogares,0)+' hogares/año',lbl:'Equivalente en consumo eléctrico de hogares abastecidos (3,5 MWh/hogar · INE 2023)'},
+      {val:fmtN(nKg,0)+' kg N/año',lbl:'Nitrógeno orgánico reciclado al suelo vía digestato (economía circular de nutrientes)'},
+    ];
+    envEl.innerHTML=ev.map(e=>`
+      <div class="rsm-env-item">
+        <div class="rsm-env-val">${e.val}</div>
+        <div class="rsm-env-lbl">${e.lbl}</div>
+      </div>`).join('');
+  }
+
+  // Tabla comparativa de escenarios
+  const stbody=$('rsm-sc-tbody');
+  if(stbody){
+    const rows=['JA','A','B','C'].map(k=>{
+      const sc=SCENARIOS[k];if(!sc)return'';
+      const cr=compute(sc);
+      const isAct=k===activeKey;
+      const diag=cr.van>0&&cr.tir!==null&&cr.tir>sc.tasa_descuento
+        ?'<span style="color:var(--pos);font-weight:700;">&#10003; Viable</span>'
+        :cr.van>0?'<span style="color:var(--warn);font-weight:700;">&#9650; Ajustado</span>'
+        :'<span style="color:var(--neg);font-weight:700;">&#10007; No viable</span>';
+      const names={JA:'JA · 15.000 t',A:'Conservador · 3.265 t',B:'Realista · 6.100 t',C:'Optimista · 9.000 t'};
+      return`<tr class="${isAct?'rsm-active':''}">
+        <td>${names[k]}</td>
+        <td>${fmtN(sc.t_aceituna,0)}</td>
+        <td>${fmtEur(cr.inversion_neta,0)}</td>
+        <td style="color:${cr.fc_operativo>=0?'var(--pos)':'var(--neg)'}">${fmtEur(cr.fc_operativo,0)}</td>
+        <td>${cr.payback!==null?cr.payback+' años':'> '+sc.horizonte+' a.'}</td>
+        <td style="color:${cr.tir!==null&&cr.tir>sc.tasa_descuento?'var(--pos)':'var(--neg)'}">${cr.tir!==null?fmtPct(cr.tir,2):'&mdash;'}</td>
+        <td style="color:${cr.van>=0?'var(--pos)':'var(--neg)'};font-weight:600">${fmtEur(cr.van,0)}</td>
+        <td>${diag}</td>
+      </tr>`;
+    }).join('');
+    stbody.innerHTML=rows;
+  }
+
+  // Gráficos — solo cuando el tab está visible (canvas size issue en elementos ocultos)
+  if(!$('tab-resumen')?.classList.contains('active'))return;
+
+  const lgPos=window.innerWidth<640?'bottom':'right';
+  mkChart('rsm-chart-ing','doughnut',{
+    labels:['Ahorro electricidad','Excedente red','Venta hueso','Digestato'],
+    datasets:[{
+      data:[r.ahorro_electricidad,r.ingreso_excedente,r.ingreso_hueso,r.ingreso_digestato],
+      backgroundColor:OP,borderWidth:1,borderColor:'#fff'
+    }]
+  },{plugins:{legend:{display:true,position:lgPos,labels:{font:{size:10},boxWidth:9,color:'#6b6660',padding:6}},tooltip:{callbacks:{label:ctx=>ctx.label+': '+fmtEur(ctx.raw,0)}}}});
+
+  const lbls=Array.from({length:r.n+1},(_,i)=>i===0?'0':''+i);
+  const pbIdx=r.payback;
+  mkChart('rsm-chart-fc','line',{
+    labels:lbls,
+    datasets:[{
+      label:'FC Acumulado',
+      data:r.cum_fc,
+      borderColor:'#4a6741',
+      backgroundColor:'rgba(74,103,65,0.07)',
+      borderWidth:2,fill:true,tension:0.3,
+      pointRadius:r.cum_fc.map((_,i)=>i===pbIdx?7:2),
+      pointBackgroundColor:r.cum_fc.map((_,i)=>i===pbIdx?'#3d6b35':'#4a6741')
+    }]
+  },{
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>fmtEur(ctx.raw,0)+(ctx.dataIndex===pbIdx?' ← PAYBACK':'')}}
+    },
+    scales:{
+      x:{ticks:{font:{size:10},color:'#6b6660'},grid:{color:'rgba(0,0,0,0.04)'}},
+      y:{ticks:{font:{size:10},color:'#6b6660',callback:v=>fmtEur(v,0)},grid:{color:'rgba(0,0,0,0.04)'},afterDataLimits(ax){ax.min=Math.min(ax.min,0);}}
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
-  loadScenario('A');updateStageInfo();
+  loadScenario('JA');updateStageInfo();
   setTimeout(startCanvas,60);
   window.addEventListener('resize',()=>{if($('tab-proceso').classList.contains('active'))startCanvas();});
 });
 </script>
+
+<!-- ─── PILL INFO MODAL ─── -->
+<div class="pill-modal-overlay" id="pill-modal-overlay" onclick="closePillModal(event)">
+  <div class="pill-modal" id="pill-modal">
+    <div class="pill-modal-head">
+      <span class="pill-modal-title" id="pmi-title"></span>
+      <button class="pill-modal-close" onclick="closePillModal()">×</button>
+    </div>
+    <div class="pill-modal-body">
+      <div class="pill-modal-value" id="pmi-value"></div>
+      <div id="pmi-content"></div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
