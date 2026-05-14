@@ -1068,6 +1068,16 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
     <div class="chart-card"><div class="card-header">Sensibilidad — Impacto en VAN</div><div class="chart-wrap"><canvas id="chart-sens"></canvas></div></div>
   </div>
 
+  <!-- Análisis de subvención — escenario activo -->
+  <div class="card" style="margin-bottom:18px;">
+    <div class="card-header">Análisis de subvención pública — escenario activo</div>
+    <div style="padding:14px 18px 4px;">
+      <div class="subv-info-box" id="fin-subv-info"></div>
+    </div>
+    <div style="position:relative;height:220px;padding:0 18px 4px;"><canvas id="fin-chart-subv"></canvas></div>
+    <div style="padding:6px 18px 14px;font-size:10px;color:var(--text-sec);">Sensibilidad del VAN al porcentaje de subvención sobre el CAPEX total. El resto de parámetros técnicos y operativos permanecen constantes. Convocatorias aplicables: PRTR, FEADER (PDR Andalucía), PERTE Agroalimentario. La línea discontinua marca VAN = 0.</div>
+  </div>
+
   <div class="card" style="margin-bottom:18px;">
     <div class="card-header">Tabla de Flujos de Caja</div>
     <div class="fc-table-wrap">
@@ -1860,7 +1870,7 @@ const bgVAN=v=>v>0?'var(--pos-bg)':'var(--neg-bg)';
 const bgTIR=(tir,tasa)=>tir===null?'var(--neg-bg)':tir>tasa+2?'var(--pos-bg)':tir>tasa-2?'var(--warn-bg)':'var(--neg-bg)';
 const bgPB=pb=>pb===null?'var(--neg-bg)':pb<8?'var(--pos-bg)':pb<=12?'var(--warn-bg)':'var(--neg-bg)';
 
-function updateAll(){R=compute();updateDerived();updateKPIs();updateCharts();updateFCTable();updateThresholds();updateMarginChart();updateDiagnosis();updatePnLTable();updatePhysical();updateRecommendations();updateComparisonSection();updateOutputsCard(R);updateResumen();}
+function updateAll(){R=compute();updateDerived();updateKPIs();updateCharts();updateFCTable();updateSubvAnalysis();updateThresholds();updateMarginChart();updateDiagnosis();updatePnLTable();updatePhysical();updateRecommendations();updateComparisonSection();updateOutputsCard(R);updateResumen();}
 
 function updateDerived(){const r=R;
   setText('d-alperujo',fmtN(r.t_alperujo,0));setText('d-hueso',fmtN(r.t_hueso_separado,0));setText('d-digestion',fmtN(r.t_alperujo_deshuesado,0));
@@ -1950,6 +1960,69 @@ function renderScenarios(){
   const tbody=$('scenario-tbody');
   if(!scenarios.length){tbody.innerHTML='<tr><td colspan="6" style="color:var(--text-sec);font-size:12px;padding:12px;">Sin escenarios guardados.</td></tr>';return;}
   tbody.innerHTML=scenarios.map(s=>`<tr><td>${s.name}</td><td>${fmtEur(s.capex,0)}</td><td style="color:${s.van>0?'var(--pos)':'var(--neg)'}">${fmtEur(s.van,0)}</td><td>${s.tir!==null?fmtPct(s.tir,2):'—'}</td><td>${s.payback!==null?s.payback+' a.':'> horiz.'}</td><td><button class="btn-del" onclick="deleteScenario(${s.id})">Borrar</button></td></tr>`).join('');
+}
+
+function updateSubvAnalysis(){
+  const r=R;if(!r||!r.p)return;
+  const infoEl=$('fin-subv-info');
+  if(infoEl){
+    // Umbral de viabilidad por bisección (0-80%)
+    let thPct=null;
+    const rBase={...r.p};
+    if(compute({...rBase,pct_subvencion:80}).van>=0){
+      let lo=r.p.pct_subvencion,hi=80;
+      // si ya es viable con subv. actual, buscar hacia abajo
+      if(r.van>=0){hi=r.p.pct_subvencion;lo=0;}
+      for(let i=0;i<50;i++){const m=(lo+hi)/2;const mv=compute({...rBase,pct_subvencion:m}).van;if(Math.abs(mv)<300){thPct=m;break;}if(mv<0)lo=m;else hi=m;}
+      if(thPct===null)thPct=(lo+hi)/2;
+    }
+    const van0=compute({...rBase,pct_subvencion:0}).van;
+    const van20=compute({...rBase,pct_subvencion:20}).van;
+    const van40=compute({...rBase,pct_subvencion:40}).van;
+    const thHTML=thPct!==null
+      ?`<div class="subv-threshold-pill">
+          <div class="pill-val">${fmtN(thPct,1)} %</div>
+          <div class="pill-lbl">Subvención mínima<br>para VAN = 0</div>
+        </div>`
+      :`<div class="subv-threshold-pill" style="background:var(--${r.van>=0?'pos':'neg'}-bg);border-color:${r.van>=0?'#4a6741':'#8b3a2a'};">
+          <div class="pill-val" style="color:var(--${r.van>=0?'pos':'neg'})">${r.van>=0?'Ya viable':'> 80 %'}</div>
+          <div class="pill-lbl">${r.van>=0?'No requiere subvención':'No alcanza VAN = 0 con subv. máx.'}</div>
+        </div>`;
+    infoEl.innerHTML=thHTML
+      +`<div class="subv-stat-pill">
+          <div class="pill-val" style="color:${van0>=0?'var(--pos)':'var(--neg)'}">${fmtEur(van0,0)}</div>
+          <div class="pill-lbl">VAN sin subvención</div>
+        </div>
+        <div class="subv-stat-pill">
+          <div class="pill-val" style="color:${van20>=0?'var(--pos)':'var(--warn)'}">${fmtEur(van20,0)}</div>
+          <div class="pill-lbl">VAN con 20 % PRTR</div>
+        </div>
+        <div class="subv-stat-pill">
+          <div class="pill-val" style="color:${van40>=0?'var(--pos)':'var(--warn)'}">${fmtEur(van40,0)}</div>
+          <div class="pill-lbl">VAN con 40 % máx.</div>
+        </div>`;
+  }
+  const subvPcts=[0,5,10,15,20,25,30,35,40];
+  const subvVANs=subvPcts.map(p=>compute({...r.p,pct_subvencion:p}).van);
+  const subvColors=subvVANs.map(v=>v>=0?'rgba(74,103,65,0.80)':'rgba(139,58,42,0.75)');
+  const subvBorders=subvVANs.map(v=>v>=0?'#4a6741':'#8b3a2a');
+  // Línea de cero como anotación manual con plugin inline
+  mkChart('fin-chart-subv','bar',{
+    labels:subvPcts.map(p=>p+' %'),
+    datasets:[
+      {label:'VAN',data:subvVANs,backgroundColor:subvColors,borderColor:subvBorders,borderWidth:1.5,borderRadius:3,order:1},
+      {label:'VAN = 0',data:subvPcts.map(()=>0),type:'line',borderColor:'rgba(0,0,0,0.30)',borderWidth:1.5,borderDash:[4,3],pointRadius:0,fill:false,order:0}
+    ]
+  },{
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>ctx.dataset.label==='VAN = 0'?null:'VAN: '+fmtEur(ctx.raw,0)},filter:item=>item.dataset.label!=='VAN = 0'}
+    },
+    scales:{
+      x:{ticks:{font:{size:10},color:'#6b6660'},grid:{display:false},title:{display:true,text:'Subvención sobre CAPEX (%)',font:{size:10},color:'#6b6660'}},
+      y:{ticks:{font:{size:10},color:'#6b6660',callback:v=>fmtEur(v,0)},grid:{color:'rgba(0,0,0,0.05)'},afterDataLimits(ax){ax.min=Math.min(ax.min,0);}}
+    }
+  });
 }
 
 function bisect(key,lo,hi){const o={};let a=lo,b=hi;for(let i=0;i<80;i++){const m=(a+b)/2;if(Math.abs(b-a)<0.01)break;o[key]=m;if(compute(o).van>=0)b=m;else a=m;}return(a+b)/2;}
