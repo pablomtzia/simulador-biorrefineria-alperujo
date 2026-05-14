@@ -377,8 +377,7 @@ body { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; backg
   </div>
   <div class="nav-scenarios">
     <span class="nav-sc-label">Escenario:</span>
-    <button id="sc-btn-JA" class="nav-sc-btn active" onclick="loadScenario('JA')" title="Parámetros validados por J.A. de la Cal (30/04/2026)">JA · 15.000 t</button>
-    <button id="sc-btn-A" class="nav-sc-btn" onclick="loadScenario('A')">A · 3.265 t</button>
+    <button id="sc-btn-A" class="nav-sc-btn active" onclick="loadScenario('A')">A · 3.265 t</button>
     <button id="sc-btn-B" class="nav-sc-btn" onclick="loadScenario('B')">B · 6.100 t</button>
     <button id="sc-btn-C" class="nav-sc-btn" onclick="loadScenario('C')">C · 9.000 t</button>
   </div>
@@ -2415,7 +2414,7 @@ function updateResumen(){
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
-  loadScenario('JA');updateStageInfo();
+  loadScenario('A');updateStageInfo();
   setTimeout(startCanvas,60);
   window.addEventListener('resize',()=>{if($('tab-proceso').classList.contains('active'))startCanvas();});
 });
